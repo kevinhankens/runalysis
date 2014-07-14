@@ -42,23 +42,27 @@ class RockerCell: UIView {
         
         // Create a cover view.
         let cover = UIView(frame: CGRect(x: 0, y: 0, width: cellWidth, height: 50.00))
-        cover.backgroundColor = UIColor.blackColor()
+        cover.backgroundColor = container.getCoverBgColorNormal()
         container.cover = cover
         
         let leftLabel = UILabel(frame: CGRect(x: 3, y: 3, width: 50.00, height: 40.00))
         leftLabel.text = "0"
-        leftLabel.textColor = container.getCoverTextColor()
+        leftLabel.textColor = UIColor.whiteColor()
+        leftLabel.layer.cornerRadius = 8
+        leftLabel.layer.masksToBounds = true
         container.leftLabel = leftLabel
         cover.addSubview(leftLabel)
         
         let centerLabel = UILabel(frame: CGRect(x: (cellWidth/2 - 50), y: 3, width: 100.00, height: 40.00))
         centerLabel.text = centerText
-        centerLabel.textColor = container.getCoverTextColor()
+        centerLabel.textColor = UIColor.whiteColor()
         cover.addSubview(centerLabel)
         
-        let rightLabel = UILabel(frame: CGRect(x: cellWidth - 50, y: 3, width: 100.00, height: 40.00))
+        let rightLabel = UILabel(frame: CGRect(x: cellWidth - 50, y: 3, width: 50.00, height: 40.00))
         rightLabel.text = "0"
-        rightLabel.textColor = container.getCoverTextColor()
+        rightLabel.textColor = UIColor.whiteColor()
+        rightLabel.layer.cornerRadius = 8
+        rightLabel.layer.masksToBounds = true
         container.rightLabel = rightLabel
         cover.addSubview(rightLabel)
         
@@ -76,9 +80,14 @@ class RockerCell: UIView {
         return container
     }
     
-    // Set the text color.
-    func getCoverTextColor()->UIColor {
-      return UIColor.whiteColor()
+    // Set the label normal color.
+    func getCoverBgColorNormal()->UIColor {
+      return UIColor(red: 42/255, green: 57/255, blue: 82/255, alpha: 1.0)
+    }
+    
+    // Set the label highlight color.
+    func getCoverBgColorHi()->UIColor {
+        return UIColor(red: 28/255, green: 38/255, blue: 54/255, alpha: 1.0)
     }
     
     // Handles swipe gestures on the cover.
@@ -88,17 +97,21 @@ class RockerCell: UIView {
             var v = gesture.view as RockerCell
             var c = v.cover!
             var f = c.frame
+            var l = v.leftLabel! as UILabel
+            var r = v.rightLabel! as UILabel
             
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.Right:
                 if v.rocked == v.rockedLeft || v.rocked == v.rockedNone {
-                  c.center = CGPointMake(c.center.x + 100, c.center.y)
+                    c.center = CGPointMake(c.center.x + 100, c.center.y)
                 }
                 if v.rocked == v.rockedNone {
-                  v.rocked = v.rockedRight
+                    l.backgroundColor = v.getCoverBgColorHi()
+                    v.rocked = v.rockedRight
                 }
                 else {
-                  v.rocked = v.rockedNone
+                    r.backgroundColor = v.getCoverBgColorNormal()
+                    v.rocked = v.rockedNone
                 }
                 break;
             case UISwipeGestureRecognizerDirection.Left:
@@ -106,9 +119,11 @@ class RockerCell: UIView {
                     c.center = CGPointMake(c.center.x - 100, c.center.y)
                 }
                 if v.rocked == v.rockedNone {
+                    r.backgroundColor = v.getCoverBgColorHi()
                     v.rocked = v.rockedLeft
                 }
                 else {
+                    l.backgroundColor = v.getCoverBgColorNormal()
                     v.rocked = v.rockedNone
                 }
                 break;
