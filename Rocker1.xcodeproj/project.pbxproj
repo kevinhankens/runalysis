@@ -13,6 +13,7 @@
 		178151C51972F1240029EB87 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 178151C31972F1240029EB87 /* Main.storyboard */; };
 		178151C71972F1240029EB87 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 178151C61972F1240029EB87 /* Images.xcassets */; };
 		178151D31972F1240029EB87 /* Rocker1Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178151D21972F1240029EB87 /* Rocker1Tests.swift */; };
+		178151DD1972F16B0029EB87 /* RockerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178151DC1972F16B0029EB87 /* RockerCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +37,7 @@
 		178151CC1972F1240029EB87 /* Rocker1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Rocker1Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		178151D11972F1240029EB87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		178151D21972F1240029EB87 /* Rocker1Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rocker1Tests.swift; sourceTree = "<group>"; };
+		178151DC1972F16B0029EB87 /* RockerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 				178151BC1972F1240029EB87 /* AppDelegate.swift */,
 				178151C11972F1240029EB87 /* ViewController.swift */,
 				178151C31972F1240029EB87 /* Main.storyboard */,
+				178151DC1972F16B0029EB87 /* RockerCell.swift */,
 				178151C61972F1240029EB87 /* Images.xcassets */,
 				178151BE1972F1240029EB87 /* Rocker1.xcdatamodeld */,
 				178151BA1972F1240029EB87 /* Supporting Files */,
@@ -212,6 +215,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				178151C21972F1240029EB87 /* ViewController.swift in Sources */,
+				178151DD1972F16B0029EB87 /* RockerCell.swift in Sources */,
 				178151BD1972F1240029EB87 /* AppDelegate.swift in Sources */,
 				178151C01972F1240029EB87 /* Rocker1.xcdatamodeld in Sources */,
 			);
