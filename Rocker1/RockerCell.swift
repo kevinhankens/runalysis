@@ -10,32 +10,34 @@ import Foundation
 import UIKit
 
 class RockerCell: UIView {
-    
+
+    // Tracks the sub views.
     var cover: UIView?
     var leftControl: UIView?
     var rightControl: UIView?
-    var rocked: Bool?
-    var rockedLeft: Bool?
-    var rockedRight: Bool?
+    var leftLabel: UIView?
+    var rightLabel: UIView?
 
-    //func init(frame: CGRect) {
-    //    super.init(frame)
-    //}
+    // Tracks the position of the rocker.
+    var rocked: Int = 0
+    let rockedNone: Int = 0
+    let rockedLeft: Int = -1
+    let rockedRight: Int = 1
     
     class func createCell(centerText: String, cellHeight: Float, cellWidth: Float, cellY: Float)->RockerCell {
         // @todo cgrect size should be args
         // @todo make this 100% width
         let container = RockerCell(frame: CGRect(x: 0, y: cellY, width: cellWidth, height: 50.00))
-        container.rockedLeft = false
-        container.rockedRight = false
         
         // Create a control panel under the main visible cell.
-        let leftControl = UIStepper(frame: CGRect(x: 3, y: 10, width: 30.00, height: 20.00))
+        let leftControl = RockerStepper(frame: CGRect(x: 3, y: 10, width: 30.00, height: 20.00))
         container.leftControl = leftControl
+        leftControl.addTarget(container, action: "leftMileageIncrease:", forControlEvents: UIControlEvents.TouchUpInside)
         container.addSubview(leftControl)
         
-        let rightControl = UIStepper(frame: CGRect(x: cellWidth - 95, y: 10, width: 30.00, height: 20.00))
+        let rightControl = RockerStepper(frame: CGRect(x: cellWidth - 95, y: 10, width: 30.00, height: 20.00))
         container.rightControl = rightControl
+        rightControl.addTarget(container, action: "rightMileageIncrease:", forControlEvents: UIControlEvents.TouchUpInside)
         container.addSubview(rightControl)
         
         // Create a cover view.
@@ -46,6 +48,7 @@ class RockerCell: UIView {
         let leftLabel = UILabel(frame: CGRect(x: 3, y: 3, width: 50.00, height: 40.00))
         leftLabel.text = "0"
         leftLabel.textColor = container.getCoverTextColor()
+        container.leftLabel = leftLabel
         cover.addSubview(leftLabel)
         
         let centerLabel = UILabel(frame: CGRect(x: (cellWidth/2 - 50), y: 3, width: 100.00, height: 40.00))
@@ -56,6 +59,7 @@ class RockerCell: UIView {
         let rightLabel = UILabel(frame: CGRect(x: cellWidth - 50, y: 3, width: 100.00, height: 40.00))
         rightLabel.text = "0"
         rightLabel.textColor = container.getCoverTextColor()
+        container.rightLabel = rightLabel
         cover.addSubview(rightLabel)
         
         // Swipe recognizer: right
@@ -87,31 +91,45 @@ class RockerCell: UIView {
             
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.Right:
-                if v.rockedLeft! || !v.rockedRight! {
+                if v.rocked == v.rockedLeft || v.rocked == v.rockedNone {
                   c.center = CGPointMake(c.center.x + 100, c.center.y)
                 }
-                if v.rockedLeft! {
-                  v.rockedLeft = false
+                if v.rocked == v.rockedNone {
+                  v.rocked = v.rockedRight
                 }
                 else {
-                  v.rockedRight = true
+                  v.rocked = v.rockedNone
                 }
                 break;
             case UISwipeGestureRecognizerDirection.Left:
-                if v.rockedRight! || !v.rockedLeft! {
+                if v.rocked == v.rockedRight || v.rocked == v.rockedNone {
                     c.center = CGPointMake(c.center.x - 100, c.center.y)
                 }
-                if v.rockedRight! {
-                    v.rockedRight = false
+                if v.rocked == v.rockedNone {
+                    v.rocked = v.rockedLeft
                 }
                 else {
-                    v.rockedLeft = true
+                    v.rocked = v.rockedNone
                 }
                 break;
             default:
                 break;
             }
         }
+    }
+    
+    // Handle stepper events
+    func leftMileageIncrease(sender:UIStepper) {
+        var v = self.leftLabel! as UILabel
+        var fractionMiles = RockerStepper.mileageWithFraction(sender.value)
+        v.text = "\(fractionMiles)"
+    }
+    
+    // Handle stepper events
+    func rightMileageIncrease(sender:UIStepper) {
+        var v = self.rightLabel! as UILabel
+        var fractionMiles = RockerStepper.mileageWithFraction(sender.value)
+        v.text = "\(fractionMiles)"
     }
 
 }
