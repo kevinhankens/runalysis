@@ -13,9 +13,10 @@ class RockerStepper: UIStepper {
     
     init(frame: CGRect) {
         super.init(frame: frame)
-        minimumValue = 0.0;
-        maximumValue = 100.0;
-        stepValue = 0.25;
+        minimumValue = 0.0
+        maximumValue = 100.0
+        stepValue = 0.25
+        autorepeat = true
     }
     
     class func mileageWithFraction(miles:Double)->String {
@@ -26,11 +27,11 @@ class RockerStepper: UIStepper {
         var fraction = ""
         switch numerator {
         case 1.0:
-            fraction = "1/4"
+            fraction = "¼"
         case 2.0:
-            fraction = "1/2"
+            fraction = "½"
         case 3.0:
-            fraction = "3/4"
+            fraction = "¾"
         default:
             fraction = ""
         }

@@ -20,6 +20,7 @@ class ViewController: UIViewController {
             self.view.addSubview(RockerCell.createCell(day, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos))
             ypos = ypos + height
         }
+
     }
 
     override func didReceiveMemoryWarning() {

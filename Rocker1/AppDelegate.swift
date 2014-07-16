@@ -17,7 +17,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication!, didFinishLaunchingWithOptions launchOptions: NSDictionary!) -> Bool {
         // Override point for customization after application launch.
+        
+        self.coreDataExperiment()
+
         return true
+    }
+    
+    func coreDataExperiment() {
+        // EXPERIMENT W/CORE DATA
+        let obj = NSEntityDescription.insertNewObjectForEntityForName("Mileage", inManagedObjectContext: self.managedObjectContext) as Mileage
+        let planned = 1.25
+        let actual = 2.5
+        obj.date = NSNumber(int: 20140715)
+        obj.mileageActual = NSNumber(float: Float(1.25))
+        obj.mileagePlanned = NSNumber(float: Float(2.5))
+        obj.note = "kevin"
+        self.saveContext()
+        
+        //var newobj = self.managedObjectContext.objectWithID(obj.objectID) as Mileage
+        //var entity = NSEntityDescription("Mileage", managedObjectContext)
+        
+        var error: NSError? = nil
+        var fReq: NSFetchRequest = NSFetchRequest(entityName: "Mileage")
+        
+        fReq.predicate = NSPredicate(format:"date == 20140715")
+        //fReq.predicate = NSPredicate(format:"id == 1")
+        
+        //var sorter: NSSortDescriptor = NSSortDescriptor(key: "date" , ascending: false)
+        //fReq.sortDescriptors = [sorter]
+        
+        var result = self.managedObjectContext.executeFetchRequest(fReq, error:&error)
+        for resultItem : AnyObject in result {
+            var mileageItem = resultItem as Mileage
+            println("Fetched Mileage for \(mileageItem) ")
+        }
+        
+        //println("\(newobj)")
     }
 
     func applicationWillResignActive(application: UIApplication!) {
@@ -47,6 +82,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func saveContext () {
         var error: NSError? = nil
         let managedObjectContext = self.managedObjectContext
+
         if managedObjectContext != nil {
             if managedObjectContext.hasChanges && !managedObjectContext.save(&error) {
                 // Replace this implementation with code to handle the error appropriately.

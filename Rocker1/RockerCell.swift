@@ -32,12 +32,12 @@ class RockerCell: UIView {
         // Create a control panel under the main visible cell.
         let leftControl = RockerStepper(frame: CGRect(x: 3, y: 10, width: 30.00, height: 20.00))
         container.leftControl = leftControl
-        leftControl.addTarget(container, action: "leftMileageIncrease:", forControlEvents: UIControlEvents.TouchUpInside)
+        leftControl.addTarget(container, action: "leftMileageIncrease:", forControlEvents: UIControlEvents.ValueChanged)
         container.addSubview(leftControl)
         
         let rightControl = RockerStepper(frame: CGRect(x: cellWidth - 95, y: 10, width: 30.00, height: 20.00))
         container.rightControl = rightControl
-        rightControl.addTarget(container, action: "rightMileageIncrease:", forControlEvents: UIControlEvents.TouchUpInside)
+        rightControl.addTarget(container, action: "rightMileageIncrease:", forControlEvents: UIControlEvents.ValueChanged)
         container.addSubview(rightControl)
         
         // Create a cover view.
@@ -82,12 +82,13 @@ class RockerCell: UIView {
     
     // Set the label normal color.
     func getCoverBgColorNormal()->UIColor {
-      return UIColor(red: 42/255, green: 57/255, blue: 82/255, alpha: 1.0)
+        return UIColor.blackColor()
+      //return UIColor(red: 42/255, green: 57/255, blue: 82/255, alpha: 1.0)
     }
     
     // Set the label highlight color.
     func getCoverBgColorHi()->UIColor {
-        return UIColor(red: 28/255, green: 38/255, blue: 54/255, alpha: 1.0)
+        return UIColor(red: 59/255, green: 173/255, blue: 255/255, alpha: 1.0)
     }
     
     // Handles swipe gestures on the cover.
@@ -105,6 +106,9 @@ class RockerCell: UIView {
                 if v.rocked == v.rockedLeft || v.rocked == v.rockedNone {
                     c.center = CGPointMake(c.center.x + 100, c.center.y)
                 }
+                else {
+                    break;
+                }
                 if v.rocked == v.rockedNone {
                     l.backgroundColor = v.getCoverBgColorHi()
                     v.rocked = v.rockedRight
@@ -117,6 +121,9 @@ class RockerCell: UIView {
             case UISwipeGestureRecognizerDirection.Left:
                 if v.rocked == v.rockedRight || v.rocked == v.rockedNone {
                     c.center = CGPointMake(c.center.x - 100, c.center.y)
+                }
+                else {
+                    break;
                 }
                 if v.rocked == v.rockedNone {
                     r.backgroundColor = v.getCoverBgColorHi()
@@ -138,6 +145,8 @@ class RockerCell: UIView {
         var v = self.leftLabel! as UILabel
         var fractionMiles = RockerStepper.mileageWithFraction(sender.value)
         v.text = "\(fractionMiles)"
+        
+        
     }
     
     // Handle stepper events
