@@ -16,6 +16,7 @@
 		178151DD1972F16B0029EB87 /* RockerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178151DC1972F16B0029EB87 /* RockerCell.swift */; };
 		178151DF197423140029EB87 /* RockerStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178151DE197423140029EB87 /* RockerStepper.swift */; };
 		178151EA197590230029EB87 /* Mileage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178151E9197590230029EB87 /* Mileage.swift */; };
+		178151ED1976E26A0029EB87 /* MileageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178151EC1976E26A0029EB87 /* MileageStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,8 @@
 		178151DE197423140029EB87 /* RockerStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerStepper.swift; sourceTree = "<group>"; };
 		178151E9197590230029EB87 /* Mileage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mileage.swift; sourceTree = "<group>"; };
 		178151EB1975969D0029EB87 /* Rocker1-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Rocker1-Bridging-Header.h"; sourceTree = "<group>"; };
+		178151EC1976E26A0029EB87 /* MileageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MileageStore.swift; sourceTree = "<group>"; };
+		178151EE19771A9E0029EB87 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +69,8 @@
 		178151AE1972F1240029EB87 = {
 			isa = PBXGroup;
 			children = (
+				178151EE19771A9E0029EB87 /* MyPlayground.playground */,
+				178151EC1976E26A0029EB87 /* MileageStore.swift */,
 				178151EB1975969D0029EB87 /* Rocker1-Bridging-Header.h */,
 				178151DE197423140029EB87 /* RockerStepper.swift */,
 				178151B91972F1240029EB87 /* Rocker1 */,
@@ -224,6 +229,7 @@
 			files = (
 				178151C21972F1240029EB87 /* ViewController.swift in Sources */,
 				178151DD1972F16B0029EB87 /* RockerCell.swift in Sources */,
+				178151ED1976E26A0029EB87 /* MileageStore.swift in Sources */,
 				178151BD1972F1240029EB87 /* AppDelegate.swift in Sources */,
 				178151C01972F1240029EB87 /* Rocker1.xcdatamodeld in Sources */,
 				178151EA197590230029EB87 /* Mileage.swift in Sources */,

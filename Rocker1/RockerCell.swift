@@ -17,6 +17,8 @@ class RockerCell: UIView {
     var rightControl: UIView?
     var leftLabel: UIView?
     var rightLabel: UIView?
+    var dayNum: NSNumber = 0
+    var store: MileageStore = MileageStore()
 
     // Tracks the position of the rocker.
     var rocked: Int = 0
@@ -24,20 +26,25 @@ class RockerCell: UIView {
     let rockedLeft: Int = -1
     let rockedRight: Int = 1
     
-    class func createCell(centerText: String, cellHeight: Float, cellWidth: Float, cellY: Float)->RockerCell {
+    class func createCell(centerText: String, cellHeight: Float, cellWidth:
+        Float, cellY: Float, day: NSNumber)->RockerCell {
         // @todo cgrect size should be args
         // @todo make this 100% width
+            
         let container = RockerCell(frame: CGRect(x: 0, y: cellY, width: cellWidth, height: 50.00))
+        container.dayNum = day
         
         // Create a control panel under the main visible cell.
         let leftControl = RockerStepper(frame: CGRect(x: 3, y: 10, width: 30.00, height: 20.00))
         container.leftControl = leftControl
         leftControl.addTarget(container, action: "leftMileageIncrease:", forControlEvents: UIControlEvents.ValueChanged)
+        leftControl.addTarget(container, action: "leftMileageSave:", forControlEvents: UIControlEvents.TouchUpInside)
         container.addSubview(leftControl)
         
         let rightControl = RockerStepper(frame: CGRect(x: cellWidth - 95, y: 10, width: 30.00, height: 20.00))
         container.rightControl = rightControl
         rightControl.addTarget(container, action: "rightMileageIncrease:", forControlEvents: UIControlEvents.ValueChanged)
+        rightControl.addTarget(container, action: "rightMileageSave:", forControlEvents: UIControlEvents.TouchUpInside)
         container.addSubview(rightControl)
         
         // Create a cover view.
@@ -145,8 +152,6 @@ class RockerCell: UIView {
         var v = self.leftLabel! as UILabel
         var fractionMiles = RockerStepper.mileageWithFraction(sender.value)
         v.text = "\(fractionMiles)"
-        
-        
     }
     
     // Handle stepper events
@@ -154,6 +159,22 @@ class RockerCell: UIView {
         var v = self.rightLabel! as UILabel
         var fractionMiles = RockerStepper.mileageWithFraction(sender.value)
         v.text = "\(fractionMiles)"
+    }
+    
+    func saveMileage() {
+        let l = self.leftControl! as UIStepper
+        let r = self.rightControl! as UIStepper
+        self.store.setMileageForDay(self.dayNum, planned: l.value, actual: r.value)
+        self.store.saveContext()
+        //println("SAVED: \(self.dayNum) L: \(l.value) R: \(r.value)")
+    }
+    
+    func leftMileageSave(sender:UIStepper) {
+        self.saveMileage()
+    }
+    
+    func rightMileageSave(sender:UIStepper) {
+        self.saveMileage()
     }
 
 }
