@@ -53,11 +53,11 @@ class RockerCell: UIView {
     /*!
      * Factory method to create an instance of RockerCell
      *
-     * @param String centerText
-     * @param Float cellHeight
-     * @param Float cellWidth
-     * @param Float cellY
-     * @param NSNumber day
+     * @param centerText
+     * @param cellHeight
+     * @param cellWidth
+     * @param cellY
+     * @param day
      *
      * @return RockerCell
      */
@@ -94,19 +94,22 @@ class RockerCell: UIView {
         container.cover = cover
         
         let leftLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 50.00, height: container.bounds.height))
-        leftLabel.text = "\(mileageData.mileagePlanned)"
+        leftLabel.text = RockerStepper.getLabel(Double(mileageData.mileagePlanned))
         leftLabel.textColor = UIColor.whiteColor()
+        leftLabel.textAlignment = NSTextAlignment.Center
         container.leftLabel = leftLabel
         cover.addSubview(leftLabel)
         
         let centerLabel = UILabel(frame: CGRect(x: (cellWidth/2 - 50), y: 3, width: 100.00, height: 40.00))
         centerLabel.text = centerText
         centerLabel.textColor = UIColor.whiteColor()
+        centerLabel.textAlignment = NSTextAlignment.Center
         cover.addSubview(centerLabel)
         
         let rightLabel = UILabel(frame: CGRect(x: cellWidth - 50, y: 0, width: 50.00, height: container.bounds.height))
-        rightLabel.text = "\(mileageData.mileageActual)"
+        rightLabel.text = RockerStepper.getLabel(Double(mileageData.mileageActual))
         rightLabel.textColor = UIColor.whiteColor()
+        rightLabel.textAlignment = NSTextAlignment.Center
         container.rightLabel = rightLabel
         cover.addSubview(rightLabel)
         
@@ -197,6 +200,13 @@ class RockerCell: UIView {
         }
     }
     
+    /*!
+     * Update the date of a cell.
+     *
+     * @param day
+     *
+     * @return void.
+     */   
     func updateDate(day: NSNumber) {
         let mileageData = self.store.getMileageForDate(day)
         let lc = self.leftControl! as UIStepper
@@ -206,15 +216,15 @@ class RockerCell: UIView {
         
         self.dayNum = day
         lc.value = Double(mileageData.mileagePlanned)
-        ll.text = "\(mileageData.mileagePlanned)"
+        ll.text = RockerStepper.getLabel(lc.value)
         rc.value = Double(mileageData.mileageActual)
-        rl.text = "\(mileageData.mileageActual)"
+        rl.text = RockerStepper.getLabel(rc.value)
     }
     
     /*!
      * Handle the left stepper value change.
      *
-     * @param UIStepper sender
+     * @param sender
      *
      * @return void.
      */
@@ -227,7 +237,7 @@ class RockerCell: UIView {
     /*!
      * Handle the right stepper value change.
      *
-     * @param UIStepper sender
+     * @param sender
      *
      * @return void.
      */
@@ -239,8 +249,6 @@ class RockerCell: UIView {
     
     /*!
      * Saves the mileage currently set on this object.
-     *
-     * @param UIStepper sender
      *
      * @return void.
      */
@@ -255,7 +263,7 @@ class RockerCell: UIView {
     /*!
      * Handle the left stepper touch release.
      *
-     * @param UIStepper sender
+     * @param sender
      *
      * @return void.
      */
@@ -266,7 +274,7 @@ class RockerCell: UIView {
     /*!
      * Handle the left stepper touch release.
      *
-     * @param UIStepper sender
+     * @param sender
      *
      * @return void.
      */

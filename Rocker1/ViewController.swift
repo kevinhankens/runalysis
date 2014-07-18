@@ -30,13 +30,50 @@ extension NSDateComponents {
     }
 }
 
+
+/*!
+ * Add a method to output an NSDate object.
+ */
 extension NSDate {
+    /*!
+     * Converts a date to a RockerCell-compatible id. e.g. 20140715
+     *
+     * @return NSNumber
+     */
     func toRockerId()->NSNumber {
         let format = NSDateFormatter()
         format.dateFormat = "yyyyMMdd"
         let num = format.stringFromDate(self).toInt()
         return num!
     }
+    
+    /*!
+     * Gets the date N days after today.
+     *
+     * @param increment
+     *   The number of days to move forward.
+     * 
+     * @return NSDate
+     */
+    func nextDay(increment: NSNumber = 1)->NSDate {
+        let ti = 60*60*24*(increment.doubleValue)
+        return self.dateByAddingTimeInterval(ti)
+    }
+    
+    /*!
+     * Gets the date N days prior to today.
+     *
+     * @param increment
+     *   The number of days to move forward.
+     * 
+     * @return NSDate
+     */   
+    func prevDay(increment: NSNumber = 1)->NSDate {
+        let negative = Double(increment.intValue * -1)
+        let ti = 60*60*24*negative
+        return self.dateByAddingTimeInterval(ti)
+    }
+ 
 }
 
 /*!
@@ -55,17 +92,18 @@ class ViewController: UIViewController {
 
         self.sunday = self.findPreviousSunday()
         
+        self.view.backgroundColor = UIColor.blackColor()
+        
         var ypos:Float = 70.0
         let height:Float = 50.0
         
         let beginDate = sunday
-        let endDate = self.getNextDay(self.sunday, increment: 6)
+        let endDate = sunday.nextDay(increment: 6)
         let header = WeekHeader.createHeader(height, cellWidth: self.view.bounds.width, beginDate: beginDate, endDate: endDate);
+        header.backgroundColor = UIColor(red: 59/255, green: 173/255, blue: 255/255, alpha: 1.0)
         self.headerCell = header
         self.view.addSubview(header)
         
-        // @todo catch gesture and update sunday, then iterate
-        // over the mileageCell values and call updateDate
         var swipeRight = UISwipeGestureRecognizer(target: self, action: "hederSwipe:")
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
         header.addGestureRecognizer(swipeRight)
@@ -80,7 +118,7 @@ class ViewController: UIViewController {
             self.view.addSubview(cell)
             self.mileageCells += cell
             ypos = ypos + height
-            dayNum = getNextDay(dayNum)
+            dayNum = dayNum.nextDay()
         }
 
     }
@@ -90,55 +128,42 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    /*!
+     * Handle the horizontal swiping of the date header.
+     *
+     * @param gesture
+     *
+     * @return void
+     */
     func hederSwipe(gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             switch swipeGesture.direction {
-            case UISwipeGestureRecognizerDirection.Right:
-                self.sunday = self.getNextDay(self.sunday, increment: 6)
-                break;
             case UISwipeGestureRecognizerDirection.Left:
-                self.sunday = self.getPrevDay(self.sunday, increment: 6)
+                self.sunday = sunday.nextDay(increment: 6)
+                break;
+            case UISwipeGestureRecognizerDirection.Right:
+                self.sunday = sunday.prevDay(increment: 6)
                 break;
             default:
                 break;
             }
             
             let header = self.headerCell! as WeekHeader
-            var date = self.getNextDay(self.sunday)
-            let endDate = self.getNextDay(date, increment: 6)
+            var date = sunday.nextDay()
+            let endDate = date.nextDay(increment: 6)
             header.updateDate(date, endDate: endDate)
             for cell in self.mileageCells {
                 cell.updateDate(date.toRockerId())
-                date = self.getNextDay(date)
-                println("\(date.toRockerId())")
+                date = date.nextDay()
             }
         }
     }
     
-    /*!
-     * Gets the next day based on our date int value.
-     *
-     * @param NSNumber day
-     *   A date in the form of 20140715
-     * 
-     * @return NSNumber
-     */
-    func getNextDay(date: NSDate, increment: NSNumber = 1)->NSDate {
-        let ti = 60*60*24*(increment.doubleValue)
-        return date.dateByAddingTimeInterval(ti)
-    }
-    
-    func getPrevDay(date: NSDate, increment: NSNumber = 1)->NSDate {
-        let c = NSDateComponents()
-        let negative = Double(increment.intValue * -1)
-        let ti = 60*60*24*negative
-        return date.dateByAddingTimeInterval(ti)
-    }
-    
+   
     /*!
      * Locate the most recent Sunday to find the beginning of this week.
      *
-     * @return NSNumber
+     * @return NSDate
      */
     func findPreviousSunday()->NSDate {
         let format = NSDateFormatter()
@@ -151,13 +176,6 @@ class ViewController: UIViewController {
         return day_count.days.fromNow
     }
     
-    func nsdateToInt(date: NSDate)->NSNumber {
-        let format = NSDateFormatter()
-        format.dateFormat = "yyyyMMdd"
-        let num = format.stringFromDate(date).toInt()
-        return num!
-    }
-
 
 }
 

@@ -42,7 +42,7 @@ class RockerStepper: UIStepper {
         var rval = miles - ival
         var numerator = Int(4.0 * rval)
         
-        var fraction = "-"
+        var fraction = ""
         switch numerator {
         case 1.0:
             fraction = "¼"
@@ -51,7 +51,7 @@ class RockerStepper: UIStepper {
         case 3.0:
             fraction = "¾"
         default:
-            fraction = "-"
+            fraction = ""
         }
         
         return "\(Int(miles)) \(fraction)"
