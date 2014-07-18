@@ -9,8 +9,19 @@
 import Foundation
 import UIKit
 
+/*!
+ * @class RockerStepper
+ *
+ * This is a custom implementation of a UIStepper which provides defaults
+ * as well as custom formatting for the value.
+ */
 class RockerStepper: UIStepper {
     
+    /*!
+     * Constructor.
+     *
+     * @param CGRect frame
+     */
     init(frame: CGRect) {
         super.init(frame: frame)
         minimumValue = 0.0
@@ -18,13 +29,20 @@ class RockerStepper: UIStepper {
         stepValue = 0.25
         autorepeat = true
     }
-    
-    class func mileageWithFraction(miles:Double)->String {
+   
+    /*!
+     * Gets a custom label based upon the internal value.
+     *
+     * @param Double miles
+     *
+     * @return String
+     */
+    class func getLabel(miles:Double)->String {
         var ival = floor(miles)
         var rval = miles - ival
         var numerator = Int(4.0 * rval)
         
-        var fraction = ""
+        var fraction = "-"
         switch numerator {
         case 1.0:
             fraction = "¼"
@@ -33,7 +51,7 @@ class RockerStepper: UIStepper {
         case 3.0:
             fraction = "¾"
         default:
-            fraction = ""
+            fraction = "-"
         }
         
         return "\(Int(miles)) \(fraction)"

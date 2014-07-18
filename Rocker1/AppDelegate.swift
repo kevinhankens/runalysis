@@ -19,38 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         return true
     }
-    
-    func coreDataExperiment() {
-        // EXPERIMENT W/CORE DATA
-        let obj = NSEntityDescription.insertNewObjectForEntityForName("Mileage", inManagedObjectContext: self.managedObjectContext) as Mileage
-        let planned = 1.25
-        let actual = 2.5
-        obj.date = NSNumber(int: 20140715)
-        obj.mileageActual = NSNumber(float: Float(1.25))
-        obj.mileagePlanned = NSNumber(float: Float(2.5))
-        obj.note = "kevin"
-        self.saveContext()
-        
-        //var newobj = self.managedObjectContext.objectWithID(obj.objectID) as Mileage
-        //var entity = NSEntityDescription("Mileage", managedObjectContext)
-        
-        var error: NSError? = nil
-        var fReq: NSFetchRequest = NSFetchRequest(entityName: "Mileage")
-        
-        fReq.predicate = NSPredicate(format:"date == 20140715")
-        //fReq.predicate = NSPredicate(format:"id == 1")
-        
-        //var sorter: NSSortDescriptor = NSSortDescriptor(key: "date" , ascending: false)
-        //fReq.sortDescriptors = [sorter]
-        
-        var result = self.managedObjectContext.executeFetchRequest(fReq, error:&error)
-        for resultItem : AnyObject in result {
-            var mileageItem = resultItem as Mileage
-            println("Fetched Mileage for \(mileageItem) ")
-        }
-        
-        //println("\(newobj)")
-    }
 
     func applicationWillResignActive(application: UIApplication!) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
