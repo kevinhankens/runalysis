@@ -18,6 +18,18 @@ class RockerCell: UIView {
 
     // The cover view which contains the labels.
     var cover: UIView?
+   
+    // The boundaries of the left pan.
+    var coverBoundsLeft = CGFloat(0)
+    
+    // The boundaries of the right pan.
+    var coverBoundsRight = CGFloat(0)
+    
+    // The "normal" home position of the cover.
+    var coverBoundsNormal = CGFloat(0)
+    
+    // The Limit to the cover movement.
+    var coverBoundsOffset = CGFloat(100)
     
     // The left-hand stepper.
     var leftControl: UIView?
@@ -92,6 +104,7 @@ class RockerCell: UIView {
         let cover = UIView(frame: CGRect(x: 0, y: 0, width: cellWidth, height: 50.00))
         cover.backgroundColor = container.getCoverBgColorNormal()
         container.cover = cover
+        container.coverBoundsNormal = cover.center.x
         
         let leftLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 50.00, height: container.bounds.height))
         leftLabel.text = RockerStepper.getLabel(Double(mileageData.mileagePlanned))
@@ -99,6 +112,7 @@ class RockerCell: UIView {
         leftLabel.textAlignment = NSTextAlignment.Center
         container.leftLabel = leftLabel
         cover.addSubview(leftLabel)
+        container.coverBoundsLeft = cover.center.x - container.coverBoundsOffset
         
         let centerLabel = UILabel(frame: CGRect(x: (cellWidth/2 - 50), y: 3, width: 100.00, height: 40.00))
         centerLabel.text = centerText
@@ -112,16 +126,20 @@ class RockerCell: UIView {
         rightLabel.textAlignment = NSTextAlignment.Center
         container.rightLabel = rightLabel
         cover.addSubview(rightLabel)
+        container.coverBoundsRight = cover.center.x + container.coverBoundsOffset
         
         // Swipe recognizer: right
-        var swipeRight = UISwipeGestureRecognizer(target: container, action: "respondToSwipeGesture:")
-        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        container.addGestureRecognizer(swipeRight)
+        var pan = UIPanGestureRecognizer(target: container, action: "respondToPanGesture:")
+        container.addGestureRecognizer(pan)
+        //var swipeRight = UISwipeGestureRecognizer(target: container, action: "respondToSwipeGesture:")
+        //swipeRight.direction = UISwipeGestureRecognizerDirection.Right
+        //container.addGestureRecognizer(swipeRight)
         
         // Swipe recognizer: left
-        var swipeLeft = UISwipeGestureRecognizer(target: container, action: "respondToSwipeGesture:")
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
-        container.addGestureRecognizer(swipeLeft)
+        //var swipeLeft = UISwipeGestureRecognizer(target: container, action: "respondToSwipeGesture:")
+        //swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
+        //container.addGestureRecognizer(swipeLeft)
+            
         container.addSubview(cover)
         
         return container
@@ -143,6 +161,47 @@ class RockerCell: UIView {
      */
     func getCoverBgColorHi()->UIColor {
         return UIColor(red: 59/255, green: 173/255, blue: 255/255, alpha: 1.0)
+    }
+   
+    /*!
+     * Handle the pan gesture of the rocker cell cover.
+     *
+     * @param pan
+     *
+     * @return void
+     */
+    func respondToPanGesture(pan: UIPanGestureRecognizer) {
+        var v = pan.view as RockerCell
+        var c = v.cover!
+        var translation = pan.translationInView(c.superview) as CGPoint
+        var pos = c.center as CGPoint
+        
+        if (c.center.x >= v.coverBoundsLeft && c.center.x <= v.coverBoundsRight) {
+            pos.x += translation.x
+            c.center = pos
+            pan.setTranslation(CGPointZero, inView: cover)
+        }
+            
+        if (pan.state == UIGestureRecognizerState.Ended) {
+            if (c.center.x < v.coverBoundsLeft) {
+                c.center.x = v.coverBoundsLeft
+            }
+            else if (c.center.x > v.coverBoundsRight) {
+                c.center.x = v.coverBoundsRight
+            }
+            else if (c.center.x > v.coverBoundsNormal && c.center.x < v.coverBoundsNormal + (v.coverBoundsOffset/2)) {
+                c.center.x = v.coverBoundsNormal
+            }
+            else if (c.center.x < v.coverBoundsRight && c.center.x > v.coverBoundsNormal + (v.coverBoundsOffset/2)) {
+                c.center.x = v.coverBoundsRight
+            }
+            else if (c.center.x < v.coverBoundsNormal && c.center.x > v.coverBoundsNormal - (v.coverBoundsOffset/2)) {
+                c.center.x = v.coverBoundsNormal
+            }
+            else if (c.center.x > v.coverBoundsLeft && c.center.x < v.coverBoundsNormal - (v.coverBoundsOffset/2)) {
+                c.center.x = v.coverBoundsLeft
+            }
+        }
     }
     
     /*!

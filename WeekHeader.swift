@@ -73,7 +73,7 @@ class WeekHeader: UIView {
         let v = self.dateLabel!
         let format = NSDateFormatter()
         format.dateFormat = "MMM d"
-        v.text = "\(format.stringFromDate(self.beginDate)) - \(format.stringFromDate(self.endDate))"
+        v.text = "< \(format.stringFromDate(self.beginDate)) - \(format.stringFromDate(self.endDate)) >"
     }
 
 }
