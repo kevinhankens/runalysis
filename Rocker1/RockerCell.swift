@@ -166,7 +166,7 @@ class RockerCell: UIView {
     /*!
      * Handle the pan gesture of the rocker cell cover.
      *
-     * @param pan
+     * @param UIPanGestureRecognizer pan
      *
      * @return void
      */
