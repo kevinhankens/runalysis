@@ -94,8 +94,8 @@ class ViewController: UIViewController {
         
         self.view.backgroundColor = UIColor.blackColor()
         
-        var ypos:Float = 70.0
-        let height:Float = 50.0
+        var ypos:CGFloat = 70.0
+        let height:CGFloat = 50.0
         
         let beginDate = sunday
         let endDate = sunday.nextDay(increment: 6)

@@ -73,13 +73,13 @@ class RockerCell: UIView {
      *
      * @return RockerCell
      */
-    class func createCell(centerText: String, cellHeight: Float, cellWidth:
-        Float, cellY: Float, day: NSNumber)->RockerCell {
+    class func createCell(centerText: String, cellHeight: CGFloat, cellWidth:
+        CGFloat, cellY: CGFloat, day: NSNumber)->RockerCell {
         // @todo cgrect size should be args
         // @todo make this 100% width
         // @todo make the steppers injectable?
             
-        let container = RockerCell(frame: CGRect(x: 0, y: cellY, width: cellWidth, height: 50.00))
+        let container = RockerCell(frame: CGRectMake(0, cellY, cellWidth, 50.00))
         container.dayNum = day
         container.backgroundColor = container.getCoverBgColorHi()
             
@@ -184,21 +184,27 @@ class RockerCell: UIView {
             
         if (pan.state == UIGestureRecognizerState.Ended) {
             if (c.center.x < v.coverBoundsLeft) {
+                // Don't allow it to go beyond the left boundary.
                 c.center.x = v.coverBoundsLeft
             }
             else if (c.center.x > v.coverBoundsRight) {
+                // Don't allow it to go beyond the right boundary.
                 c.center.x = v.coverBoundsRight
             }
-            else if (c.center.x > v.coverBoundsNormal && c.center.x < v.coverBoundsNormal + (v.coverBoundsOffset/2)) {
+            else if (c.center.x > v.coverBoundsNormal && c.center.x <= v.coverBoundsNormal + (v.coverBoundsOffset/2)) {
+                // Snap to center if they are right of normal and left of half.
                 c.center.x = v.coverBoundsNormal
             }
             else if (c.center.x < v.coverBoundsRight && c.center.x > v.coverBoundsNormal + (v.coverBoundsOffset/2)) {
+                // Snap to right if they are right of the half.
                 c.center.x = v.coverBoundsRight
             }
-            else if (c.center.x < v.coverBoundsNormal && c.center.x > v.coverBoundsNormal - (v.coverBoundsOffset/2)) {
+            else if (c.center.x < v.coverBoundsNormal && c.center.x >= v.coverBoundsNormal - (v.coverBoundsOffset/2)) {
+                // Snap to center if they are left of normal and right of half.
                 c.center.x = v.coverBoundsNormal
             }
             else if (c.center.x > v.coverBoundsLeft && c.center.x < v.coverBoundsNormal - (v.coverBoundsOffset/2)) {
+                // Snap to left if they are left of the half.
                 c.center.x = v.coverBoundsLeft
             }
         }

@@ -33,10 +33,11 @@ class WeekHeader: UIView {
      *
      * @return WeekHeader
      */
-    class func createHeader(cellHeight: Float, cellWidth:
-        Float, beginDate: NSDate, endDate: NSDate)->WeekHeader {
-    
-        let header = WeekHeader(frame: CGRect(x: 0, y: 20, width: cellWidth, height: cellHeight))
+    class func createHeader(cellHeight: CGFloat, cellWidth:
+        CGFloat, beginDate: NSDate, endDate: NSDate)->WeekHeader {
+   
+        let loc = CGPointMake(0, 20)
+        let header = WeekHeader(frame: CGRectMake(loc.x, loc.y, cellWidth, cellHeight))
 
         let headerDate = UILabel(frame: CGRect(x: 0, y: 0, width: header.bounds.width, height: 50.0))
         headerDate.textAlignment = NSTextAlignment.Center
