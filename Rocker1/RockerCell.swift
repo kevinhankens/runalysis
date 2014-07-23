@@ -62,6 +62,8 @@ class RockerCell: UIView {
     // The rocker is moved right (exposed on the left).
     let rockedRight: Int = 1
     
+    var summary: SummaryCell?
+    
     /*!
      * Factory method to create an instance of RockerCell
      *
@@ -74,14 +76,17 @@ class RockerCell: UIView {
      * @return RockerCell
      */
     class func createCell(centerText: String, cellHeight: CGFloat, cellWidth:
-        CGFloat, cellY: CGFloat, day: NSNumber)->RockerCell {
+        CGFloat, cellY: CGFloat, day: NSNumber, summary: SummaryCell)->RockerCell {
         // @todo cgrect size should be args
         // @todo make this 100% width
         // @todo make the steppers injectable?
             
+            
         let container = RockerCell(frame: CGRectMake(0, cellY, cellWidth, 50.00))
         container.dayNum = day
         container.backgroundColor = container.getCoverBgColorHi()
+            
+        container.summary = summary
             
         let mileageData = container.store.getMileageForDate(day)
         
@@ -322,6 +327,11 @@ class RockerCell: UIView {
         let r = self.rightControl! as UIStepper
         self.store.setMileageForDay(self.dayNum, planned: l.value, actual: r.value)
         self.store.saveContext()
+        
+        let summary = self.summary! as SummaryCell
+        summary.updateValues()
+        summary.setNeedsDisplay()
+        
         //println("SAVED: \(self.dayNum) L: \(l.value) R: \(r.value)")
     }
     

@@ -84,6 +84,7 @@ class ViewController: UIViewController {
     let daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     var mileageCells: [RockerCell] = []
     var headerCell: WeekHeader?
+    var summaryCell: SummaryCell?
     var sunday: NSDate = NSDate()
     
     override func viewDidLoad() {
@@ -104,23 +105,36 @@ class ViewController: UIViewController {
         self.headerCell = header
         self.view.addSubview(header)
         
-        var swipeRight = UISwipeGestureRecognizer(target: self, action: "hederSwipe:")
+        var swipeRight = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
         header.addGestureRecognizer(swipeRight)
         
-        var swipeLeft = UISwipeGestureRecognizer(target: self, action: "hederSwipe:")
+        var swipeLeft = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
         swipeRight.direction = UISwipeGestureRecognizerDirection.Left
         header.addGestureRecognizer(swipeLeft)
 
+        var summary = SummaryCell.createCell(height, cellWidth: self.view.bounds.width, cellY: height * 9)
+        self.summaryCell = summary
+        self.view.addSubview(summary)
+        
         var dayNum = self.sunday
         for day in self.daysOfWeek {
-            var cell = RockerCell.createCell(day, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum.toRockerId())
+            var cell = RockerCell.createCell(day, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum.toRockerId(), summary: summary)
             self.view.addSubview(cell)
             self.mileageCells += cell
             ypos = ypos + height
             dayNum = dayNum.nextDay()
         }
+        
+        summary.cells = self.mileageCells
+        self.updateSummary()
 
+    }
+    
+    func updateSummary() {
+        let summary = self.summaryCell! as SummaryCell
+        summary.updateValues()
+        summary.setNeedsDisplay()
     }
 
     override func didReceiveMemoryWarning() {
@@ -135,7 +149,7 @@ class ViewController: UIViewController {
      *
      * @return void
      */
-    func hederSwipe(gesture: UIGestureRecognizer) {
+    func headerSwipe(gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.Left:
@@ -156,6 +170,8 @@ class ViewController: UIViewController {
                 cell.updateDate(date.toRockerId())
                 date = date.nextDay()
             }
+            
+            self.updateSummary()
         }
     }
     

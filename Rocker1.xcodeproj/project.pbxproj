@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		174004B3197963170083199E /* WeekHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174004B2197963170083199E /* WeekHeader.swift */; };
+		17534462197FEE270023B7E6 /* SummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17534461197FEE270023B7E6 /* SummaryCell.swift */; };
 		178151BD1972F1240029EB87 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178151BC1972F1240029EB87 /* AppDelegate.swift */; };
 		178151C01972F1240029EB87 /* Rocker1.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 178151BE1972F1240029EB87 /* Rocker1.xcdatamodeld */; };
 		178151C21972F1240029EB87 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178151C11972F1240029EB87 /* ViewController.swift */; };
@@ -32,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		174004B2197963170083199E /* WeekHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekHeader.swift; sourceTree = "<group>"; };
+		17534461197FEE270023B7E6 /* SummaryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryCell.swift; sourceTree = "<group>"; };
 		178151B71972F1240029EB87 /* Rocker1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rocker1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		178151BB1972F1240029EB87 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		178151BC1972F1240029EB87 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 			children = (
 				174004B2197963170083199E /* WeekHeader.swift */,
 				178151EE19771A9E0029EB87 /* MyPlayground.playground */,
+				17534461197FEE270023B7E6 /* SummaryCell.swift */,
 				178151EC1976E26A0029EB87 /* MileageStore.swift */,
 				178151EB1975969D0029EB87 /* Rocker1-Bridging-Header.h */,
 				178151DE197423140029EB87 /* RockerStepper.swift */,
@@ -234,6 +237,7 @@
 				178151C21972F1240029EB87 /* ViewController.swift in Sources */,
 				178151DD1972F16B0029EB87 /* RockerCell.swift in Sources */,
 				178151ED1976E26A0029EB87 /* MileageStore.swift in Sources */,
+				17534462197FEE270023B7E6 /* SummaryCell.swift in Sources */,
 				178151BD1972F1240029EB87 /* AppDelegate.swift in Sources */,
 				178151C01972F1240029EB87 /* Rocker1.xcdatamodeld in Sources */,
 				178151EA197590230029EB87 /* Mileage.swift in Sources */,
