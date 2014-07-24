@@ -126,6 +126,8 @@ class SummaryCell: UIView {
             var r = cell.rightControl! as RockerStepper
             mileage[0][i] = l.value
             mileage[1][i] = r.value
+            println("l: \(l.value)")
+            println("r: \(r.value)")
             
             if l.value > vmax && l.value > r.value {
                 vmax = l.value
@@ -154,6 +156,10 @@ class SummaryCell: UIView {
             var yval = CGFloat(0.0)
             for i in 0...6 {
                 yval = CGFloat(mileage[type][i]) * CGFloat(vscale)
+                println("\(yval)")
+                if (isnan(yval)) {
+                    yval = CGFloat(0.0)
+                }
                 if start {
                     CGContextMoveToPoint(context, xval, self.frame.height - yval)
                     start = false
