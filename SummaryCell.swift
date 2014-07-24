@@ -104,56 +104,69 @@ class SummaryCell: UIView {
      */
     override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
+    
+        // The max mileage.
+        var vmax = 0.0
         
-        CGContextFillRect(context, self.bounds)
+        // The vertical scale.
+        var vscale = 0.0
+        
+        // The vertical boundary.
+        let vbounds = CGFloat(10.0)
+        
+        // Tracks the mileage for each day of the week.
+        var mileage = [[0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0]]
         
         let mileageCells = self.cells!
-        // @todo better handling of the increment value.
-        let increment = (self.frame.width - 100) / 6
-        // @todo scale the drawing to fit vertically
-        let scale = self.frame.height
        
-        // Gross.
-        CGContextSetLineWidth(context, 2.0);
-        // Draw the planned mileage.
-        CGContextSetStrokeColorWithColor(context, self.plannedColor.CGColor);
-        var xval = CGFloat(50.0);
-        var yval = CGFloat(0.0);
-        var start = true
+        // Locate the maximum value to determine graph scale.
+        var i = 0
         for cell in mileageCells {
             var l = cell.leftControl! as RockerStepper
             var r = cell.rightControl! as RockerStepper
-            yval = CGFloat(l.value) * 3
-            if start {
-                CGContextMoveToPoint(context, xval, self.frame.height - yval);
-                start = false
+            mileage[0][i] = l.value
+            mileage[1][i] = r.value
+            
+            if l.value > vmax && l.value > r.value {
+                vmax = l.value
             }
-            else {
-                CGContextAddLineToPoint(context, xval, self.frame.height - yval);
+            else if r.value > vmax {
+                vmax = r.value
             }
-            xval += increment
+            i++
         }
-        CGContextStrokePath(context);
+       
+        // Determine the vertical scale for each point.
+        vscale = (self.frame.height - vbounds)/vmax
+       
+        // Clear the context to start over.
+        CGContextFillRect(context, self.bounds)
+        CGContextSetLineWidth(context, 2.0)
         
-        // Draw the actual mileage.
-        CGContextSetStrokeColorWithColor(context, self.actualColor.CGColor);
-        xval = CGFloat(50.0);
-        yval = CGFloat(0.0);
-        start = true
-        for cell in mileageCells {
-            var l = cell.leftControl! as RockerStepper
-            var r = cell.rightControl! as RockerStepper
-            yval = CGFloat(r.value) * 3
-            if start {
-                CGContextMoveToPoint(context, xval, self.frame.height - yval);
-                start = false
+        var start = true
+        let increment = (self.frame.width - 100) / 6
+    
+        // Iterate over planned/actual and chart the mileage.
+        var type = 0
+        for color in [self.plannedColor, self.actualColor] {
+            CGContextSetStrokeColorWithColor(context, color.CGColor)
+            var xval = CGFloat(50.0)
+            var yval = CGFloat(0.0)
+            for i in 0...6 {
+                yval = CGFloat(mileage[type][i]) * CGFloat(vscale)
+                if start {
+                    CGContextMoveToPoint(context, xval, self.frame.height - yval)
+                    start = false
+                }
+                else {
+                    CGContextAddLineToPoint(context, xval, self.frame.height - yval)
+                }
+                xval += increment       
             }
-            else {
-                CGContextAddLineToPoint(context, xval, self.frame.height - yval);
-            }
-            xval += increment
+            start = true
+            CGContextStrokePath(context)
+            type++
         }
-        CGContextStrokePath(context);
     }
 
 }
