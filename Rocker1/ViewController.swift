@@ -83,7 +83,6 @@ class ViewController: UIViewController {
     
     let daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     var mileageCells: [RockerCell] = []
-    var headerCell: WeekHeader?
     var summaryCell: SummaryCell?
     var sunday: NSDate = NSDate()
     
@@ -95,28 +94,26 @@ class ViewController: UIViewController {
         
         self.view.backgroundColor = UIColor.blackColor()
         
-        var ypos:CGFloat = 70.0
+        var ypos:CGFloat = 125.0
         let height:CGFloat = 50.0
         
         let beginDate = sunday
         let endDate = sunday.nextDay(increment: 6)
-        let header = WeekHeader.createHeader(height, cellWidth: self.view.bounds.width, beginDate: beginDate, endDate: endDate);
-        header.backgroundColor = UIColor(red: 59/255, green: 173/255, blue: 255/255, alpha: 1.0)
-        self.headerCell = header
-        self.view.addSubview(header)
+        
+        var summary = SummaryCell.createCell(height * 1.5, cellWidth: self.view.bounds.width, cellY: height - 10, beginDate: beginDate, endDate: endDate)
+        self.summaryCell = summary
+        
+        self.view.addSubview(summary)
         
         var swipeRight = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        header.addGestureRecognizer(swipeRight)
+        summary.addGestureRecognizer(swipeRight)
         
         var swipeLeft = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
         swipeRight.direction = UISwipeGestureRecognizerDirection.Left
-        header.addGestureRecognizer(swipeLeft)
+        summary.addGestureRecognizer(swipeLeft)
 
-        var summary = SummaryCell.createCell(height, cellWidth: self.view.bounds.width, cellY: height * 9)
-        self.summaryCell = summary
-        self.view.addSubview(summary)
-        
+       
         var dayNum = self.sunday
         for day in self.daysOfWeek {
             var cell = RockerCell.createCell(day, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum.toRockerId(), summary: summary)
@@ -162,7 +159,7 @@ class ViewController: UIViewController {
                 break;
             }
             
-            let header = self.headerCell! as WeekHeader
+            let header = self.summaryCell! as SummaryCell
             var date = sunday.nextDay()
             let endDate = date.nextDay(increment: 6)
             header.updateDate(date, endDate: endDate)

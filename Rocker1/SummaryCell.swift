@@ -10,7 +10,16 @@ import Foundation
 import UIKit
 
 class SummaryCell: UIView {
-   
+  
+    // The date this week begins with.
+    var beginDate: NSDate = NSDate()
+    
+    // The date this week ends with.
+    var endDate: NSDate = NSDate()
+    
+    // The label containing the date.
+    var dateLabel: UILabel?
+    
     // The total planned mileage for the week.
     var totalPlanned = 0.0
     
@@ -28,12 +37,14 @@ class SummaryCell: UIView {
    
     // Computed value to return the planned mileage color.
     var plannedColor: UIColor {
-        return UIColor.blueColor()
+        return UIColor(red: 69/255, green: 118/255, blue: 173/255, alpha: 1.0)
+        //return UIColor.blueColor()
     }
     
     // Computed value to return the actual mileage color.
     var actualColor: UIColor {
-        return UIColor.greenColor()
+        return UIColor(red: 69/255, green: 173/255, blue: 125/255, alpha: 1.0)
+        //return UIColor.greenColor()
     }
    
     /*!
@@ -46,23 +57,30 @@ class SummaryCell: UIView {
      * @return SummaryCell
      */
     class func createCell(cellHeight: CGFloat, cellWidth:
-        CGFloat, cellY: CGFloat)->SummaryCell {
+        CGFloat, cellY: CGFloat, beginDate: NSDate, endDate: NSDate)->SummaryCell {
             
         // @todo this needs more dynamic boundaries.
             
-        let container = SummaryCell(frame: CGRectMake(0, cellY, cellWidth, 50.00))
+        let container = SummaryCell(frame: CGRectMake(0, cellY, cellWidth, cellHeight))
     
-        let planned = UILabel(frame: CGRect(x: 0, y: 0, width: 50.00, height: container.bounds.height))
+        let planned = UILabel(frame: CGRect(x: 0, y: 25, width: 50.00, height: container.bounds.height))
         planned.textColor = container.plannedColor
         planned.textAlignment = NSTextAlignment.Center
         container.plannedLabel = planned
         container.addSubview(planned)
             
-        let actual = UILabel(frame: CGRect(x: cellWidth - 50, y: 0, width: 50.00, height: container.bounds.height))
+        let actual = UILabel(frame: CGRect(x: cellWidth - 50, y: 25, width: 50.00, height: container.bounds.height))
         actual.textColor = container.actualColor
         actual.textAlignment = NSTextAlignment.Center
         container.actualLabel = actual
         container.addSubview(actual)
+            
+        let headerDate = UILabel(frame: CGRect(x: 0, y: 0, width: container.bounds.width, height: 50.0))
+        headerDate.textAlignment = NSTextAlignment.Center
+        headerDate.textColor = UIColor.whiteColor()
+        container.dateLabel = headerDate
+        container.updateDate(beginDate, endDate: endDate)
+        container.addSubview(headerDate)
             
         return container
     }
@@ -112,7 +130,7 @@ class SummaryCell: UIView {
         var vscale = 0.0
         
         // The vertical boundary.
-        let vbounds = CGFloat(10.0)
+        let vbounds = CGFloat(40.0)
         
         // Tracks the mileage for each day of the week.
         var mileage = [[0.0,0.0,0.0,0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0,0.0,0.0,0.0]]
@@ -126,8 +144,6 @@ class SummaryCell: UIView {
             var r = cell.rightControl! as RockerStepper
             mileage[0][i] = l.value
             mileage[1][i] = r.value
-            println("l: \(l.value)")
-            println("r: \(r.value)")
             
             if l.value > vmax && l.value > r.value {
                 vmax = l.value
@@ -156,10 +172,10 @@ class SummaryCell: UIView {
             var yval = CGFloat(0.0)
             for i in 0...6 {
                 yval = CGFloat(mileage[type][i]) * CGFloat(vscale)
-                println("\(yval)")
                 if (isnan(yval)) {
                     yval = CGFloat(0.0)
                 }
+                yval = yval == CGFloat(0.0) ? CGFloat(1.0) : yval
                 if start {
                     CGContextMoveToPoint(context, xval, self.frame.height - yval)
                     start = false
@@ -174,5 +190,35 @@ class SummaryCell: UIView {
             type++
         }
     }
+    
+    /*!
+    * Updates the header to contain a new begin and end date.
+    *
+    * This also updates the label accordingly.
+    *
+    * @param beginDate
+    * @param endDate
+    *
+    * @return void
+    */
+    func updateDate(beginDate: NSDate, endDate: NSDate) {
+        self.beginDate = beginDate
+        self.endDate = endDate
+        self.updateLabel()
+    }
+    
+    /*!
+    * Updates the label containing the dates.
+    *
+    *
+    * @return void
+    */
+    func updateLabel() {
+        let v = self.dateLabel!
+        let format = NSDateFormatter()
+        format.dateFormat = "MMM d"
+        v.text = "< \(format.stringFromDate(self.beginDate)) - \(format.stringFromDate(self.endDate)) >"
+    }
+
 
 }

@@ -41,6 +41,7 @@ class WeekHeader: UIView {
 
         let headerDate = UILabel(frame: CGRect(x: 0, y: 0, width: header.bounds.width, height: 50.0))
         headerDate.textAlignment = NSTextAlignment.Center
+        headerDate.textColor = UIColor.whiteColor()
         header.dateLabel = headerDate
         header.updateDate(beginDate, endDate: endDate)
         header.addSubview(headerDate)

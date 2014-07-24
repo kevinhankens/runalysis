@@ -96,6 +96,7 @@ class RockerCell: UIView {
         leftControl.addTarget(container, action: "leftMileageIncrease:", forControlEvents: UIControlEvents.ValueChanged)
         leftControl.addTarget(container, action: "leftMileageSave:", forControlEvents: UIControlEvents.TouchUpInside)
         leftControl.value = Double(mileageData.mileagePlanned)
+        leftControl.tintColor = UIColor.whiteColor()
         container.addSubview(leftControl)
         
         let rightControl = RockerStepper(frame: CGRect(x: cellWidth - 95, y: 10, width: 30.00, height: 20.00))
@@ -103,6 +104,7 @@ class RockerCell: UIView {
         rightControl.addTarget(container, action: "rightMileageIncrease:", forControlEvents: UIControlEvents.ValueChanged)
         rightControl.addTarget(container, action: "rightMileageSave:", forControlEvents: UIControlEvents.TouchUpInside)
         rightControl.value = Double(mileageData.mileageActual)
+        rightControl.tintColor = UIColor.whiteColor()
         container.addSubview(rightControl)
         
         // Create a cover view.
@@ -165,7 +167,8 @@ class RockerCell: UIView {
      * @return UIColor
      */
     func getCoverBgColorHi()->UIColor {
-        return UIColor(red: 59/255, green: 173/255, blue: 255/255, alpha: 1.0)
+        return UIColor(red: 69/255, green: 173/255, blue: 125/255, alpha: 1.0)
+        //return UIColor(red: 59/255, green: 173/255, blue: 255/255, alpha: 1.0)
     }
    
     /*!
