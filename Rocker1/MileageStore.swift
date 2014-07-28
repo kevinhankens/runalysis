@@ -19,14 +19,13 @@ import CoreData
  *  let ms = MileageStore()
  *  let test1 = ms.getMileageForDate(20140716)
  *  println("created: \(test1)")
- *  ms.setMileageForDay(test1.date, planned: 1.25, actual: 2.5)
+ *  ms.setMileageForDay(test1.date, planned: 1.25, actual: 2.5, note:"My note.")
  *  let test2 = ms.getMileageForDate(test1.date)
+ *  ms.setNoteForDay(test2.date, note:"My note.")
  *  println("retrieved: \(test2)")
  *  ms.saveContext()
  */
 class MileageStore {
-    
-
     
     /*!
      * @var NSManagedObjectContext
@@ -92,6 +91,7 @@ class MileageStore {
         obj.date = day
         obj.mileagePlanned = 0
         obj.mileageActual = 0
+        obj.note = ""
         
         return obj
     }
@@ -105,14 +105,34 @@ class MileageStore {
      *   The number of miles planned.
      * @param NSNumber actual
      *   The number of actual miles accomplished.
+     * @param NSString note
+     *   A note about the day.
      *
      * @return void
      */
-    func setMileageForDay(day: NSNumber, planned: NSNumber, actual: NSNumber) {
-        var obj = self.getMileageForDate(day)
+    func setMileageForDay(day: NSNumber, planned: NSNumber, actual: NSNumber, note: NSString) {
+        let obj = self.getMileageForDate(day)
         obj.mileagePlanned = planned
         obj.mileageActual = actual
+        if note != "" {
+          obj.note = note
+        }
         
+    }
+    
+    /*!
+     * Sets a note for the specified day.
+     *
+     * @param NSNumber day
+     *   The number representing a day, e.g. 20140715
+     * @param NSString note
+     *   A note about the day.
+     *
+     * @return void
+     */
+    func setNoteForDay(day: NSNumber, note: NSString) {
+        let obj = self.getMileageForDate(day)
+          obj.note = note
     }
 
 }

@@ -85,6 +85,7 @@ class ViewController: UIViewController {
     var mileageCells: [RockerCell] = []
     var summaryCell: SummaryCell?
     var sunday: NSDate = NSDate()
+    var noteViewDayNum: NSNumber = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,7 +117,7 @@ class ViewController: UIViewController {
        
         var dayNum = self.sunday
         for day in self.daysOfWeek {
-            var cell = RockerCell.createCell(day, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum.toRockerId(), summary: summary)
+            var cell = RockerCell.createCell(day, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum.toRockerId(), summary: summary, controller: self)
             self.view.addSubview(cell)
             self.mileageCells += cell
             ypos = ypos + height
@@ -137,6 +138,11 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+        let v = segue.destinationViewController as NoteViewController
+        v.dayNum = self.noteViewDayNum
     }
     
     /*!

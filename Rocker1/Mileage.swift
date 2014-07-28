@@ -11,9 +11,16 @@ import CoreData
 
 class Mileage: NSManagedObject {
 
+    // The date of the mileage, tracked as a numeric value.
     @NSManaged var date: NSNumber
+    
+    // The planned mileage for the specified day.
     @NSManaged var mileagePlanned: NSNumber
+    
+    // The actual mileage for the specified day.
     @NSManaged var mileageActual: NSNumber
+    
+    // A note about the day.
     @NSManaged var note: String
 
 }

@@ -44,7 +44,7 @@ class RockerCell: UIView {
     var rightLabel: UIView?
     
     // The identifier of the day, e.g. 20140715
-    // @todo maybe have a rockerId class?
+    // @todo convert to MileageId?
     var dayNum: NSNumber = 0
     
     // The core data storage.
@@ -64,6 +64,8 @@ class RockerCell: UIView {
     
     var summary: SummaryCell?
     
+    var controller: UIViewController?
+    
     /*!
      * Factory method to create an instance of RockerCell
      *
@@ -76,17 +78,18 @@ class RockerCell: UIView {
      * @return RockerCell
      */
     class func createCell(centerText: String, cellHeight: CGFloat, cellWidth:
-        CGFloat, cellY: CGFloat, day: NSNumber, summary: SummaryCell)->RockerCell {
+        CGFloat, cellY: CGFloat, day: NSNumber, summary: SummaryCell, controller: UIViewController)->RockerCell {
         // @todo cgrect size should be args
         // @todo make this 100% width
         // @todo make the steppers injectable?
-            
-            
+           
         let container = RockerCell(frame: CGRectMake(0, cellY, cellWidth, 50.00))
         container.dayNum = day
         container.backgroundColor = container.getCoverBgColorHi()
             
         container.summary = summary
+            
+        container.controller = controller
             
         let mileageData = container.store.getMileageForDate(day)
         
@@ -135,9 +138,15 @@ class RockerCell: UIView {
         cover.addSubview(rightLabel)
         container.coverBoundsRight = cover.center.x + container.coverBoundsOffset
         
-        // Swipe recognizer: right
+        // Pan gesture recognizer.
         var pan = UIPanGestureRecognizer(target: container, action: "respondToPanGesture:")
         container.addGestureRecognizer(pan)
+            
+        // Tap gesture recognizer.
+        let tap = UITapGestureRecognizer(target: container, action: "respondToTapGesture:")
+        tap.numberOfTapsRequired = 2
+        cover.addGestureRecognizer(tap)
+        
         //var swipeRight = UISwipeGestureRecognizer(target: container, action: "respondToSwipeGesture:")
         //swipeRight.direction = UISwipeGestureRecognizerDirection.Right
         //container.addGestureRecognizer(swipeRight)
@@ -169,6 +178,12 @@ class RockerCell: UIView {
     func getCoverBgColorHi()->UIColor {
         return UIColor(red: 69/255, green: 173/255, blue: 125/255, alpha: 1.0)
         //return UIColor(red: 59/255, green: 173/255, blue: 255/255, alpha: 1.0)
+    }
+    
+    func respondToTapGesture(tap: UITapGestureRecognizer) {
+        let c = self.controller! as ViewController
+        c.noteViewDayNum = self.dayNum
+        c.performSegueWithIdentifier("noteViewSegue", sender: c)
     }
    
     /*!
@@ -328,7 +343,7 @@ class RockerCell: UIView {
     func saveMileage() {
         let l = self.leftControl! as UIStepper
         let r = self.rightControl! as UIStepper
-        self.store.setMileageForDay(self.dayNum, planned: l.value, actual: r.value)
+        self.store.setMileageForDay(self.dayNum, planned: l.value, actual: r.value, note: "")
         self.store.saveContext()
         
         let summary = self.summary! as SummaryCell

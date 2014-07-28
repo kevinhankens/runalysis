@@ -19,6 +19,9 @@
 		178D50E81981ADF600173703 /* SummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D50E71981ADF600173703 /* SummaryCell.swift */; };
 		178D50EA1981AE2A00173703 /* MileageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D50E91981AE2A00173703 /* MileageStore.swift */; };
 		178D50EC1981AE4600173703 /* RockerStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D50EB1981AE4600173703 /* RockerStepper.swift */; };
+		178D50EF1982FCF800173703 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D50EE1982FCF800173703 /* NoteViewController.swift */; };
+		178D50F11986851D00173703 /* GlobalTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D50F01986851D00173703 /* GlobalTheme.swift */; };
+		178D50F31986853A00173703 /* MileageId.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D50F21986853A00173703 /* MileageId.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,10 +48,13 @@
 		178151DC1972F16B0029EB87 /* RockerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerCell.swift; sourceTree = "<group>"; };
 		178151E9197590230029EB87 /* Mileage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mileage.swift; sourceTree = "<group>"; };
 		178D50E51981ADC900173703 /* WeekHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekHeader.swift; sourceTree = "<group>"; };
-		178D50E71981ADF600173703 /* SummaryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SummaryCell.swift; path = Rocker1/SummaryCell.swift; sourceTree = "<group>"; };
-		178D50E91981AE2A00173703 /* MileageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MileageStore.swift; path = Rocker1/MileageStore.swift; sourceTree = "<group>"; };
-		178D50EB1981AE4600173703 /* RockerStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RockerStepper.swift; path = Rocker1/RockerStepper.swift; sourceTree = "<group>"; };
+		178D50E71981ADF600173703 /* SummaryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryCell.swift; sourceTree = "<group>"; };
+		178D50E91981AE2A00173703 /* MileageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MileageStore.swift; sourceTree = "<group>"; };
+		178D50EB1981AE4600173703 /* RockerStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerStepper.swift; sourceTree = "<group>"; };
 		178D50ED1981AEE000173703 /* Rocker1-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Rocker1-Bridging-Header.h"; sourceTree = "<group>"; };
+		178D50EE1982FCF800173703 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
+		178D50F01986851D00173703 /* GlobalTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalTheme.swift; sourceTree = "<group>"; };
+		178D50F21986853A00173703 /* MileageId.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MileageId.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,9 +79,6 @@
 			isa = PBXGroup;
 			children = (
 				178D50ED1981AEE000173703 /* Rocker1-Bridging-Header.h */,
-				178D50EB1981AE4600173703 /* RockerStepper.swift */,
-				178D50E91981AE2A00173703 /* MileageStore.swift */,
-				178D50E71981ADF600173703 /* SummaryCell.swift */,
 				178151B91972F1240029EB87 /* Rocker1 */,
 				178151CF1972F1240029EB87 /* Rocker1Tests */,
 				178151B81972F1240029EB87 /* Products */,
@@ -94,14 +97,20 @@
 		178151B91972F1240029EB87 /* Rocker1 */ = {
 			isa = PBXGroup;
 			children = (
-				178D50E51981ADC900173703 /* WeekHeader.swift */,
+				178D50F01986851D00173703 /* GlobalTheme.swift */,
+				178D50F21986853A00173703 /* MileageId.swift */,
+				178D50EE1982FCF800173703 /* NoteViewController.swift */,
 				178151BC1972F1240029EB87 /* AppDelegate.swift */,
-				178151C11972F1240029EB87 /* ViewController.swift */,
 				178151C31972F1240029EB87 /* Main.storyboard */,
 				178151E9197590230029EB87 /* Mileage.swift */,
+				178D50E91981AE2A00173703 /* MileageStore.swift */,
 				178151DC1972F16B0029EB87 /* RockerCell.swift */,
+				178D50EB1981AE4600173703 /* RockerStepper.swift */,
 				178151C61972F1240029EB87 /* Images.xcassets */,
 				178151BE1972F1240029EB87 /* Rocker1.xcdatamodeld */,
+				178D50E71981ADF600173703 /* SummaryCell.swift */,
+				178151C11972F1240029EB87 /* ViewController.swift */,
+				178D50E51981ADC900173703 /* WeekHeader.swift */,
 				178151BA1972F1240029EB87 /* Supporting Files */,
 			);
 			path = Rocker1;
@@ -233,13 +242,16 @@
 			files = (
 				178D50EA1981AE2A00173703 /* MileageStore.swift in Sources */,
 				178D50E61981ADC900173703 /* WeekHeader.swift in Sources */,
+				178D50F11986851D00173703 /* GlobalTheme.swift in Sources */,
 				178151C21972F1240029EB87 /* ViewController.swift in Sources */,
 				178151DD1972F16B0029EB87 /* RockerCell.swift in Sources */,
 				178D50E81981ADF600173703 /* SummaryCell.swift in Sources */,
 				178151BD1972F1240029EB87 /* AppDelegate.swift in Sources */,
 				178151C01972F1240029EB87 /* Rocker1.xcdatamodeld in Sources */,
 				178D50EC1981AE4600173703 /* RockerStepper.swift in Sources */,
+				178D50EF1982FCF800173703 /* NoteViewController.swift in Sources */,
 				178151EA197590230029EB87 /* Mileage.swift in Sources */,
+				178D50F31986853A00173703 /* MileageId.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
