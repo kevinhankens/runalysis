@@ -86,6 +86,7 @@ class ViewController: UIViewController {
     var summaryCell: SummaryCell?
     var sunday: NSDate = NSDate()
     var noteViewDayNum: NSNumber = 0
+    var noteViewTriggeringCell: RockerCell?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -143,6 +144,7 @@ class ViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
         let v = segue.destinationViewController as NoteViewController
         v.dayNum = self.noteViewDayNum
+        v.triggeringCell = self.noteViewTriggeringCell
     }
     
     /*!
@@ -156,17 +158,18 @@ class ViewController: UIViewController {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.Left:
-                self.sunday = sunday.nextDay(increment: 6)
+                self.sunday = sunday.nextDay(increment: 7)
                 break;
             case UISwipeGestureRecognizerDirection.Right:
-                self.sunday = sunday.prevDay(increment: 6)
+                self.sunday = sunday.prevDay(increment: 7)
                 break;
             default:
                 break;
             }
             
             let header = self.summaryCell! as SummaryCell
-            var date = sunday.nextDay()
+            //var date = sunday.nextDay()
+            var date = sunday
             let endDate = date.nextDay(increment: 6)
             header.updateDate(date, endDate: endDate)
             for cell in self.mileageCells {

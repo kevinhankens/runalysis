@@ -78,7 +78,7 @@ class RockerCell: UIView {
      * @return RockerCell
      */
     class func createCell(centerText: String, cellHeight: CGFloat, cellWidth:
-        CGFloat, cellY: CGFloat, day: NSNumber, summary: SummaryCell, controller: UIViewController)->RockerCell {
+        CGFloat, cellY: CGFloat, day: NSNumber, summary: SummaryCell?, controller: UIViewController)->RockerCell {
         // @todo cgrect size should be args
         // @todo make this 100% width
         // @todo make the steppers injectable?
@@ -180,9 +180,15 @@ class RockerCell: UIView {
         //return UIColor(red: 59/255, green: 173/255, blue: 255/255, alpha: 1.0)
     }
     
+    /*!
+     * Handle taps on the rocker cover.
+     *
+     * @param UITapGestureRecognizer tap
+     */
     func respondToTapGesture(tap: UITapGestureRecognizer) {
         let c = self.controller! as ViewController
         c.noteViewDayNum = self.dayNum
+        c.noteViewTriggeringCell = self
         c.performSegueWithIdentifier("noteViewSegue", sender: c)
     }
    
@@ -346,9 +352,10 @@ class RockerCell: UIView {
         self.store.setMileageForDay(self.dayNum, planned: l.value, actual: r.value, note: "")
         self.store.saveContext()
         
-        let summary = self.summary! as SummaryCell
-        summary.updateValues()
-        summary.setNeedsDisplay()
+        if let summary = self.summary as? SummaryCell {
+            summary.updateValues()
+            summary.setNeedsDisplay()
+        }
         
         //println("SAVED: \(self.dayNum) L: \(l.value) R: \(r.value)")
     }
