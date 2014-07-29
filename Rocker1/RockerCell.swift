@@ -85,7 +85,14 @@ class RockerCell: UIView {
            
         let container = RockerCell(frame: CGRectMake(0, cellY, cellWidth, 50.00))
         container.dayNum = day
-        container.backgroundColor = container.getCoverBgColorHi()
+            
+        let leftBg = UIView(frame: CGRect(x: 0, y: 0, width: container.bounds.width/2, height: container.bounds.height))
+        leftBg.backgroundColor = GlobalTheme.getPlannedColor()
+        container.addSubview(leftBg)
+            
+        let rightBg = UIView(frame: CGRect(x: container.bounds.width/2, y: 0, width: container.bounds.width/2, height: container.bounds.height))
+        rightBg.backgroundColor = GlobalTheme.getActualColor()
+        container.addSubview(rightBg)
             
         container.summary = summary
             
@@ -118,7 +125,7 @@ class RockerCell: UIView {
         
         let leftLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 50.00, height: container.bounds.height))
         leftLabel.text = RockerStepper.getLabel(Double(mileageData.mileagePlanned))
-        leftLabel.textColor = UIColor.whiteColor()
+        leftLabel.textColor = GlobalTheme.getPlannedColor()
         leftLabel.textAlignment = NSTextAlignment.Center
         container.leftLabel = leftLabel
         cover.addSubview(leftLabel)
@@ -132,7 +139,7 @@ class RockerCell: UIView {
         
         let rightLabel = UILabel(frame: CGRect(x: cellWidth - 50, y: 0, width: 50.00, height: container.bounds.height))
         rightLabel.text = RockerStepper.getLabel(Double(mileageData.mileageActual))
-        rightLabel.textColor = UIColor.whiteColor()
+        rightLabel.textColor = GlobalTheme.getActualColor()
         rightLabel.textAlignment = NSTextAlignment.Center
         container.rightLabel = rightLabel
         cover.addSubview(rightLabel)

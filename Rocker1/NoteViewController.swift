@@ -17,8 +17,10 @@ class NoteViewController: UIViewController {
     // The core data storage.
     var store: MileageStore = MileageStore()
     
+    // The note that should be saved to the db.
     var note: UITextView?
     
+    // The rocker cell that triggered this view, for redrawing.
     var triggeringCell: RockerCell?
 
     override func viewDidLoad() {
@@ -53,7 +55,6 @@ class NoteViewController: UIViewController {
         noteView.text = mileageData.note
         self.note = noteView
         self.view.addSubview(noteView)
-        
     }
     
     /*!
@@ -64,14 +65,17 @@ class NoteViewController: UIViewController {
      * @param UIButton sender
      */
     func returnToRootView(sender: UIButton) {
-        println("pressed")
         if let cell = self.triggeringCell as? RockerCell {
+            // Redraw the triggering cell in the root view.
             cell.updateDate(cell.dayNum)
         }
+        
+        // Save the note to the db.
         let note = self.note!
         self.store.setNoteForDay(self.dayNum, note: note.text)
         self.store.saveContext()
-        println("dismissing")
+        
+        // Return to the root view.
         self.dismissViewControllerAnimated(true, completion: nil)
     }
    

@@ -35,18 +35,6 @@ class SummaryCell: UIView {
     // A list of the RockerCell objects for summary.
     var cells: [RockerCell]?
    
-    // Computed value to return the planned mileage color.
-    var plannedColor: UIColor {
-        return UIColor(red: 69/255, green: 118/255, blue: 173/255, alpha: 1.0)
-        //return UIColor.blueColor()
-    }
-    
-    // Computed value to return the actual mileage color.
-    var actualColor: UIColor {
-        return UIColor(red: 69/255, green: 173/255, blue: 125/255, alpha: 1.0)
-        //return UIColor.greenColor()
-    }
-   
     /*!
      * Factory method to create a SummaryCell.
      *
@@ -64,13 +52,13 @@ class SummaryCell: UIView {
         let container = SummaryCell(frame: CGRectMake(0, cellY, cellWidth, cellHeight))
     
         let planned = UILabel(frame: CGRect(x: 0, y: 25, width: 50.00, height: container.bounds.height))
-        planned.textColor = container.plannedColor
+        planned.textColor = UIColor.whiteColor()
         planned.textAlignment = NSTextAlignment.Center
         container.plannedLabel = planned
         container.addSubview(planned)
             
         let actual = UILabel(frame: CGRect(x: cellWidth - 50, y: 25, width: 50.00, height: container.bounds.height))
-        actual.textColor = container.actualColor
+        actual.textColor = UIColor.whiteColor()
         actual.textAlignment = NSTextAlignment.Center
         container.actualLabel = actual
         container.addSubview(actual)
@@ -166,7 +154,7 @@ class SummaryCell: UIView {
     
         // Iterate over planned/actual and chart the mileage.
         var type = 0
-        for color in [self.plannedColor, self.actualColor] {
+        for color in [GlobalTheme.getPlannedColor(), GlobalTheme.getActualColor()] {
             CGContextSetStrokeColorWithColor(context, color.CGColor)
             var xval = CGFloat(50.0)
             var yval = CGFloat(0.0)
