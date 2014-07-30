@@ -1,6 +1,6 @@
 //
 //  WeekHeader.swift
-//  Rocker1
+//  JogLog
 //
 //  Created by Kevin Hankens on 7/18/14.
 //  Copyright (c) 2014 Kevin Hankens. All rights reserved.

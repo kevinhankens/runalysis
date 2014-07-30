@@ -1,6 +1,6 @@
 //
 //  RockerCell.swift
-//  Rocker1
+//  JogLog
 //
 //  Created by Kevin Hankens on 7/13/14.
 //  Copyright (c) 2014 Kevin Hankens. All rights reserved.
@@ -62,8 +62,10 @@ class RockerCell: UIView {
     // The rocker is moved right (exposed on the left).
     let rockedRight: Int = 1
     
+    // Tracks the summary cell to update when mileages change.
     var summary: SummaryCell?
     
+    // Tracks the parent controller to trigger note view segue.
     var controller: UIViewController?
     
     /*!
@@ -78,7 +80,7 @@ class RockerCell: UIView {
      * @return RockerCell
      */
     class func createCell(centerText: String, cellHeight: CGFloat, cellWidth:
-        CGFloat, cellY: CGFloat, day: NSNumber, summary: SummaryCell?, controller: UIViewController)->RockerCell {
+        CGFloat, cellY: CGFloat, day: NSNumber, summary: SummaryCell?, controller: UIViewController?)->RockerCell {
         // @todo cgrect size should be args
         // @todo make this 100% width
         // @todo make the steppers injectable?
@@ -133,8 +135,10 @@ class RockerCell: UIView {
         
         let centerLabel = UILabel(frame: CGRect(x: (cellWidth/2 - 50), y: 3, width: 100.00, height: 40.00))
         centerLabel.text = centerText
-        centerLabel.textColor = UIColor.whiteColor()
+        centerLabel.sizeToFit()
+        centerLabel.textColor = GlobalTheme.getNormalTextColor()
         centerLabel.textAlignment = NSTextAlignment.Center
+        centerLabel.frame = CGRectMake((container.frame.width/2 - centerLabel.frame.width/2), (container.frame.height/2 - centerLabel.frame.height/2), centerLabel.frame.width, centerLabel.frame.height)
         cover.addSubview(centerLabel)
         
         let rightLabel = UILabel(frame: CGRect(x: cellWidth - 50, y: 0, width: 50.00, height: container.bounds.height))
@@ -146,7 +150,7 @@ class RockerCell: UIView {
         container.coverBoundsRight = cover.center.x + container.coverBoundsOffset
         
         // Pan gesture recognizer.
-        var pan = UIPanGestureRecognizer(target: container, action: "respondToPanGesture:")
+        let pan = UIPanGestureRecognizer(target: container, action: "respondToPanGesture:")
         container.addGestureRecognizer(pan)
             
         // Tap gesture recognizer.
@@ -154,15 +158,6 @@ class RockerCell: UIView {
         tap.numberOfTapsRequired = 2
         cover.addGestureRecognizer(tap)
         
-        //var swipeRight = UISwipeGestureRecognizer(target: container, action: "respondToSwipeGesture:")
-        //swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        //container.addGestureRecognizer(swipeRight)
-        
-        // Swipe recognizer: left
-        //var swipeLeft = UISwipeGestureRecognizer(target: container, action: "respondToSwipeGesture:")
-        //swipeLeft.direction = UISwipeGestureRecognizerDirection.Left
-        //container.addGestureRecognizer(swipeLeft)
-            
         container.addSubview(cover)
         
         return container
@@ -193,10 +188,11 @@ class RockerCell: UIView {
      * @param UITapGestureRecognizer tap
      */
     func respondToTapGesture(tap: UITapGestureRecognizer) {
-        let c = self.controller! as ViewController
-        c.noteViewDayNum = self.dayNum
-        c.noteViewTriggeringCell = self
-        c.performSegueWithIdentifier("noteViewSegue", sender: c)
+        if let c = self.controller as? ViewController {
+            c.noteViewDayNum = self.dayNum
+            c.noteViewTriggeringCell = self
+            c.performSegueWithIdentifier("noteViewSegue", sender: c)
+        }
     }
    
     /*!
@@ -208,103 +204,58 @@ class RockerCell: UIView {
      */
     func respondToPanGesture(pan: UIPanGestureRecognizer) {
         var v = pan.view as RockerCell
-        var c = v.cover!
+        var c = v.cover! as UIView
         var translation = pan.translationInView(c.superview) as CGPoint
         var pos = c.center as CGPoint
         
+        // Move the cover horizontally based on the pan change.
         if (c.center.x >= v.coverBoundsLeft && c.center.x <= v.coverBoundsRight) {
             pos.x += translation.x
             c.center = pos
             pan.setTranslation(CGPointZero, inView: cover)
         }
-            
+        
+        // Define some boundaries and react to incomplete pans.
         if (pan.state == UIGestureRecognizerState.Ended) {
-            if (c.center.x < v.coverBoundsLeft) {
+            if (c.center.x <= v.coverBoundsLeft) {
                 // Don't allow it to go beyond the left boundary.
                 c.center.x = v.coverBoundsLeft
             }
-            else if (c.center.x > v.coverBoundsRight) {
+            else if (c.center.x >= v.coverBoundsRight) {
                 // Don't allow it to go beyond the right boundary.
                 c.center.x = v.coverBoundsRight
             }
             else if (c.center.x > v.coverBoundsNormal && c.center.x <= v.coverBoundsNormal + (v.coverBoundsOffset/2)) {
                 // Snap to center if they are right of normal and left of half.
-                c.center.x = v.coverBoundsNormal
+                UIView.animateWithDuration(0.1, animations: {
+                    c.center.x = v.coverBoundsNormal
+                    })
             }
             else if (c.center.x < v.coverBoundsRight && c.center.x > v.coverBoundsNormal + (v.coverBoundsOffset/2)) {
                 // Snap to right if they are right of the half.
-                c.center.x = v.coverBoundsRight
+                UIView.animateWithDuration(0.1, animations: {
+                    c.center.x = v.coverBoundsRight
+                    })
             }
             else if (c.center.x < v.coverBoundsNormal && c.center.x >= v.coverBoundsNormal - (v.coverBoundsOffset/2)) {
                 // Snap to center if they are left of normal and right of half.
-                c.center.x = v.coverBoundsNormal
+                UIView.animateWithDuration(0.1, animations: {
+                    c.center.x = v.coverBoundsNormal
+                    })
             }
             else if (c.center.x > v.coverBoundsLeft && c.center.x < v.coverBoundsNormal - (v.coverBoundsOffset/2)) {
                 // Snap to left if they are left of the half.
-                c.center.x = v.coverBoundsLeft
+                UIView.animateWithDuration(0.1, animations: {
+                    c.center.x = v.coverBoundsLeft
+                    })
             }
         }
     }
-    
-    /*!
-     * Handles the swipe gesture on the rocker cover.
-     *
-     * @param UIGestureRecognizer gesture
-     *
-     * @return void
-     */
-    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
-        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
-            
-            var v = gesture.view as RockerCell
-            var c = v.cover!
-            var f = c.frame
-            var l = v.leftLabel! as UILabel
-            var r = v.rightLabel! as UILabel
-            
-            switch swipeGesture.direction {
-            case UISwipeGestureRecognizerDirection.Right:
-                if v.rocked == v.rockedLeft || v.rocked == v.rockedNone {
-                    c.center = CGPointMake(c.center.x + 100, c.center.y)
-                }
-                else {
-                    break;
-                }
-                if v.rocked == v.rockedNone {
-                    l.backgroundColor = v.getCoverBgColorHi()
-                    v.rocked = v.rockedRight
-                }
-                else {
-                    r.backgroundColor = v.getCoverBgColorNormal()
-                    v.rocked = v.rockedNone
-                }
-                break;
-            case UISwipeGestureRecognizerDirection.Left:
-                if v.rocked == v.rockedRight || v.rocked == v.rockedNone {
-                    c.center = CGPointMake(c.center.x - 100, c.center.y)
-                }
-                else {
-                    break;
-                }
-                if v.rocked == v.rockedNone {
-                    r.backgroundColor = v.getCoverBgColorHi()
-                    v.rocked = v.rockedLeft
-                }
-                else {
-                    l.backgroundColor = v.getCoverBgColorNormal()
-                    v.rocked = v.rockedNone
-                }
-                break;
-            default:
-                break;
-            }
-        }
-    }
-    
+   
     /*!
      * Update the date of a cell.
      *
-     * @param day
+     * @param NSNumber day
      *
      * @return void.
      */   
@@ -325,7 +276,7 @@ class RockerCell: UIView {
     /*!
      * Handle the left stepper value change.
      *
-     * @param sender
+     * @param UIStepper sender
      *
      * @return void.
      */
@@ -338,7 +289,7 @@ class RockerCell: UIView {
     /*!
      * Handle the right stepper value change.
      *
-     * @param sender
+     * @param UIStepper sender
      *
      * @return void.
      */
@@ -370,7 +321,7 @@ class RockerCell: UIView {
     /*!
      * Handle the left stepper touch release.
      *
-     * @param sender
+     * @param UIStepper sender
      *
      * @return void.
      */
@@ -381,7 +332,7 @@ class RockerCell: UIView {
     /*!
      * Handle the left stepper touch release.
      *
-     * @param sender
+     * @param UIStepper sender
      *
      * @return void.
      */

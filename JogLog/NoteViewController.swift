@@ -1,6 +1,6 @@
 //
 //  NoteViewController.swift
-//  Rocker1
+//  JogLog
 //
 //  Created by Kevin Hankens on 7/25/14.
 //  Copyright (c) 2014 Kevin Hankens. All rights reserved.
@@ -28,16 +28,21 @@ class NoteViewController: UIViewController {
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
-        let backButton = UIButton(frame: CGRect(x: 10, y: 30, width: self.view.bounds.width/2, height: 20.00))
+        let backButton = UIButton()
+        backButton.frame = CGRectMake(10, 30, self.view.bounds.width/2, 20.00)
         backButton.setTitle("< Back", forState: UIControlState.Normal)
         backButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
-        backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchUpInside)
+        backButton.backgroundColor = GlobalTheme.getBackgroundColor()
+        backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
+        backButton.layer.cornerRadius = 2;
+        backButton.layer.borderWidth = 1;
+        backButton.layer.borderColor = GlobalTheme.getPlannedColor().CGColor
         self.view.addSubview(backButton)
         
         let mileageData = self.store.getMileageForDate(self.dayNum)
         let mileage = MileageId.createFromNumber(mileageData.date)
         
-        var cell = RockerCell.createCell(mileage.toStringMedium(), cellHeight: 50.0, cellWidth: self.view.bounds.width, cellY: 50.0, day: self.dayNum, summary: nil, controller: self)
+        let cell = RockerCell.createCell(mileage.toStringMedium(), cellHeight: 50.0, cellWidth: self.view.bounds.width, cellY: 55.0, day: self.dayNum, summary: nil, controller: nil)
         self.view.addSubview(cell)
        
         //println("\(self.dayNum)")
@@ -50,7 +55,7 @@ class NoteViewController: UIViewController {
         noteLabel.textColor = GlobalTheme.getNormalTextColor()
         self.view.addSubview(noteLabel)
         
-        let noteView = UITextView(frame: CGRect(x: 10, y: 140, width: self.view.bounds.width, height: 200.00))
+        let noteView = UITextView(frame: CGRect(x: 10, y: 140, width: self.view.bounds.width - 5, height: 200.00))
         noteView.editable = true
         noteView.text = mileageData.note
         self.note = noteView
@@ -72,13 +77,15 @@ class NoteViewController: UIViewController {
      *
      * @param UIButton sender
      */
-    func returnToRootView(sender: UIButton) {
+    func returnToRootView(sender: UIButton!) {
+        //println("Pressed \(NSDate())")
         if let cell = self.triggeringCell as? RockerCell {
             // Redraw the triggering cell in the root view.
             cell.updateDate(cell.dayNum)
+            cell.saveMileage()
         }
         
-        // Save the note to the db.
+        // Save the note to the db asynchronously.
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             let note = self.note!
             self.store.setNoteForDay(self.dayNum, note: note.text)
