@@ -34,6 +34,15 @@ class MileageId {
     class func getDateFormatShort()->NSString {
         return "MM/dd/yyyy"
     }
+    
+    /*!
+     * Specifies the medium date format.
+     *
+     * @return NSString
+     */
+    class func getDateFormatMedium()->NSString {
+        return "EEE, MMMM d"
+    }
    
     // The date of this object.
     var date: NSDate = NSDate()
@@ -108,8 +117,28 @@ class MileageId {
      * @return NSString
      */
     func toStringShort()->NSString {
-        let format = NSDateFormatter()
-        format.dateFormat = MileageId.getDateFormatShort()
-        return format.stringFromDate(self.date)
+        return self.toStringFormat(MileageId.getDateFormatShort())
+    }
+    
+    /*!
+     * Creates a medium human-readable date string.
+     *
+     * @return NSString
+     */
+    func toStringMedium()->NSString {
+        return self.toStringFormat(MileageId.getDateFormatMedium())
+    }
+    
+    /**
+     * Convert the current date to a specified format.
+     *
+     * @param NSString format
+     *
+     * @return NSString
+     */
+    func toStringFormat(format: NSString)->NSString {
+        let dateFormat = NSDateFormatter()
+        dateFormat.dateFormat = format
+        return dateFormat.stringFromDate(self.date)
     }
 }

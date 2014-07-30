@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "178151B61972F1240029EB87"
-               BuildableName = "Rocker1.app"
-               BlueprintName = "Rocker1"
-               ReferencedContainer = "container:Rocker1.xcodeproj">
+               BuildableName = "JogLog.app"
+               BlueprintName = "JogLog"
+               ReferencedContainer = "container:JogLog.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "178151CB1972F1240029EB87"
-               BuildableName = "Rocker1Tests.xctest"
-               BlueprintName = "Rocker1Tests"
-               ReferencedContainer = "container:Rocker1.xcodeproj">
+               BuildableName = "JogLogTests.xctest"
+               BlueprintName = "JogLogTests"
+               ReferencedContainer = "container:JogLog.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "178151B61972F1240029EB87"
-            BuildableName = "Rocker1.app"
-            BlueprintName = "Rocker1"
-            ReferencedContainer = "container:Rocker1.xcodeproj">
+            BuildableName = "JogLog.app"
+            BlueprintName = "JogLog"
+            ReferencedContainer = "container:JogLog.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "178151B61972F1240029EB87"
-            BuildableName = "Rocker1.app"
-            BlueprintName = "Rocker1"
-            ReferencedContainer = "container:Rocker1.xcodeproj">
+            BuildableName = "JogLog.app"
+            BlueprintName = "JogLog"
+            ReferencedContainer = "container:JogLog.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "178151B61972F1240029EB87"
-            BuildableName = "Rocker1.app"
-            BlueprintName = "Rocker1"
-            ReferencedContainer = "container:Rocker1.xcodeproj">
+            BuildableName = "JogLog.app"
+            BlueprintName = "JogLog"
+            ReferencedContainer = "container:JogLog.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

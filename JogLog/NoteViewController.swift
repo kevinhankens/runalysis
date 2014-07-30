@@ -37,7 +37,7 @@ class NoteViewController: UIViewController {
         let mileageData = self.store.getMileageForDate(self.dayNum)
         let mileage = MileageId.createFromNumber(mileageData.date)
         
-        var cell = RockerCell.createCell(mileage.toStringShort(), cellHeight: 50.0, cellWidth: self.view.bounds.width, cellY: 50.0, day: self.dayNum, summary: nil, controller: self)
+        var cell = RockerCell.createCell(mileage.toStringMedium(), cellHeight: 50.0, cellWidth: self.view.bounds.width, cellY: 50.0, day: self.dayNum, summary: nil, controller: self)
         self.view.addSubview(cell)
        
         //println("\(self.dayNum)")
@@ -57,6 +57,14 @@ class NoteViewController: UIViewController {
         self.view.addSubview(noteView)
     }
     
+    override func shouldAutorotate()->Bool {
+        return false
+    }
+    
+    override func supportedInterfaceOrientations()->Int {
+        return Int(UIInterfaceOrientation.Portrait.toRaw())
+    }
+    
     /*!
      * Button responder.
      *
@@ -71,9 +79,11 @@ class NoteViewController: UIViewController {
         }
         
         // Save the note to the db.
-        let note = self.note!
-        self.store.setNoteForDay(self.dayNum, note: note.text)
-        self.store.saveContext()
+        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            let note = self.note!
+            self.store.setNoteForDay(self.dayNum, note: note.text)
+            self.store.saveContext()
+        })
         
         // Return to the root view.
         self.dismissViewControllerAnimated(true, completion: nil)

@@ -130,6 +130,14 @@ class ViewController: UIViewController {
 
     }
     
+    override func shouldAutorotate()->Bool {
+      return false
+    }
+    
+    override func supportedInterfaceOrientations()->Int {
+        return Int(UIInterfaceOrientation.Portrait.toRaw())
+    }
+    
     func updateSummary() {
         let summary = self.summaryCell! as SummaryCell
         summary.updateValues()

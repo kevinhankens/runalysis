@@ -115,7 +115,7 @@ class SummaryCell: UIView {
         var vmax = 0.0
         
         // The vertical scale.
-        var vscale = 0.0
+        var vscale:CGFloat = 0
         
         // The vertical boundary.
         let vbounds = CGFloat(40.0)
@@ -143,7 +143,7 @@ class SummaryCell: UIView {
         }
        
         // Determine the vertical scale for each point.
-        vscale = (self.frame.height - vbounds)/vmax
+        vscale = CGFloat(self.frame.height - vbounds)/CGFloat(vmax)
        
         // Clear the context to start over.
         CGContextFillRect(context, self.bounds)
@@ -159,7 +159,7 @@ class SummaryCell: UIView {
             var xval = CGFloat(50.0)
             var yval = CGFloat(0.0)
             for i in 0...6 {
-                yval = CGFloat(mileage[type][i]) * CGFloat(vscale)
+                yval = CGFloat(mileage[type][i]) * vscale
                 if (isnan(yval)) {
                     yval = CGFloat(0.0)
                 }

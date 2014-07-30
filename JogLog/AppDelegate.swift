@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  Rocker1
+//  JogLog
 //
 //  Created by Kevin Hankens on 7/13/14.
 //  Copyright (c) 2014 Kevin Hankens. All rights reserved.
@@ -78,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // If the model doesn't already exist, it is created from the application's model.
     var managedObjectModel: NSManagedObjectModel {
         if !_managedObjectModel {
-            let modelURL = NSBundle.mainBundle().URLForResource("Rocker1", withExtension: "momd")
+            let modelURL = NSBundle.mainBundle().URLForResource("JogLog", withExtension: "momd")
             _managedObjectModel = NSManagedObjectModel(contentsOfURL: modelURL)
         }
         return _managedObjectModel!
@@ -89,7 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // If the coordinator doesn't already exist, it is created and the application's store added to it.
     var persistentStoreCoordinator: NSPersistentStoreCoordinator {
         if !_persistentStoreCoordinator {
-            let storeURL = self.applicationDocumentsDirectory.URLByAppendingPathComponent("Rocker1.sqlite")
+            let storeURL = self.applicationDocumentsDirectory.URLByAppendingPathComponent("JogLog.sqlite")
             var error: NSError? = nil
             _persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
             if _persistentStoreCoordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil, error: &error) == nil {
