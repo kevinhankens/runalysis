@@ -21,6 +21,8 @@
 		1798394A1989371D0047F859 /* SummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393B1989371D0047F859 /* SummaryCell.swift */; };
 		1798394B1989371D0047F859 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393C1989371D0047F859 /* ViewController.swift */; };
 		1798394C1989371D0047F859 /* WeekHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393D1989371D0047F859 /* WeekHeader.swift */; };
+		17983951198A86320047F859 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1798392E1989371D0047F859 /* Main.storyboard */; };
+		17983953198C2CE30047F859 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17983952198C2CE30047F859 /* HelpView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,7 @@
 		1798393B1989371D0047F859 /* SummaryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryCell.swift; sourceTree = "<group>"; };
 		1798393C1989371D0047F859 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		1798393D1989371D0047F859 /* WeekHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekHeader.swift; sourceTree = "<group>"; };
+		17983952198C2CE30047F859 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +116,7 @@
 		1798392C1989371D0047F859 /* JogLog */ = {
 			isa = PBXGroup;
 			children = (
+				17983952198C2CE30047F859 /* HelpView.swift */,
 				1798392D1989371D0047F859 /* AppDelegate.swift */,
 				1798392E1989371D0047F859 /* Main.storyboard */,
 				179839301989371D0047F859 /* GlobalTheme.swift */,
@@ -213,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				179839411989371D0047F859 /* Images.xcassets in Resources */,
+				17983951198A86320047F859 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -231,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1798394C1989371D0047F859 /* WeekHeader.swift in Sources */,
+				17983953198C2CE30047F859 /* HelpView.swift in Sources */,
 				179839461989371D0047F859 /* MileageStore.swift in Sources */,
 				1798394A1989371D0047F859 /* SummaryCell.swift in Sources */,
 				1798394B1989371D0047F859 /* ViewController.swift in Sources */,

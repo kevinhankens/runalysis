@@ -25,6 +25,10 @@ class GlobalTheme {
         return UIColor.blackColor()
     }
     
+    class func getOverlayBackgroundColor()->UIColor {
+        return UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
+    }
+    
     /*!
      * Retrieves the global "normal" text color.
      *
