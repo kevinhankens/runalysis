@@ -41,7 +41,7 @@ class MileageId {
      * @return NSString
      */
     class func getDateFormatMedium()->NSString {
-        return "EEE, MMMM d"
+        return "EEEE, MMM d"
     }
    
     // The date of this object.

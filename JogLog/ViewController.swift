@@ -14,22 +14,30 @@ import UIKit
 extension Int {
     var days: NSDateComponents {
     let comps = NSDateComponents()
-        comps.day = self * -1;
+        comps.day = self;
         return comps
     }
 }
 
 /*!
- * Add a property to locate a date in the future.
+ * Add a property to locate a date in the future or past.
  */
 extension NSDateComponents {
+    // Locate a date after today.
     var fromNow: NSDate {
-    let cal = NSCalendar.currentCalendar()
+        let cal = NSCalendar.currentCalendar()
+        let date = cal.dateByAddingComponents(self, toDate: NSDate.date(), options: nil)
+        return date
+    }
+    
+    // Locate a date prior to today.
+    var beforeNow: NSDate {
+        self.day *= -1
+        let cal = NSCalendar.currentCalendar()
         let date = cal.dateByAddingComponents(self, toDate: NSDate.date(), options: nil)
         return date
     }
 }
-
 
 /*!
  * Add a method to output an NSDate object.
@@ -81,10 +89,12 @@ extension NSDate {
  */
 class ViewController: UIViewController {
    
+    // The day to start on, defaults to localized Sunday.
+    // @todo make the start configurable.
+    var startOfWeek = 1
+    
     // The array of days of the week.
-    // @todo convert this to NSDate objects, or derive them from it to get
-    // localization and make the start of the week customizable.
-    let daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+    var daysOfWeek = [1,2,3,4,5,6,7]
     
     // A list of the daily cells created.
     var mileageCells: [RockerCell] = []
@@ -113,10 +123,10 @@ class ViewController: UIViewController {
         
         // Locate the week we are on by finding the most recent Sunday.
         self.sunday = self.findPreviousSunday()
+        println("\(self.sunday)")
         
         self.view.backgroundColor = UIColor.blackColor()
         
-        var ypos:CGFloat = 125.0
         let height:CGFloat = 50.0
         
         let beginDate = sunday
@@ -135,12 +145,18 @@ class ViewController: UIViewController {
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
         swipeRight.direction = UISwipeGestureRecognizerDirection.Left
         summary.addGestureRecognizer(swipeLeft)
+        
+        // Start the rocker cells at the bottom of the summary.
+        var ypos:CGFloat = summary.frame.height + summary.frame.minY
 
         // Add rocker cells for each day of the week.
         var dayNum = self.sunday
         var cell = RockerCell()
+        let format = NSDateFormatter()
+        format.dateFormat = "EEEE"
         for day in self.daysOfWeek {
-            cell = RockerCell.createCell(day, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum.toRockerId(), summary: summary, controller: self)
+            var today = format.stringFromDate(dayNum)
+            cell = RockerCell.createCell(today, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum.toRockerId(), summary: summary, controller: self)
             self.view.addSubview(cell)
             self.mileageCells += cell
             ypos = ypos + height
@@ -261,7 +277,6 @@ class ViewController: UIViewController {
         }
     }
     
-   
     /*!
      * Locate the most recent Sunday to find the beginning of this week.
      *
@@ -269,13 +284,13 @@ class ViewController: UIViewController {
      */
     func findPreviousSunday()->NSDate {
         let format = NSDateFormatter()
-        format.dateFormat = "EEEE"
-        let today = format.stringFromDate(0.days.fromNow)
-        var day_count = 0
-        while today != self.daysOfWeek[day_count] {
+        format.dateFormat = "c"
+        let today = format.stringFromDate(0.days.fromNow).toInt()
+        var day_count = self.startOfWeek
+        while day_count < self.daysOfWeek.count && today != self.daysOfWeek[day_count] {
             day_count += 1
         }
-        return day_count.days.fromNow
+        return day_count.days.beforeNow
     }
     
 
