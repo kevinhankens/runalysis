@@ -120,10 +120,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // @todo move the setup to init?
+        // @todo move the date logic to a date object.
         
         // Locate the week we are on by finding the most recent Sunday.
-        self.sunday = self.findPreviousSunday()
-        println("\(self.sunday)")
+        self.sunday = self.findWeekStartDate()
         
         self.view.backgroundColor = UIColor.blackColor()
         
@@ -282,13 +282,18 @@ class ViewController: UIViewController {
      *
      * @return NSDate
      */
-    func findPreviousSunday()->NSDate {
+    func findWeekStartDate()->NSDate {
         let format = NSDateFormatter()
         format.dateFormat = "c"
-        let today = format.stringFromDate(0.days.fromNow).toInt()
-        var day_count = self.startOfWeek
-        while day_count < self.daysOfWeek.count && today != self.daysOfWeek[day_count] {
-            day_count += 1
+        let today = format.stringFromDate(NSDate()).toInt()
+        var day_count = 0
+        for i in self.daysOfWeek {
+            if today == self.daysOfWeek[day_count] {
+                break
+            }
+            else {
+                day_count++
+            }
         }
         return day_count.days.beforeNow
     }
