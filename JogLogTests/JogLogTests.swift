@@ -1,6 +1,6 @@
 //
-//  Rocker1Tests.swift
-//  Rocker1Tests
+//  JogLogTests.swift
+//  JogLogTests
 //
 //  Created by Kevin Hankens on 7/13/14.
 //  Copyright (c) 2014 Kevin Hankens. All rights reserved.
@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 
-class Rocker1Tests: XCTestCase {
+class JogLogTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -21,16 +21,16 @@ class Rocker1Tests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-        }
-    }
+    //func testExample() {
+    //    // This is an example of a functional test case.
+    //    XCTAssert(true, "Pass")
+    //}
+    //
+    //func testPerformanceExample() {
+    //    // This is an example of a performance test case.
+    //    self.measureBlock() {
+    //        // Put the code you want to measure the time of here.
+    //    }
+    //}
     
 }

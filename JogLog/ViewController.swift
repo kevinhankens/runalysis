@@ -156,7 +156,7 @@ class ViewController: UIViewController {
         format.dateFormat = "EEEE"
         for day in self.daysOfWeek {
             var today = format.stringFromDate(dayNum)
-            cell = RockerCell.createCell(today, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum.toRockerId(), summary: summary, controller: self)
+            cell = RockerCell.createCell(today, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum.toRockerId(), summary: summary, controller: self, store: nil)
             self.view.addSubview(cell)
             self.mileageCells += cell
             ypos = ypos + height

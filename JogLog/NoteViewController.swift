@@ -40,9 +40,9 @@ class NoteViewController: UIViewController {
         self.view.addSubview(backButton)
         
         let mileageData = self.store.getMileageForDate(self.dayNum)
-        let mileage = MileageId.createFromNumber(mileageData.date)
+        let mileage = JLDate.createFromNumber(mileageData.date)
         
-        let cell = RockerCell.createCell(mileage.toStringMedium(), cellHeight: 50.0, cellWidth: self.view.bounds.width, cellY: 55.0, day: self.dayNum, summary: nil, controller: nil)
+        let cell = RockerCell.createCell(mileage.toStringMedium(), cellHeight: 50.0, cellWidth: self.view.bounds.width, cellY: 55.0, day: self.dayNum, summary: nil, controller: nil, store: nil)
         self.view.addSubview(cell)
        
         //println("\(self.dayNum)")

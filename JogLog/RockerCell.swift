@@ -44,7 +44,7 @@ class RockerCell: UIView {
     var rightLabel: UIView?
     
     // The identifier of the day, e.g. 20140715
-    // @todo convert to MileageId?
+    // @todo convert to JLDate?
     var dayNum: NSNumber = 0
     
     // The core data storage.
@@ -80,13 +80,17 @@ class RockerCell: UIView {
      * @return RockerCell
      */
     class func createCell(centerText: String, cellHeight: CGFloat, cellWidth:
-        CGFloat, cellY: CGFloat, day: NSNumber, summary: SummaryCell?, controller: UIViewController?)->RockerCell {
+        CGFloat, cellY: CGFloat, day: NSNumber, summary: SummaryCell?, controller: UIViewController?, store: MileageStore?)->RockerCell {
         // @todo cgrect size should be args
         // @todo make this 100% width
         // @todo make the steppers injectable?
            
         let container = RockerCell(frame: CGRectMake(0, cellY, cellWidth, 50.00))
         container.dayNum = day
+            
+        if let st = store as? MileageStore {
+            container.store = st
+        }
             
         let leftBg = UIView(frame: CGRect(x: 0, y: 0, width: container.bounds.width/2, height: container.bounds.height))
         leftBg.backgroundColor = GlobalTheme.getPlannedColor()
