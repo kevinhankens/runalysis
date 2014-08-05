@@ -94,6 +94,14 @@ class JLDate {
     // The numeric representation of this object, e.g. 20140727
     var number: NSNumber = 0
     
+    /*!
+     * Factory method to create a JLDate object from the most recent week start.
+     *
+     * @param NSNumber number
+     *   The date format "c" of the day that starts the week. e.g. Sun = 1
+     *
+     * @return JLDate
+     */
     class func createFromWeekStart(number: NSNumber = 1)->JLDate {
         let day = JLDate.createFromDate(NSDate())
         let dayNumber = day.toStringFormat(JLDate.getDateFormatDayNumber())
@@ -113,10 +121,10 @@ class JLDate {
     }
    
     /*!
-     * Factory method to create an ID from a date object.
+     * Factory method to create a JLDate object from a date object.
      *
      * @param NSDate date
-     *   The date to use for this ID.
+     *   The date to use for this object.
      *
      * @return JLDate
      */
@@ -128,7 +136,7 @@ class JLDate {
     }
     
     /*!
-     * Factory method to create an ID from a number
+     * Factory method to create a JLDate from a number object.
      *
      * @param NSNumber number
      *   The numeric representation, e.g. 20140727
@@ -140,6 +148,21 @@ class JLDate {
         mileage.date = JLDate.numberToDate(number)
         mileage.number = number
         return mileage
+    }
+    
+    /*!
+     * Factory method to create a JLDate object relative to another.
+     *
+     * @param JLDate day
+     *   The JLDate to use as a reference point.
+     * @param NSNumber count
+     *   The number of days +/- to move.
+     *
+     * @return JLDate
+     */
+    class func createRelativeDay(day: JLDate, count: NSNumber)->JLDate {
+        let ti = 60*60*24*(count.doubleValue)
+        return JLDate.createFromDate(day.date.dateByAddingTimeInterval(ti))
     }
 
     /*!
@@ -206,9 +229,7 @@ class JLDate {
      * @return JLDate
      */   
     func nextDay(increment: NSNumber = 1)->JLDate {
-        let ti = 60*60*24*(increment.doubleValue)
-        let next = self.date.dateByAddingTimeInterval(ti)
-        return JLDate.createFromDate(next)
+        return JLDate.createRelativeDay(self, count: increment)
     }
     
     /*!
@@ -220,11 +241,9 @@ class JLDate {
      * @return JLDate
      */
     func prevDay(increment: NSNumber = 1)->JLDate {
-        let ti = 60*60*24*(increment.doubleValue * -1)
-        let next = self.date.dateByAddingTimeInterval(ti)
-        return JLDate.createFromDate(next)
+        return JLDate.createRelativeDay(self, count: increment.doubleValue * -1)
     }
-   
+  
     /*!
      * Creates a "day" string of the date.
      *

@@ -46,7 +46,7 @@ class JLDateTests: JogLogTests {
         
         // Ensure that an object created from NSDate matches one created
         // from an integer value of that same day.
-        assert(fromDate.number == fromNumber.number, "The number formats should match.")
+        XCTAssertEqual(fromDate.number, fromNumber.number, "Objects created for the same day using createFromDate and createFromNumber should match.")
         
         var ti = Double(60*60*24)
         let nextDate = fromDate.date.dateByAddingTimeInterval(ti)
@@ -54,7 +54,7 @@ class JLDateTests: JogLogTests {
         fromDate.updateByDate(nextDate)
         
         // Ensure that we can get the next day and set a date.
-        assert(fromDate.number == nextDayFromDate.number, "The next days should match.")
+        XCTAssertEqual(fromDate.number, nextDayFromDate.number, "Objects created with a relative date or updated to a relative date should match.")
         
         ti = ti * -1
         let prevDate = fromDate.date.dateByAddingTimeInterval(ti)
@@ -62,7 +62,7 @@ class JLDateTests: JogLogTests {
         fromDate.updateByDate(prevDate)
         
         // Ensure that we can get the next day and set a date.
-        assert(fromDate.number == prevDayFromDate.number, "The next days should match.")
+        XCTAssertEqual(fromDate.number, prevDayFromDate.number, "Objects created with a relative date or updated to a relative date should match.")
     }
     
     /*!

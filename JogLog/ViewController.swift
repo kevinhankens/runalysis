@@ -30,6 +30,7 @@ class ViewController: UIViewController {
     var sunday: JLDate = JLDate.createFromDate(NSDate())
     
     // Track the note view in a modal.
+    // @todo poor variable name.
     var noteViewDayNum: JLDate = JLDate.createFromDate(NSDate())
     
     // Track the cell that triggered the note view modal.
@@ -44,7 +45,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // @todo move the setup to init?
-        // @todo move the date logic to a date object.
         
         // Locate the week we are on by finding the most recent Sunday.
         self.sunday = JLDate.createFromWeekStart(number: self.daysOfWeek[0])

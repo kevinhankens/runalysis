@@ -43,23 +43,12 @@ class RockerCell: UIView {
     // The right-hand label.
     var rightLabel: UIView?
     
-    // The identifier of the day, e.g. 20140715
+    // The date of this cell.
+    // @todo poorly named variable.
     var dayNum: JLDate = JLDate.createFromDate(NSDate())
     
     // The core data storage.
     var store: MileageStore = MileageStore()
-    
-    // The position of the rocker.
-    var rocked: Int = 0
-    
-    // The rocker is not moved.
-    let rockedNone: Int = 0
-    
-    // The rocker is moved left (exposed on the right).
-    let rockedLeft: Int = -1
-    
-    // The rocker is moved right (exposed on the left).
-    let rockedRight: Int = 1
     
     // Tracks the summary cell to update when mileages change.
     var summary: SummaryCell?
@@ -70,11 +59,22 @@ class RockerCell: UIView {
     /*!
      * Factory method to create an instance of RockerCell
      *
-     * @param centerText
-     * @param cellHeight
-     * @param cellWidth
-     * @param cellY
-     * @param day
+     * @param String centerText
+     *   The text on the cover of the cell.
+     * @param CGFloat cellHeight
+     *   The height of the cell.
+     * @param CGFloat cellWidth
+     *   The width of the cell.
+     * @param CGFloat cellY
+     *   The y-position of the cell.
+     * @param JLDate day
+     *   The date of the cell.
+     * @param SummaryCell? summary
+     *   The summary cell that this should update.
+     * @param UIViewController? controller
+     *   The controller hosting this cell.
+     * @param MileageStore? store
+     *   The data store for this cell.
      *
      * @return RockerCell
      */
@@ -84,23 +84,24 @@ class RockerCell: UIView {
         // @todo make this 100% width
         // @todo make the steppers injectable?
            
-        let container = RockerCell(frame: CGRectMake(0, cellY, cellWidth, 50.00))
+        let container = RockerCell(frame: CGRectMake(0, cellY, cellWidth, cellHeight))
         container.dayNum = day
             
         if let st = store as? MileageStore {
             container.store = st
         }
             
+        // A background color view.
         let leftBg = UIView(frame: CGRect(x: 0, y: 0, width: container.bounds.width/2, height: container.bounds.height))
         leftBg.backgroundColor = GlobalTheme.getPlannedColor()
         container.addSubview(leftBg)
             
+        // A background color view.
         let rightBg = UIView(frame: CGRect(x: container.bounds.width/2, y: 0, width: container.bounds.width/2, height: container.bounds.height))
         rightBg.backgroundColor = GlobalTheme.getActualColor()
         container.addSubview(rightBg)
             
         container.summary = summary
-            
         container.controller = controller
             
         let mileageData = container.store.getMileageForDate(day)
@@ -123,8 +124,8 @@ class RockerCell: UIView {
         container.addSubview(rightControl)
         
         // Create a cover view.
-        let cover = UIView(frame: CGRect(x: 0, y: 0, width: cellWidth, height: 50.00))
-        cover.backgroundColor = container.getCoverBgColorNormal()
+        let cover = UIView(frame: CGRect(x: 0, y: 0, width: cellWidth, height: cellHeight))
+        cover.backgroundColor = GlobalTheme.getBackgroundColor()
         container.cover = cover
         container.coverBoundsNormal = cover.center.x
         
@@ -136,7 +137,7 @@ class RockerCell: UIView {
         cover.addSubview(leftLabel)
         container.coverBoundsLeft = cover.center.x - container.coverBoundsOffset
         
-        let centerLabel = UILabel(frame: CGRect(x: (cellWidth/2 - 50), y: 3, width: 100.00, height: 40.00))
+        let centerLabel = UILabel(frame: CGRect(x: (cellWidth/2 - 50), y: 3, width: 100.00, height: cellHeight))
         centerLabel.text = centerText
         centerLabel.sizeToFit()
         centerLabel.textColor = GlobalTheme.getNormalTextColor()
@@ -164,25 +165,6 @@ class RockerCell: UIView {
         container.addSubview(cover)
         
         return container
-    }
-    
-    /*!
-     * Gets the label background highlight color.
-     *
-     * @return UIColor
-     */
-    func getCoverBgColorNormal()->UIColor {
-        return UIColor.blackColor()
-    }
-    
-    /*!
-     * Gets the label background highlight color.
-     *
-     * @return UIColor
-     */
-    func getCoverBgColorHi()->UIColor {
-        return UIColor(red: 69/255, green: 173/255, blue: 125/255, alpha: 1.0)
-        //return UIColor(red: 59/255, green: 173/255, blue: 255/255, alpha: 1.0)
     }
     
     /*!
