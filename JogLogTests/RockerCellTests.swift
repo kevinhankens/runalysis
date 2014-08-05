@@ -13,16 +13,16 @@ import CoreData
 class RockerCellTests: JogLogTests {
 
     var testCell: RockerCell?
-    var testDate: NSDate?
+    var testDate: JLDate?
 
     override func setUp() {
         super.setUp()
         
-        self.testDate = NSDate()
+        self.testDate = JLDate.createFromDate(NSDate())
         
         let store = MileageStoreMock()
         
-        self.testCell = RockerCellMock.createCell("test", cellHeight: 20, cellWidth: 400, cellY: 20, day: 20140715, summary: nil, controller: nil, store: store)
+        self.testCell = RockerCellMock.createCell("test", cellHeight: 20, cellWidth: 400, cellY: 20, day: self.testDate!, summary: nil, controller: nil, store: store)
     }
     
     override func tearDown() {

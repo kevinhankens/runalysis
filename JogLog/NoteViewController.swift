@@ -12,7 +12,7 @@ import UIKit
 class NoteViewController: UIViewController {
    
     // The date representation that we are working with.
-    var dayNum: NSNumber = 0
+    var dayNum: JLDate = JLDate.createFromDate(NSDate())
     
     // The core data storage.
     var store: MileageStore = MileageStore()
@@ -45,11 +45,6 @@ class NoteViewController: UIViewController {
         let cell = RockerCell.createCell(mileage.toStringMedium(), cellHeight: 50.0, cellWidth: self.view.bounds.width, cellY: 55.0, day: self.dayNum, summary: nil, controller: nil, store: nil)
         self.view.addSubview(cell)
        
-        //println("\(self.dayNum)")
-        //println("\(mileageData.mileagePlanned)")
-        //println("\(mileageData.mileageActual)")
-        //println("\(mileageData.note)")
-        
         let noteLabel = UILabel(frame: CGRect(x: 10, y: 110, width: self.view.bounds.width, height: 20.00))
         noteLabel.text = "Notes:"
         noteLabel.textColor = GlobalTheme.getNormalTextColor()

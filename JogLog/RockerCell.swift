@@ -44,8 +44,7 @@ class RockerCell: UIView {
     var rightLabel: UIView?
     
     // The identifier of the day, e.g. 20140715
-    // @todo convert to JLDate?
-    var dayNum: NSNumber = 0
+    var dayNum: JLDate = JLDate.createFromDate(NSDate())
     
     // The core data storage.
     var store: MileageStore = MileageStore()
@@ -80,7 +79,7 @@ class RockerCell: UIView {
      * @return RockerCell
      */
     class func createCell(centerText: String, cellHeight: CGFloat, cellWidth:
-        CGFloat, cellY: CGFloat, day: NSNumber, summary: SummaryCell?, controller: UIViewController?, store: MileageStore?)->RockerCell {
+        CGFloat, cellY: CGFloat, day: JLDate, summary: SummaryCell?, controller: UIViewController?, store: MileageStore?)->RockerCell {
         // @todo cgrect size should be args
         // @todo make this 100% width
         // @todo make the steppers injectable?
@@ -263,7 +262,7 @@ class RockerCell: UIView {
      *
      * @return void.
      */   
-    func updateDate(day: NSNumber) {
+    func updateDate(day: JLDate) {
         let mileageData = self.store.getMileageForDate(day)
         let lc = self.leftControl! as UIStepper
         let ll = self.leftLabel! as UILabel
@@ -318,8 +317,6 @@ class RockerCell: UIView {
             summary.updateValues()
             summary.setNeedsDisplay()
         }
-        
-        //println("SAVED: \(self.dayNum) L: \(l.value) R: \(r.value)")
     }
     
     /*!

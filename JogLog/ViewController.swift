@@ -43,17 +43,6 @@ extension NSDateComponents {
  * Add a method to output an NSDate object.
  */
 extension NSDate {
-    /*!
-     * Converts a date to a RockerCell-compatible id. e.g. 20140715
-     *
-     * @return NSNumber
-     */
-    func toRockerId()->NSNumber {
-        let format = NSDateFormatter()
-        format.dateFormat = "yyyyMMdd"
-        let num = format.stringFromDate(self).toInt()
-        return num!
-    }
     
     /*!
      * Gets the date N days after today.
@@ -106,7 +95,7 @@ class ViewController: UIViewController {
     var sunday: NSDate = NSDate()
     
     // Track the note view in a modal.
-    var noteViewDayNum: NSNumber = 0
+    var noteViewDayNum: JLDate = JLDate.createFromDate(NSDate())
     
     // Track the cell that triggered the note view modal.
     var noteViewTriggeringCell: RockerCell?
@@ -150,13 +139,12 @@ class ViewController: UIViewController {
         var ypos:CGFloat = summary.frame.height + summary.frame.minY
 
         // Add rocker cells for each day of the week.
-        var dayNum = self.sunday
+        var dayNum = JLDate.createFromDate(self.sunday)
         var cell = RockerCell()
         let format = NSDateFormatter()
         format.dateFormat = "EEEE"
         for day in self.daysOfWeek {
-            var today = format.stringFromDate(dayNum)
-            cell = RockerCell.createCell(today, cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum.toRockerId(), summary: summary, controller: self, store: nil)
+            cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum, summary: summary, controller: self, store: nil)
             self.view.addSubview(cell)
             self.mileageCells += cell
             ypos = ypos + height
@@ -269,7 +257,7 @@ class ViewController: UIViewController {
             let endDate = date.nextDay(increment: 6)
             header.updateDate(date, endDate: endDate)
             for cell in self.mileageCells {
-                cell.updateDate(date.toRockerId())
+                cell.updateDate(JLDate.createFromDate(date))
                 date = date.nextDay()
             }
             

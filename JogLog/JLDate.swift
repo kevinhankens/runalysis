@@ -43,6 +43,15 @@ class JLDate {
     class func getDateFormatMedium()->NSString {
         return "EEEE, MMM d"
     }
+    
+    /*!
+     * Specifies the "day" date format.
+     *
+     * @return NSString
+     */
+    class func getDateFormatDay()->NSString {
+        return "EEEE"
+    }
    
     // The date of this object.
     var date: NSDate = NSDate()
@@ -110,7 +119,54 @@ class JLDate {
         let mileage = NSNumber.numberWithInteger(num!)
         return mileage
     }
+    
+    /*!
+     * Updates the internal date by specifying an NSDate object.
+     *
+     * @param NSDate date
+     *
+     * @return void
+     */
+    func updateByDate(date: NSDate) {
+        self.date = date
+        self.number = JLDate.dateToNumber(date)
+    }
+    
+    /*!
+     * Updates the internal date by specifying an NSNumber object.
+     *
+     * @param NSNumber number
+     *
+     * @return void
+     */
+    func updateByNumber(number: NSNumber) {
+        self.date = JLDate.numberToDate(self.number)
+        self.number = number
+    }
+    
+    /*!
+     * Produce a JLDate object in the future.
+     *
+     * @param NSNumber increment
+     *   (Optional) How many days in the future to jump.
+     *
+     * @return JLDate
+     */   
+    func nextDay(increment: NSNumber = 1)->JLDate {
+        let ti = 60*60*24*(increment.doubleValue)
+        let next = self.date.dateByAddingTimeInterval(ti)
+        return JLDate.createFromDate(next)
+    }
    
+    /*!
+     * Creates a "day" string of the date.
+     *
+     * @return NSString
+     */
+    func toStringDay()->NSString {
+        return self.toStringFormat(JLDate.getDateFormatDay())
+    }
+    
     /*!
      * Creates a short human-readable date string.
      *

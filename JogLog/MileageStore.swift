@@ -16,12 +16,15 @@ import CoreData
  * Handles Core Data integration with the AppDelgate.
  *
  * @example
+ * @todo update to new spec
  *  let ms = MileageStore()
- *  let test1 = ms.getMileageForDate(20140716)
+ *  let date = JLDate.createFromDate(NSDate())
+ *  let test1 = ms.getMileageForDate(date)
  *  println("created: \(test1)")
- *  ms.setMileageForDay(test1.date, planned: 1.25, actual: 2.5, note:"My note.")
- *  let test2 = ms.getMileageForDate(test1.date)
- *  ms.setNoteForDay(test2.date, note:"My note.")
+ *  ms.setMileageForDay(date, planned: 1.25, actual: 2.5, note:"My note.")
+ *  let next = date.nextDay()
+ *  let test2 = ms.getMileageForDate(next)
+ *  ms.setNoteForDay(next, note:"My note.")
  *  println("retrieved: \(test2)")
  *  ms.saveContext()
  */
@@ -49,17 +52,17 @@ class MileageStore {
     /*!
      * Gets the mileage for a particular day.
      *
-     * @param NSNumber day
-     *   The number representing a day, e.g. 20140715
+     * @param JLDate day
+     *   The date of the object to retrieve.
      *
      * @return Mileage
      */
-    func getMileageForDate(day: NSNumber)->Mileage {
+    func getMileageForDate(day: JLDate)->Mileage {
         // @todo error handling?
         var error: NSError? = nil
         var fReq: NSFetchRequest = NSFetchRequest(entityName: "Mileage")
         
-        fReq.predicate = NSPredicate(format:"date == \(day)")
+        fReq.predicate = NSPredicate(format:"date == \(day.number)")
         //fReq.predicate = NSPredicate(format:"id == 1")
         
         //var sorter: NSSortDescriptor = NSSortDescriptor(key: "date" , ascending: false)
@@ -81,14 +84,14 @@ class MileageStore {
     /*!
      * Prepares a new mileage object in the shared context.
      *
-     * @param NSNumber day
-     *   The number representing a day, e.g. 20140715
+     * @param JLDate day
+     *   The date of the object to retrieve.
      *
      * @return Mileage
      */
-    func getMileageObject(day: NSNumber)->Mileage {
+    func getMileageObject(day: JLDate)->Mileage {
         var obj = NSEntityDescription.insertNewObjectForEntityForName("Mileage", inManagedObjectContext: self.context) as Mileage
-        obj.date = day
+        obj.date = day.number
         obj.mileagePlanned = 0
         obj.mileageActual = 0
         obj.note = ""
@@ -99,8 +102,8 @@ class MileageStore {
     /*!
      * Sets the mileage for a particular day.
      *
-     * @param NSNumber day
-     *   The number representing a day, e.g. 20140715
+     * @param JLDate day
+     *   The date of the object to retrieve.
      * @param NSNumber planned
      *   The number of miles planned.
      * @param NSNumber actual
@@ -110,7 +113,7 @@ class MileageStore {
      *
      * @return void
      */
-    func setMileageForDay(day: NSNumber, planned: NSNumber, actual: NSNumber, note: NSString) {
+    func setMileageForDay(day: JLDate, planned: NSNumber, actual: NSNumber, note: NSString) {
         let obj = self.getMileageForDate(day)
         obj.mileagePlanned = planned
         obj.mileageActual = actual
@@ -123,14 +126,14 @@ class MileageStore {
     /*!
      * Sets a note for the specified day.
      *
-     * @param NSNumber day
-     *   The number representing a day, e.g. 20140715
+     * @param JLDate day
+     *   The date of the object to retrieve.
      * @param NSString note
      *   A note about the day.
      *
      * @return void
      */
-    func setNoteForDay(day: NSNumber, note: NSString) {
+    func setNoteForDay(day: JLDate, note: NSString) {
         let obj = self.getMileageForDate(day)
           obj.note = note
     }
