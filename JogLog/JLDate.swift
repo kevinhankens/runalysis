@@ -10,6 +10,37 @@ import Foundation
 import UIKit
 
 /*!
+* Add a days property to the Int class.
+*/
+extension Int {
+    var days: NSDateComponents {
+    let comps = NSDateComponents()
+        comps.day = self;
+        return comps
+    }
+}
+
+/*!
+* Add a property to locate a date in the future or past.
+*/
+extension NSDateComponents {
+    // Locate a date after today.
+    var fromNow: NSDate {
+    let cal = NSCalendar.currentCalendar()
+        let date = cal.dateByAddingComponents(self, toDate: NSDate.date(), options: nil)
+        return date
+    }
+    
+    // Locate a date prior to today.
+    var beforeNow: NSDate {
+    self.day *= -1
+        let cal = NSCalendar.currentCalendar()
+        let date = cal.dateByAddingComponents(self, toDate: NSDate.date(), options: nil)
+        return date
+    }
+}
+
+/*!
  * @class
  *
  * Tracks the mapping between a date's NSDate and NSNumber
@@ -52,12 +83,34 @@ class JLDate {
     class func getDateFormatDay()->NSString {
         return "EEEE"
     }
+    
+    class func getDateFormatDayNumber()->NSString {
+        return "c"
+    }
    
     // The date of this object.
     var date: NSDate = NSDate()
     
     // The numeric representation of this object, e.g. 20140727
     var number: NSNumber = 0
+    
+    class func createFromWeekStart(number: NSNumber = 1)->JLDate {
+        let day = JLDate.createFromDate(NSDate())
+        let dayNumber = day.toStringFormat(JLDate.getDateFormatDayNumber())
+        let format = NSDateFormatter()
+        format.dateFormat = "c"
+        let today = format.stringFromDate(NSDate()).toInt()
+        var day_count = 0
+        for i in [1,2,3,4,5,6,7] {
+            if today == i {
+                break
+            }
+            else {
+                day_count++
+            }
+        }
+        return JLDate.createFromDate(day_count.days.beforeNow)
+    }
    
     /*!
      * Factory method to create an ID from a date object.
@@ -154,6 +207,20 @@ class JLDate {
      */   
     func nextDay(increment: NSNumber = 1)->JLDate {
         let ti = 60*60*24*(increment.doubleValue)
+        let next = self.date.dateByAddingTimeInterval(ti)
+        return JLDate.createFromDate(next)
+    }
+    
+    /*!
+     * Produce a JLDate object in the past
+     *
+     * @param NSNumber increment
+     *   (Optional) How many days in the future to jump.
+     *
+     * @return JLDate
+     */
+    func prevDay(increment: NSNumber = 1)->JLDate {
+        let ti = 60*60*24*(increment.doubleValue * -1)
         let next = self.date.dateByAddingTimeInterval(ti)
         return JLDate.createFromDate(next)
     }

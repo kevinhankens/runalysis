@@ -42,10 +42,27 @@ class JLDateTests: JogLogTests {
         
         let fromDate = JLDate.createFromDate(self.date)
         let fromNumber = JLDate.createFromNumber(self.number)
+        let originalNumber = fromDate.number
         
         // Ensure that an object created from NSDate matches one created
         // from an integer value of that same day.
         assert(fromDate.number == fromNumber.number, "The number formats should match.")
+        
+        var ti = Double(60*60*24)
+        let nextDate = fromDate.date.dateByAddingTimeInterval(ti)
+        let nextDayFromDate = fromDate.nextDay()
+        fromDate.updateByDate(nextDate)
+        
+        // Ensure that we can get the next day and set a date.
+        assert(fromDate.number == nextDayFromDate.number, "The next days should match.")
+        
+        ti = ti * -1
+        let prevDate = fromDate.date.dateByAddingTimeInterval(ti)
+        let prevDayFromDate = fromDate.prevDay()
+        fromDate.updateByDate(prevDate)
+        
+        // Ensure that we can get the next day and set a date.
+        assert(fromDate.number == prevDayFromDate.number, "The next days should match.")
     }
     
     /*!

@@ -9,71 +9,6 @@
 import UIKit
 
 /*!
- * Add a days property to the Int class.
- */
-extension Int {
-    var days: NSDateComponents {
-    let comps = NSDateComponents()
-        comps.day = self;
-        return comps
-    }
-}
-
-/*!
- * Add a property to locate a date in the future or past.
- */
-extension NSDateComponents {
-    // Locate a date after today.
-    var fromNow: NSDate {
-        let cal = NSCalendar.currentCalendar()
-        let date = cal.dateByAddingComponents(self, toDate: NSDate.date(), options: nil)
-        return date
-    }
-    
-    // Locate a date prior to today.
-    var beforeNow: NSDate {
-        self.day *= -1
-        let cal = NSCalendar.currentCalendar()
-        let date = cal.dateByAddingComponents(self, toDate: NSDate.date(), options: nil)
-        return date
-    }
-}
-
-/*!
- * Add a method to output an NSDate object.
- */
-extension NSDate {
-    
-    /*!
-     * Gets the date N days after today.
-     *
-     * @param increment
-     *   The number of days to move forward.
-     * 
-     * @return NSDate
-     */
-    func nextDay(increment: NSNumber = 1)->NSDate {
-        let ti = 60*60*24*(increment.doubleValue)
-        return self.dateByAddingTimeInterval(ti)
-    }
-    
-    /*!
-     * Gets the date N days prior to today.
-     *
-     * @param increment
-     *   The number of days to move forward.
-     * 
-     * @return NSDate
-     */   
-    func prevDay(increment: NSNumber = 1)->NSDate {
-        let negative = Double(increment.intValue * -1)
-        let ti = 60*60*24*negative
-        return self.dateByAddingTimeInterval(ti)
-    }
- 
-}
-
-/*!
  * Main view controller.
  */
 class ViewController: UIViewController {
@@ -92,7 +27,7 @@ class ViewController: UIViewController {
     var summaryCell: SummaryCell?
     
     // Track the Sunday of the week we're currently viewing.
-    var sunday: NSDate = NSDate()
+    var sunday: JLDate = JLDate.createFromDate(NSDate())
     
     // Track the note view in a modal.
     var noteViewDayNum: JLDate = JLDate.createFromDate(NSDate())
@@ -112,16 +47,16 @@ class ViewController: UIViewController {
         // @todo move the date logic to a date object.
         
         // Locate the week we are on by finding the most recent Sunday.
-        self.sunday = self.findWeekStartDate()
+        self.sunday = JLDate.createFromWeekStart(number: self.daysOfWeek[0])
         
         self.view.backgroundColor = UIColor.blackColor()
         
         let height:CGFloat = 50.0
         
-        let beginDate = sunday
+        let beginDate = self.sunday
         let endDate = sunday.nextDay(increment: 6)
         
-        let summary = SummaryCell.createCell(height * 1.5, cellWidth: self.view.bounds.width, cellY: height - 10, beginDate: beginDate, endDate: endDate)
+        let summary = SummaryCell.createCell(height * 1.5, cellWidth: self.view.bounds.width, cellY: height - 10, beginDate: beginDate.date, endDate: endDate.date)
         self.summaryCell = summary
         self.view.addSubview(summary)
         
@@ -139,7 +74,7 @@ class ViewController: UIViewController {
         var ypos:CGFloat = summary.frame.height + summary.frame.minY
 
         // Add rocker cells for each day of the week.
-        var dayNum = JLDate.createFromDate(self.sunday)
+        var dayNum = self.sunday
         var cell = RockerCell()
         let format = NSDateFormatter()
         format.dateFormat = "EEEE"
@@ -252,40 +187,18 @@ class ViewController: UIViewController {
             }
             
             let header = self.summaryCell! as SummaryCell
-            //var date = sunday.nextDay()
             var date = sunday
             let endDate = date.nextDay(increment: 6)
-            header.updateDate(date, endDate: endDate)
+            // @todo update summary to use JLDate
+            header.updateDate(date.date, endDate: endDate.date)
             for cell in self.mileageCells {
-                cell.updateDate(JLDate.createFromDate(date))
+                cell.updateDate(date)
                 date = date.nextDay()
             }
             
             self.updateSummary()
         }
     }
-    
-    /*!
-     * Locate the most recent Sunday to find the beginning of this week.
-     *
-     * @return NSDate
-     */
-    func findWeekStartDate()->NSDate {
-        let format = NSDateFormatter()
-        format.dateFormat = "c"
-        let today = format.stringFromDate(NSDate()).toInt()
-        var day_count = 0
-        for i in self.daysOfWeek {
-            if today == self.daysOfWeek[day_count] {
-                break
-            }
-            else {
-                day_count++
-            }
-        }
-        return day_count.days.beforeNow
-    }
-    
 
 }
 
