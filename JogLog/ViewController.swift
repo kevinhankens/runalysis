@@ -39,6 +39,9 @@ class ViewController: UIViewController {
     // The current version, used to track intro/update modals.
     let version = 0.034
     
+    //
+    let cellPosOffScreen = CGFloat(20)
+    
     // Where the version is stored in the NSUserDefaults.
     let versionKey = "JogLogVersion"
     
@@ -58,7 +61,6 @@ class ViewController: UIViewController {
         
         let summary = SummaryCell.createCell(height * 1.5, cellWidth: self.view.bounds.width, cellY: height - 10, beginDate: beginDate.date, endDate: endDate.date)
         self.summaryCell = summary
-        self.view.addSubview(summary)
         
         // Add a right swipe gesture to the header.
         let swipeRight = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
@@ -79,7 +81,7 @@ class ViewController: UIViewController {
         let format = NSDateFormatter()
         format.dateFormat = "EEEE"
         for day in self.daysOfWeek {
-            cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: CGFloat(-100), day: dayNum, summary: summary, controller: self, store: nil)
+            cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: self.cellPosOffScreen, day: dayNum, summary: summary, controller: self, store: nil)
             cell.finalY = ypos
             self.view.addSubview(cell)
             self.mileageCells += cell
@@ -89,14 +91,31 @@ class ViewController: UIViewController {
         
         // Track the mileage cells in the summary.
         summary.cells = self.mileageCells
+        self.view.addSubview(summary)
         self.updateSummary()
     }
     
     override func viewDidAppear(animated: Bool) {
-        for cell in self.mileageCells {
-            UIView.animateWithDuration(1.0, animations: {cell.center.y = cell.finalY + (cell.frame.height/2)})
-        }
+        self.rollCellsDown()
         self.checkVersionChange()
+    }
+    
+    /*!
+     * Rolls all of the cells up behind the summary.
+     */
+    func rollCellsDown() {
+        for cell in self.mileageCells {
+            UIView.animateWithDuration(0.5, animations: {cell.center.y = cell.finalY + (cell.frame.height/2)})
+        }
+    }
+    
+    /*!
+     * Rolls all of the cells down into view.
+     */
+    func rollCellsUp() {
+        for cell in self.mileageCells {
+            UIView.animateWithDuration(0.5, animations: {cell.center.y = self.cellPosOffScreen + (cell.frame.height/2) + 5})
+        }
     }
     
     /*!
@@ -176,6 +195,7 @@ class ViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+        self.rollCellsUp()
         // @todo put identifiers into properties
         if segue.identifier == "noteViewSegue" {
             let v = segue.destinationViewController as NoteViewController

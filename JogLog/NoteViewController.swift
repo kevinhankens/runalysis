@@ -73,7 +73,11 @@ class NoteViewController: UIViewController {
      * @param UIButton sender
      */
     func returnToRootView(sender: UIButton!) {
-        //println("Pressed \(NSDate())")
+        if let p = self.parentViewController as? ViewController {
+            // @todo this is a little too much control for this view.
+            p.rollCellsDown()
+        }
+
         if let cell = self.triggeringCell as? RockerCell {
             // Redraw the triggering cell in the root view.
             cell.updateDate(cell.dayNum)
@@ -88,7 +92,7 @@ class NoteViewController: UIViewController {
         })
         
         // Return to the root view.
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismissViewControllerAnimated(false, completion: nil)
     }
    
     override func didReceiveMemoryWarning() {
