@@ -31,6 +31,8 @@ class RockerCell: UIView {
     // The Limit to the cover movement.
     var coverBoundsOffset = CGFloat(100)
     
+    var finalY = CGFloat(-100)
+    
     // The left-hand stepper.
     var leftControl: UIView?
     
@@ -233,6 +235,30 @@ class RockerCell: UIView {
                 UIView.animateWithDuration(0.1, animations: {
                     c.center.x = v.coverBoundsLeft
                     })
+            }
+        }
+        
+        if let p = self.controller as? ViewController {
+            if (c.center.x >= v.coverBoundsLeft || c.center.x <= v.coverBoundsRight) {
+                p.closeAllRockersExcept(self)
+            }
+        }
+    }
+    
+    /*!
+     * Close the cover view by returning it to the 'normal' position.
+     *
+     * @return void
+     */
+    func closeCover() {
+        // @todo this could probably mirror the speed of the pan.
+        if let p = self.controller as? ViewController {
+            if let c = self.cover as? UIView {
+                if (c.center.x != self.coverBoundsNormal) {
+                    UIView.animateWithDuration(0.1, animations: {
+                        c.center.x = self.coverBoundsNormal
+                        })
+                }
             }
         }
     }

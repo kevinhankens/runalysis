@@ -71,7 +71,7 @@ class ViewController: UIViewController {
         summary.addGestureRecognizer(swipeLeft)
         
         // Start the rocker cells at the bottom of the summary.
-        var ypos:CGFloat = summary.frame.height + summary.frame.minY
+        var ypos:CGFloat = summary.frame.height + summary.frame.minY + 5
 
         // Add rocker cells for each day of the week.
         var dayNum = self.sunday
@@ -79,7 +79,8 @@ class ViewController: UIViewController {
         let format = NSDateFormatter()
         format.dateFormat = "EEEE"
         for day in self.daysOfWeek {
-            cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: ypos, day: dayNum, summary: summary, controller: self, store: nil)
+            cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: CGFloat(-100), day: dayNum, summary: summary, controller: self, store: nil)
+            cell.finalY = ypos
             self.view.addSubview(cell)
             self.mileageCells += cell
             ypos = ypos + height
@@ -92,6 +93,9 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
+        for cell in self.mileageCells {
+            UIView.animateWithDuration(1.0, animations: {cell.center.y = cell.finalY + (cell.frame.height/2)})
+        }
         self.checkVersionChange()
     }
     
@@ -130,6 +134,20 @@ class ViewController: UIViewController {
             NSUserDefaults.standardUserDefaults().setDouble(self.version, forKey: self.versionKey)
             NSUserDefaults.standardUserDefaults().synchronize()
             self.displayHelpView()
+        }
+    }
+    
+    /*!
+     * Close all RockerCell covers except for the specified one.
+     *
+     * @param RockerCell except.
+     */
+    func closeAllRockersExcept(except: RockerCell) {
+        // @todo make parameter optional in case we want to just close all.
+        for cell in self.mileageCells {
+            if cell.dayNum.number != except.dayNum.number {
+                cell.closeCover()
+            }
         }
     }
     
