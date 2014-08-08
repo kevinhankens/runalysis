@@ -14,7 +14,7 @@ import UIKit
  *
  * Creates a view with hidden controls on either side accessed by horizontal swipe.
  */
-class RockerCell: UIView {
+class RockerCell: UIView, UIGestureRecognizerDelegate {
 
     // The cover view which contains the labels.
     var cover: UIView?
@@ -160,6 +160,7 @@ class RockerCell: UIView {
         
         // Pan gesture recognizer.
         let pan = UIPanGestureRecognizer(target: container, action: "respondToPanGesture:")
+        pan.delegate = container
         container.addGestureRecognizer(pan)
             
         // Tap gesture recognizer.
@@ -170,6 +171,24 @@ class RockerCell: UIView {
         container.addSubview(cover)
         
         return container
+    }
+    
+    /*!
+     * Delegate the gesture recognizer to see if it is a horizontal pan.
+     *
+     * If we find a vertical movement, pass that along so that the parent
+     * UIScrollView can handle it.
+     *
+     * @param UIGestureRecognizer
+     *
+     * @return void
+     */
+    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer!) -> Bool {
+        if let pan = gestureRecognizer as? UIPanGestureRecognizer {
+            let v = pan.velocityInView(pan.view)
+            return fabs(v.x) > fabs(v.y)
+        }
+        return true
     }
     
     /*!
@@ -185,7 +204,7 @@ class RockerCell: UIView {
             c.performSegueWithIdentifier("noteViewSegue", sender: c)
         }
     }
-   
+ 
     /*!
      * Handle the pan gesture of the rocker cell cover.
      *
@@ -204,12 +223,7 @@ class RockerCell: UIView {
         if let ll = v.leftControl as? RockerStepper {
             var sp = pan.velocityInView(pan.view)
             let d = sp.x/ll.frame.width
-            if sp.x < 0 {
-                asp = Double(1)/Double(Double(d) * Double(-1))
-            }
-            else {
-                asp = Double(1)/Double(d)
-            }
+            asp = Double(1)/fabs(Double(d))
         }
         
         // Move the cover horizontally based on the pan change.

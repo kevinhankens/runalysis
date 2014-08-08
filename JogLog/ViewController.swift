@@ -29,6 +29,10 @@ class ViewController: UIViewController {
     // Track the Sunday of the week we're currently viewing.
     var sunday: JLDate = JLDate.createFromDate(NSDate())
     
+    var scrollView: UIScrollView?
+    
+    var scrollContentHeight = CGFloat(0)
+    
     // Track the note view in a modal.
     // @todo poor variable name.
     var noteViewDayNum: JLDate = JLDate.createFromDate(NSDate())
@@ -47,6 +51,9 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let container = UIScrollView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
+        
         // @todo move the setup to init?
         
         // Locate the week we are on by finding the most recent Sunday.
@@ -91,13 +98,34 @@ class ViewController: UIViewController {
        
         var i: Int
         for (i = self.mileageCells.count - 1; i >= 0; i--) {
-            self.view.addSubview(self.mileageCells[i])
+            container.addSubview(self.mileageCells[i])
         }
         
         // Track the mileage cells in the summary.
         summary.cells = self.mileageCells
-        self.view.addSubview(summary)
+        container.addSubview(summary)
         self.updateSummary()
+        
+        // Add a help button
+        let helpButton = UIButton()
+        helpButton.frame = CGRectMake(0, ypos, self.view.bounds.width, 20.00)
+        helpButton.setTitle("?", forState: UIControlState.Normal)
+        helpButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
+        helpButton.backgroundColor = GlobalTheme.getBackgroundColor()
+        helpButton.addTarget(self, action: "displayHelpViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        container.addSubview(helpButton)
+        
+        self.scrollContentHeight = ypos + CGFloat(helpButton.frame.height)
+        
+        self.scrollView = container
+        self.view.addSubview(container)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        // Ensure that the UIScrollView knows its content bounds.
+        if let container = self.scrollView as? UIScrollView {
+            container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -135,6 +163,17 @@ class ViewController: UIViewController {
      */
     func displayHelpView() {
         self.view.addSubview(HelpView.createHelpView(self.view))
+    }
+    
+    /*!
+     * Respond to the help button click.
+     *
+     * @param UIButton sender
+     *
+     * @return void
+     */
+    func displayHelpViewFromButton(sender: UIButton) {
+        self.displayHelpView()
     }
     
     /*!

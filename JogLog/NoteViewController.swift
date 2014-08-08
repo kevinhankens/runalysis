@@ -34,9 +34,6 @@ class NoteViewController: UIViewController {
         backButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
         backButton.backgroundColor = GlobalTheme.getBackgroundColor()
         backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
-        backButton.layer.cornerRadius = 2;
-        backButton.layer.borderWidth = 1;
-        backButton.layer.borderColor = GlobalTheme.getPlannedColor().CGColor
         self.view.addSubview(backButton)
         
         let mileageData = self.store.getMileageForDate(self.dayNum)
