@@ -18,7 +18,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
-                        <segue destination="DLE-Fm-osJ" kind="presentation" identifier="noteViewSegue" animates="NO" id="sbg-oU-WZl"/>
+                        <segue destination="DLE-Fm-osJ" kind="presentation" identifier="noteViewSegue" id="sbg-oU-WZl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

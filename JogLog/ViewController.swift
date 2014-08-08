@@ -59,7 +59,7 @@ class ViewController: UIViewController {
         let beginDate = self.sunday
         let endDate = sunday.nextDay(increment: 6)
         
-        let summary = SummaryCell.createCell(height * 1.5, cellWidth: self.view.bounds.width, cellY: height - 10, beginDate: beginDate.date, endDate: endDate.date)
+        let summary = SummaryCell.createCell(height * 1.75, cellWidth: self.view.bounds.width, cellY: 40, beginDate: beginDate.date, endDate: endDate.date)
         self.summaryCell = summary
         
         // Add a right swipe gesture to the header.
@@ -73,7 +73,7 @@ class ViewController: UIViewController {
         summary.addGestureRecognizer(swipeLeft)
         
         // Start the rocker cells at the bottom of the summary.
-        var ypos:CGFloat = summary.frame.height + summary.frame.minY + 5
+        var ypos:CGFloat = summary.frame.height + summary.frame.minY
 
         // Add rocker cells for each day of the week.
         var dayNum = self.sunday
@@ -83,10 +83,15 @@ class ViewController: UIViewController {
         for day in self.daysOfWeek {
             cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: self.cellPosOffScreen, day: dayNum, summary: summary, controller: self, store: nil)
             cell.finalY = ypos
-            self.view.addSubview(cell)
+            //self.view.addSubview(cell)
             self.mileageCells += cell
             ypos = ypos + height
             dayNum = dayNum.nextDay()
+        }
+       
+        var i: Int
+        for (i = self.mileageCells.count - 1; i >= 0; i--) {
+            self.view.addSubview(self.mileageCells[i])
         }
         
         // Track the mileage cells in the summary.
@@ -101,16 +106,21 @@ class ViewController: UIViewController {
     }
     
     /*!
-     * Rolls all of the cells up behind the summary.
+     * Rolls all of the cells down into view.
      */
     func rollCellsDown() {
+        let s = Double(0.3)
+        var i = 1;
+        let t = self.mileageCells.count
         for cell in self.mileageCells {
-            UIView.animateWithDuration(0.5, animations: {cell.center.y = cell.finalY + (cell.frame.height/2)})
+            var speed = Double(i)/Double(t)
+            UIView.animateWithDuration(s * speed, animations: {cell.center.y = cell.finalY + (cell.frame.height/2)})
+            i++
         }
     }
     
     /*!
-     * Rolls all of the cells down into view.
+     * Rolls all of the cells up behind the summary.
      */
     func rollCellsUp() {
         for cell in self.mileageCells {

@@ -50,14 +50,16 @@ class SummaryCell: UIView {
         // @todo this needs more dynamic boundaries.
             
         let container = SummaryCell(frame: CGRectMake(0, cellY, cellWidth, cellHeight))
+            
+        let mpos = container.frame.minY - container.frame.height/4
     
-        let planned = UILabel(frame: CGRect(x: 0, y: 25, width: 50.00, height: container.bounds.height))
+        let planned = UILabel(frame: CGRect(x: 0, y: mpos, width: 50.00, height: container.bounds.height))
         planned.textColor = UIColor.whiteColor()
         planned.textAlignment = NSTextAlignment.Center
         container.plannedLabel = planned
         container.addSubview(planned)
             
-        let actual = UILabel(frame: CGRect(x: cellWidth - 50, y: 25, width: 50.00, height: container.bounds.height))
+        let actual = UILabel(frame: CGRect(x: cellWidth - 50, y: mpos, width: 50.00, height: container.bounds.height))
         actual.textColor = UIColor.whiteColor()
         actual.textAlignment = NSTextAlignment.Center
         container.actualLabel = actual

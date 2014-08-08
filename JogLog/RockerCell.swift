@@ -176,6 +176,7 @@ class RockerCell: UIView {
      */
     func respondToTapGesture(tap: UITapGestureRecognizer) {
         if let c = self.controller as? ViewController {
+            self.closeCover()
             c.noteViewDayNum = self.dayNum
             c.noteViewTriggeringCell = self
             c.performSegueWithIdentifier("noteViewSegue", sender: c)
