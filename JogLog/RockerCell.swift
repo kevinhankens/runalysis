@@ -19,6 +19,9 @@ class RockerCell: UIView {
     // The cover view which contains the labels.
     var cover: UIView?
    
+    // If the cover is currently closing.
+    var coverIsClosing: Bool = false
+   
     // The boundaries of the left pan.
     var coverBoundsLeft = CGFloat(0)
     
@@ -196,6 +199,19 @@ class RockerCell: UIView {
         var translation = pan.translationInView(c.superview) as CGPoint
         var pos = c.center as CGPoint
         
+        // Convert the velocity of the pan to a duration.
+        var asp = Double(0.1)
+        if let ll = v.leftControl as? RockerStepper {
+            var sp = pan.velocityInView(pan.view)
+            let d = sp.x/ll.frame.width
+            if sp.x < 0 {
+                asp = Double(1)/Double(Double(d) * Double(-1))
+            }
+            else {
+                asp = Double(1)/Double(d)
+            }
+        }
+        
         // Move the cover horizontally based on the pan change.
         if (c.center.x >= v.coverBoundsLeft && c.center.x <= v.coverBoundsRight) {
             pos.x += translation.x
@@ -241,7 +257,7 @@ class RockerCell: UIView {
         
         if let p = self.controller as? ViewController {
             if (c.center.x >= v.coverBoundsLeft || c.center.x <= v.coverBoundsRight) {
-                p.closeAllRockersExcept(self)
+                p.closeAllRockersExcept(except: self, duration: asp)
             }
         }
     }
@@ -249,16 +265,20 @@ class RockerCell: UIView {
     /*!
      * Close the cover view by returning it to the 'normal' position.
      *
+     * @param Double duration.
+     *   The duration of the animation to close the cells.
+     *
      * @return void
      */
-    func closeCover() {
-        // @todo this could probably mirror the speed of the pan.
-        if let p = self.controller as? ViewController {
-            if let c = self.cover as? UIView {
-                if (c.center.x != self.coverBoundsNormal) {
-                    UIView.animateWithDuration(0.1, animations: {
-                        c.center.x = self.coverBoundsNormal
-                        })
+    func closeCover(duration: Double = 0.1) {
+        if !self.coverIsClosing {
+            if let p = self.controller as? ViewController {
+                if let c = self.cover as? UIView {
+                    if (c.center.x != self.coverBoundsNormal) {
+                        UIView.animateWithDuration(duration, animations: {
+                            c.center.x = self.coverBoundsNormal
+                            })
+                    }
                 }
             }
         }

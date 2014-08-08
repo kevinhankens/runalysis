@@ -170,12 +170,19 @@ class ViewController: UIViewController {
      * Close all RockerCell covers except for the specified one.
      *
      * @param RockerCell except.
+     *   The cell to skip as it's probably the one being opened.
+     * @param Double duration.
+     *   The duration of the animation to close the cells.
      */
-    func closeAllRockersExcept(except: RockerCell) {
-        // @todo make parameter optional in case we want to just close all.
+    func closeAllRockersExcept(except: RockerCell? = nil, duration: Double = 0.1) {
         for cell in self.mileageCells {
-            if cell.dayNum.number != except.dayNum.number {
-                cell.closeCover()
+            if var e = except as? RockerCell {
+                if cell.dayNum.number != e.dayNum.number {
+                    cell.closeCover(duration: duration)
+                }
+            }
+            else {
+                cell.closeCover(duration: duration)
             }
         }
     }
@@ -205,6 +212,7 @@ class ViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+        self.closeAllRockersExcept(except: nil)
         self.rollCellsUp()
         // @todo put identifiers into properties
         if segue.identifier == "noteViewSegue" {
@@ -234,6 +242,7 @@ class ViewController: UIViewController {
                 break;
             }
             
+            self.closeAllRockersExcept(except: nil)
             let header = self.summaryCell! as SummaryCell
             var date = sunday
             let endDate = date.nextDay(increment: 6)
