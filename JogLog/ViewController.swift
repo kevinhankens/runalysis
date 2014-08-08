@@ -121,6 +121,9 @@ class ViewController: UIViewController {
         self.view.addSubview(container)
     }
     
+    /*!
+     * Implements UIViewController::viewWillAppear:animated
+     */
     override func viewWillAppear(animated: Bool) {
         // Ensure that the UIScrollView knows its content bounds.
         if let container = self.scrollView as? UIScrollView {
@@ -128,7 +131,11 @@ class ViewController: UIViewController {
         }
     }
     
+    /*!
+     * Implements UIViewController::viewDidAppear:animated
+     */
     override func viewDidAppear(animated: Bool) {
+        // Display the cells and possibly the help page.
         self.rollCellsDown()
         self.checkVersionChange()
     }

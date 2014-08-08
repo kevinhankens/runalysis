@@ -219,11 +219,11 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
         var pos = c.center as CGPoint
         
         // Convert the velocity of the pan to a duration.
-        var asp = Double(0.1)
+        var duration = Double(0.1)
+        var vv = pan.velocityInView(pan.view)
         if let ll = v.leftControl as? RockerStepper {
-            var sp = pan.velocityInView(pan.view)
-            let d = sp.x/ll.frame.width
-            asp = Double(1)/fabs(Double(d))
+            let d = vv.x/ll.frame.width
+            duration = Double(1)/fabs(Double(d))
         }
         
         // Move the cover horizontally based on the pan change.
@@ -233,7 +233,8 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
             pan.setTranslation(CGPointZero, inView: cover)
         }
         
-        // Define some boundaries and react to incomplete pans.
+        // Define some boundaries and react to incomplete pans. We'll use
+        // their velocity to determine their intentions.
         if (pan.state == UIGestureRecognizerState.Ended) {
             if (c.center.x <= v.coverBoundsLeft) {
                 // Don't allow it to go beyond the left boundary.
@@ -243,35 +244,36 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
                 // Don't allow it to go beyond the right boundary.
                 c.center.x = v.coverBoundsRight
             }
-            else if (c.center.x > v.coverBoundsNormal && c.center.x <= v.coverBoundsNormal + (v.coverBoundsOffset/2)) {
-                // Snap to center if they are right of normal and left of half.
-                UIView.animateWithDuration(0.1, animations: {
+            else if (c.center.x > v.coverBoundsNormal && vv.x < 0) {
+                // Snap to center if they are right of normal moving left.
+                UIView.animateWithDuration(duration/2, animations: {
                     c.center.x = v.coverBoundsNormal
                     })
             }
-            else if (c.center.x < v.coverBoundsRight && c.center.x > v.coverBoundsNormal + (v.coverBoundsOffset/2)) {
-                // Snap to right if they are right of the half.
-                UIView.animateWithDuration(0.1, animations: {
+            else if (c.center.x > v.coverBoundsNormal && vv.x >= 0) {
+                // Snap to right if they are right of the half and moving right.
+                UIView.animateWithDuration(duration/2, animations: {
                     c.center.x = v.coverBoundsRight
                     })
             }
-            else if (c.center.x < v.coverBoundsNormal && c.center.x >= v.coverBoundsNormal - (v.coverBoundsOffset/2)) {
-                // Snap to center if they are left of normal and right of half.
-                UIView.animateWithDuration(0.1, animations: {
+            else if (c.center.x < v.coverBoundsNormal && vv.x >= 0) {
+                // Snap to center if they are left of normal and moving right.
+                UIView.animateWithDuration(duration/2, animations: {
                     c.center.x = v.coverBoundsNormal
                     })
             }
-            else if (c.center.x > v.coverBoundsLeft && c.center.x < v.coverBoundsNormal - (v.coverBoundsOffset/2)) {
-                // Snap to left if they are left of the half.
-                UIView.animateWithDuration(0.1, animations: {
+            else if (c.center.x > v.coverBoundsLeft && vv.x < 0) {
+                // Snap to left if they are left of the half and moving left.
+                UIView.animateWithDuration(duration/2, animations: {
                     c.center.x = v.coverBoundsLeft
                     })
             }
         }
         
+        // Make sure that other rocker panels are closed.
         if let p = self.controller as? ViewController {
             if (c.center.x >= v.coverBoundsLeft || c.center.x <= v.coverBoundsRight) {
-                p.closeAllRockersExcept(except: self, duration: asp)
+                p.closeAllRockersExcept(except: self, duration: duration)
             }
         }
     }
