@@ -47,7 +47,7 @@ class HelpView: UIView {
         backButton.setTitle("Ok, got it!", forState: UIControlState.Normal)
         backButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
         backButton.backgroundColor = GlobalTheme.getPlannedColor()
-        backButton.addTarget(container, action: "closeHelpView:", forControlEvents: UIControlEvents.TouchDown)
+        backButton.addTarget(container, action: "closeHelpView:", forControlEvents: UIControlEvents.TouchUpInside)
         backButton.layer.cornerRadius = 2;
         backButton.layer.borderWidth = 1;
         //backButton.layer.borderColor = GlobalTheme.getPlannedColor().CGColor

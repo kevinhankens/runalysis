@@ -18,7 +18,6 @@
 		179839431989371D0047F859 /* JogLog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 179839331989371D0047F859 /* JogLog.xcdatamodeld */; };
 		179839441989371D0047F859 /* Mileage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179839351989371D0047F859 /* Mileage.swift */; };
 		179839461989371D0047F859 /* MileageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179839371989371D0047F859 /* MileageStore.swift */; };
-		179839471989371D0047F859 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179839381989371D0047F859 /* NoteViewController.swift */; };
 		179839481989371D0047F859 /* RockerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179839391989371D0047F859 /* RockerCell.swift */; };
 		179839491989371D0047F859 /* RockerStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393A1989371D0047F859 /* RockerStepper.swift */; };
 		1798394A1989371D0047F859 /* SummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393B1989371D0047F859 /* SummaryCell.swift */; };
@@ -38,10 +37,10 @@
 		17AF16C0198FEC6F00565322 /* JogLog.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 179839331989371D0047F859 /* JogLog.xcdatamodeld */; };
 		17AF16C1198FEC6F00565322 /* Mileage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179839351989371D0047F859 /* Mileage.swift */; };
 		17AF16C3198FEC6F00565322 /* MileageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179839371989371D0047F859 /* MileageStore.swift */; };
-		17AF16C4198FEC6F00565322 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179839381989371D0047F859 /* NoteViewController.swift */; };
 		17AF16C5198FEC6F00565322 /* SummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393B1989371D0047F859 /* SummaryCell.swift */; };
 		17AF16C6198FEC6F00565322 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393C1989371D0047F859 /* ViewController.swift */; };
 		17AF16C7198FEC6F00565322 /* WeekHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393D1989371D0047F859 /* WeekHeader.swift */; };
+		17D5F2CF199A4B7E00D9AF80 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D5F2CE199A4B7E00D9AF80 /* NoteView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,7 +69,6 @@
 		179839341989371D0047F859 /* JogLog.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JogLog.xcdatamodel; sourceTree = "<group>"; };
 		179839351989371D0047F859 /* Mileage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mileage.swift; sourceTree = "<group>"; };
 		179839371989371D0047F859 /* MileageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MileageStore.swift; sourceTree = "<group>"; };
-		179839381989371D0047F859 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		179839391989371D0047F859 /* RockerCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerCell.swift; sourceTree = "<group>"; };
 		1798393A1989371D0047F859 /* RockerStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerStepper.swift; sourceTree = "<group>"; };
 		1798393B1989371D0047F859 /* SummaryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryCell.swift; sourceTree = "<group>"; };
@@ -80,6 +78,7 @@
 		17AF16B3198FCD9F00565322 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17AF16B4198FCD9F00565322 /* JogLogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JogLogTests.swift; sourceTree = "<group>"; };
 		17AF16B7198FD80B00565322 /* RockerCellTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerCellTests.swift; sourceTree = "<group>"; };
+		17D5F2CE199A4B7E00D9AF80 /* NoteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +121,7 @@
 		1798392C1989371D0047F859 /* JogLog */ = {
 			isa = PBXGroup;
 			children = (
+				17D5F2CE199A4B7E00D9AF80 /* NoteView.swift */,
 				1773453A19910FA70038F304 /* JLDate.swift */,
 				17983952198C2CE30047F859 /* HelpView.swift */,
 				1798392D1989371D0047F859 /* AppDelegate.swift */,
@@ -132,7 +132,6 @@
 				179839331989371D0047F859 /* JogLog.xcdatamodeld */,
 				179839351989371D0047F859 /* Mileage.swift */,
 				179839371989371D0047F859 /* MileageStore.swift */,
-				179839381989371D0047F859 /* NoteViewController.swift */,
 				179839391989371D0047F859 /* RockerCell.swift */,
 				1798393A1989371D0047F859 /* RockerStepper.swift */,
 				1798393B1989371D0047F859 /* SummaryCell.swift */,
@@ -204,6 +203,7 @@
 				TargetAttributes = {
 					178151B61972F1240029EB87 = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = 4CV5ERH6SG;
 					};
 					178151CB1972F1240029EB87 = {
 						CreatedOnToolsVersion = 6.0;
@@ -266,7 +266,7 @@
 				1798393E1989371D0047F859 /* AppDelegate.swift in Sources */,
 				179839481989371D0047F859 /* RockerCell.swift in Sources */,
 				179839441989371D0047F859 /* Mileage.swift in Sources */,
-				179839471989371D0047F859 /* NoteViewController.swift in Sources */,
+				17D5F2CF199A4B7E00D9AF80 /* NoteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,7 +282,6 @@
 				17AF16C0198FEC6F00565322 /* JogLog.xcdatamodeld in Sources */,
 				17AF16C1198FEC6F00565322 /* Mileage.swift in Sources */,
 				17AF16C3198FEC6F00565322 /* MileageStore.swift in Sources */,
-				17AF16C4198FEC6F00565322 /* NoteViewController.swift in Sources */,
 				17AF16C5198FEC6F00565322 /* SummaryCell.swift in Sources */,
 				17AF16C6198FEC6F00565322 /* ViewController.swift in Sources */,
 				1773453B19910FA70038F304 /* JLDate.swift in Sources */,
@@ -404,10 +403,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Rocker1/Info.plist;
 				"INFOPLIST_FILE[sdk=*]" = JogLog/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = JogLog;
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Rocker1-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -419,10 +422,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Rocker1/Info.plist;
 				"INFOPLIST_FILE[sdk=*]" = JogLog/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = JogLog;
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Rocker1-Bridging-Header.h";
 			};
 			name = Release;

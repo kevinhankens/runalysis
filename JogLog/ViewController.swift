@@ -29,8 +29,10 @@ class ViewController: UIViewController {
     // Track the Sunday of the week we're currently viewing.
     var sunday: JLDate = JLDate.createFromDate(NSDate())
     
+    // The scroll view container for this controller.
     var scrollView: UIScrollView?
     
+    // The height of the content to scroll.
     var scrollContentHeight = CGFloat(0)
     
     // Track the note view in a modal.
@@ -43,11 +45,14 @@ class ViewController: UIViewController {
     // The current version, used to track intro/update modals.
     let version = 0.034
     
-    //
+    // The position of cells that are off screen.
     let cellPosOffScreen = CGFloat(20)
     
     // Where the version is stored in the NSUserDefaults.
     let versionKey = "JogLogVersion"
+    
+    // Tracks a background view that can be used for sub actions.
+    var actionView: UIView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,6 +86,11 @@ class ViewController: UIViewController {
         
         // Start the rocker cells at the bottom of the summary.
         var ypos:CGFloat = summary.frame.height + summary.frame.minY
+        
+        // Add a view behind the cells for hidden features.
+        let actions = UIView(frame: CGRect(x: 0, y: ypos, width: container.frame.width, height: container.frame.height - summary.frame.height))
+        self.actionView = actions
+        container.addSubview(actions)
 
         // Add rocker cells for each day of the week.
         var dayNum = self.sunday
@@ -255,17 +265,6 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
-        self.closeAllRockersExcept(except: nil)
-        self.rollCellsUp()
-        // @todo put identifiers into properties
-        if segue.identifier == "noteViewSegue" {
-            let v = segue.destinationViewController as NoteViewController
-            v.dayNum = self.noteViewDayNum
-            v.triggeringCell = self.noteViewTriggeringCell
-        }
     }
     
     /*!

@@ -198,10 +198,13 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
      */
     func respondToTapGesture(tap: UITapGestureRecognizer) {
         if let c = self.controller as? ViewController {
-            self.closeCover()
-            c.noteViewDayNum = self.dayNum
-            c.noteViewTriggeringCell = self
-            c.performSegueWithIdentifier("noteViewSegue", sender: c)
+            if let a = c.actionView as? UIView {
+                // @todo too much control here, needs delegate.
+                let n = NoteView.createNoteView(0, y: 0, width: a.bounds.width, height: a.bounds.height, parent: c, cell: self, dayNum: self.dayNum)
+                a.addSubview(n)
+                c.closeAllRockersExcept(except: nil)
+                c.rollCellsUp()
+            }
         }
     }
  
@@ -223,7 +226,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
         var vv = pan.velocityInView(pan.view)
         if let ll = v.leftControl as? RockerStepper {
             let d = vv.x/ll.frame.width
-            duration = Double(1)/fabs(Double(d))
+            duration = Double(1)/(1.5 * fabs(Double(d)))
         }
         
         // Move the cover horizontally based on the pan change.
@@ -246,25 +249,25 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
             }
             else if (c.center.x > v.coverBoundsNormal && vv.x < 0) {
                 // Snap to center if they are right of normal moving left.
-                UIView.animateWithDuration(duration/2, animations: {
+                UIView.animateWithDuration(duration, animations: {
                     c.center.x = v.coverBoundsNormal
                     })
             }
             else if (c.center.x > v.coverBoundsNormal && vv.x >= 0) {
                 // Snap to right if they are right of the half and moving right.
-                UIView.animateWithDuration(duration/2, animations: {
+                UIView.animateWithDuration(duration, animations: {
                     c.center.x = v.coverBoundsRight
                     })
             }
             else if (c.center.x < v.coverBoundsNormal && vv.x >= 0) {
                 // Snap to center if they are left of normal and moving right.
-                UIView.animateWithDuration(duration/2, animations: {
+                UIView.animateWithDuration(duration, animations: {
                     c.center.x = v.coverBoundsNormal
                     })
             }
             else if (c.center.x > v.coverBoundsLeft && vv.x < 0) {
                 // Snap to left if they are left of the half and moving left.
-                UIView.animateWithDuration(duration/2, animations: {
+                UIView.animateWithDuration(duration, animations: {
                     c.center.x = v.coverBoundsLeft
                     })
             }
