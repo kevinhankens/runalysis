@@ -133,9 +133,10 @@ class MileageStore {
      *
      * @return void
      */
-    func setNoteForDay(day: JLDate, note: NSString) {
+    func setNoteForDay(day: JLDate, note: String) {
         let obj = self.getMileageForDate(day)
-          obj.note = note
+        //println("d: \(obj.date) n: \(note)")
+        obj.note = note
     }
 
 }

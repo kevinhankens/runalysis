@@ -17,6 +17,10 @@ class NoteView : UIView, UITextViewDelegate {
     // The core data storage.
     var store: MileageStore = MileageStore()
     
+    var label: UILabel?
+    
+    var prevDay: JLDate?
+    
     // The note that should be saved to the db.
     var note: UITextView?
     
@@ -30,7 +34,6 @@ class NoteView : UIView, UITextViewDelegate {
         let container = NoteView(frame: CGRectMake(x, y, width, height))
         container.parent = parent
         container.triggeringCell = cell
-        container.dayNum = dayNum
         
         var ypos = CGFloat(10.0)
         
@@ -44,29 +47,92 @@ class NoteView : UIView, UITextViewDelegate {
         backButton.addTarget(container, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchUpInside)
         container.addSubview(backButton)
         
-        // Storage engine.
-        let mileageData = container.store.getMileageForDate(container.dayNum)
-        let mileage = JLDate.createFromNumber(mileageData.date)
-        
         ypos += backButton.frame.height + 10
         
         // @todo add a swipe gesture to move the daynum and possibly the week.
         let noteLabel = UILabel(frame: CGRect(x: 10, y: ypos, width: container.bounds.width - 10, height: 20.00))
-        noteLabel.text = dayNum.toStringMedium()
         noteLabel.textColor = GlobalTheme.getNormalTextColor()
+        noteLabel.text = ""
+        container.label = noteLabel
+        
+        let daySwipeLeft = UISwipeGestureRecognizer(target: container, action: "daySwipeGesture:")
+        daySwipeLeft.direction = UISwipeGestureRecognizerDirection.Left
+        container.addGestureRecognizer(daySwipeLeft)
+        
+        let daySwipeRight = UISwipeGestureRecognizer(target: container, action: "daySwipeGesture:")
+        daySwipeRight.direction = UISwipeGestureRecognizerDirection.Right
+        container.addGestureRecognizer(daySwipeRight)
+        
         container.addSubview(noteLabel)
         
         ypos += noteLabel.frame.height + 10
         
         let noteView = UITextView(frame: CGRect(x: 10, y: ypos, width: container.bounds.width - 5, height: 200.00))
         noteView.editable = true
-        noteView.text = mileageData.note
+        noteView.text = ""
         noteView.delegate = container
         container.note = noteView
         noteView.becomeFirstResponder()
         container.addSubview(noteView)
         
+        container.updateDay(dayNum)
+        
         return container
+    }
+    
+    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer!)->Bool {
+        return true
+    }
+    
+    /*!
+     * Handle a swipe gesture on the view.
+     * 
+     * @param UIGestureRecognizer gesture
+     *
+     * @return void
+     */
+    func daySwipeGesture(gesture: UIGestureRecognizer) {
+        if let g = gesture as? UISwipeGestureRecognizer {
+            // Update the day of the note.
+            var day = self.dayNum
+            switch g.direction {
+            case UISwipeGestureRecognizerDirection.Left:
+                day = self.dayNum.nextDay(increment: 1)
+                break;
+            case UISwipeGestureRecognizerDirection.Right:
+                day = self.dayNum.prevDay(increment: 1)
+                break;
+            default:
+                break;
+            }
+            self.saveNote()
+            self.updateDay(day)
+            
+            // Potentially update the summary/rockers.
+            // @todo this is too much responsibility.
+            if let p = self.parent as? ViewController {
+                let s = p.startOfWeek
+                let e = p.endOfWeek
+                let d = day.toStringFormat(JLDate.getDateFormatDayNumber()).integerValue
+                
+                switch g.direction {
+                case UISwipeGestureRecognizerDirection.Left:
+                    if d == s {
+                        p.sunday = p.sunday.nextDay(increment: 7)
+                        p.updateHeader()
+                    }
+                    break;
+                case UISwipeGestureRecognizerDirection.Right:
+                    if d == e {
+                        p.sunday = p.sunday.prevDay(increment: 7)
+                        p.updateHeader()
+                    }
+                    break;
+                default:
+                    break;
+                }
+           }
+        }
     }
     
     /*!
@@ -78,23 +144,12 @@ class NoteView : UIView, UITextViewDelegate {
      */
     func returnToRootView(sender: UIButton) {
         if let n = self.note as? UITextView {
+            let day = self.dayNum
+            let text = n.text
+            self.saveNote()
             n.resignFirstResponder()
         }
-        
-        // Store the note.
-        if let cell = self.triggeringCell as? RockerCell {
-            // Redraw the triggering cell in the root view.
-            //cell.updateDate(cell.dayNum)
-            cell.saveMileage()
-        }
-        
-        // Save the note to the db asynchronously.
-        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            let note = self.note!
-            self.store.setNoteForDay(self.dayNum, note: note.text)
-            self.store.saveContext()
-            })
-        
+       
         // Stop editing and roll the rocker cells down in the parent view.
         if let p = self.parent as? ViewController {
             p.view.endEditing(true)
@@ -102,6 +157,34 @@ class NoteView : UIView, UITextViewDelegate {
         }
         
         self.removeFromSuperview()
+    }
+    
+    func updateDay(day: JLDate) {
+        self.dayNum = day
+        
+        // Storage engine.
+        let mileageData = self.store.getMileageForDate(self.dayNum)
+        
+        if let l = self.label as? UILabel {
+            l.text = day.toStringMedium()
+        }
+        
+        if let n = self.note as? UITextView {
+            n.text = mileageData.note
+        }
+    }
+    
+    func saveNote() {
+        if let n = self.note as? UITextView {
+            let day = self.dayNum.nextDay(increment: 0)
+            let text = n.text.stringByAppendingString("")
+            // Save the note to the db asynchronously.
+            //dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                //println("saving d: \(day.number) text: \(text)")
+                self.store.setNoteForDay(day, note: text)
+                self.store.saveContext()
+                //})
+        }
     }
 
 }

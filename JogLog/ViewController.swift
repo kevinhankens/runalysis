@@ -17,6 +17,9 @@ class ViewController: UIViewController {
     // @todo make the start configurable.
     var startOfWeek = 1
     
+    // The day that the week ends on.
+    var endOfWeek = 7
+    
     // The array of days of the week.
     var daysOfWeek = [1,2,3,4,5,6,7]
     
@@ -34,13 +37,6 @@ class ViewController: UIViewController {
     
     // The height of the content to scroll.
     var scrollContentHeight = CGFloat(0)
-    
-    // Track the note view in a modal.
-    // @todo poor variable name.
-    var noteViewDayNum: JLDate = JLDate.createFromDate(NSDate())
-    
-    // Track the cell that triggered the note view modal.
-    var noteViewTriggeringCell: RockerCell?
     
     // The current version, used to track intro/update modals.
     let version = 0.034
@@ -268,6 +264,25 @@ class ViewController: UIViewController {
     }
     
     /*!
+     * Update the header to reflect an updated week start value.
+     *
+     * @return void
+     */
+    func updateHeader() {
+        let header = self.summaryCell! as SummaryCell
+        var date = self.sunday
+        let endDate = date.nextDay(increment: 6)
+        // @todo update summary to use JLDate
+        header.updateDate(date.date, endDate: endDate.date)
+        for cell in self.mileageCells {
+            cell.updateDate(date)
+            date = date.nextDay()
+        }
+            
+        self.updateSummary()
+    }
+    
+    /*!
      * Handle the horizontal swiping of the date header.
      *
      * @param gesture
@@ -288,17 +303,29 @@ class ViewController: UIViewController {
             }
             
             self.closeAllRockersExcept(except: nil)
-            let header = self.summaryCell! as SummaryCell
-            var date = sunday
-            let endDate = date.nextDay(increment: 6)
-            // @todo update summary to use JLDate
-            header.updateDate(date.date, endDate: endDate.date)
-            for cell in self.mileageCells {
-                cell.updateDate(date)
-                date = date.nextDay()
-            }
+            self.updateHeader()
             
-            self.updateSummary()
+            // Attempt to update the note view if we are editing it.
+            if let a = self.actionView as? UIView {
+                for v in a.subviews {
+                    if let n = v as? NoteView {
+                        var day = n.dayNum
+                        switch swipeGesture.direction {
+                        case UISwipeGestureRecognizerDirection.Left:
+                            day = n.dayNum.nextDay(increment: 7)
+                            break;
+                        case UISwipeGestureRecognizerDirection.Right:
+                            day = n.dayNum.prevDay(increment: 7)
+                            break;
+                        default:
+                            break;
+                        }
+ 
+                        n.saveNote()
+                        n.updateDay(day)
+                    }
+                }
+            }
         }
     }
 

@@ -84,6 +84,11 @@ class JLDate {
         return "EEEE"
     }
     
+    /*!
+     * Specifies the numeric day format, e.g. sunday = 1
+     *
+     * @return NSString
+     */
     class func getDateFormatDayNumber()->NSString {
         return "c"
     }
