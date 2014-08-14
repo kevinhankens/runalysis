@@ -12,6 +12,8 @@
 		1773453E199112900038F304 /* JLDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453D199112900038F304 /* JLDateTests.swift */; };
 		17734541199122CA0038F304 /* MileageStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453F199122CA0038F304 /* MileageStoreMock.swift */; };
 		17734542199122CA0038F304 /* RockerCellMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17734540199122CA0038F304 /* RockerCellMock.swift */; };
+		178F085C199BFE83000448F9 /* RunView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178F085B199BFE83000448F9 /* RunView.swift */; };
+		178F085E199BFF0E000448F9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 178F085D199BFF0E000448F9 /* CoreLocation.framework */; };
 		1798393E1989371D0047F859 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798392D1989371D0047F859 /* AppDelegate.swift */; };
 		179839401989371D0047F859 /* GlobalTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179839301989371D0047F859 /* GlobalTheme.swift */; };
 		179839411989371D0047F859 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 179839311989371D0047F859 /* Images.xcassets */; };
@@ -61,6 +63,8 @@
 		178151B71972F1240029EB87 /* JogLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JogLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		178151CC1972F1240029EB87 /* JogLogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JogLogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		178D50ED1981AEE000173703 /* Rocker1-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Rocker1-Bridging-Header.h"; sourceTree = "<group>"; };
+		178F085B199BFE83000448F9 /* RunView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunView.swift; sourceTree = "<group>"; };
+		178F085D199BFF0E000448F9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		1798392D1989371D0047F859 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1798392F1989371D0047F859 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		179839301989371D0047F859 /* GlobalTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalTheme.swift; sourceTree = "<group>"; };
@@ -86,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				178F085E199BFF0E000448F9 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +107,7 @@
 		178151AE1972F1240029EB87 = {
 			isa = PBXGroup;
 			children = (
+				178F085D199BFF0E000448F9 /* CoreLocation.framework */,
 				1798392C1989371D0047F859 /* JogLog */,
 				178D50ED1981AEE000173703 /* Rocker1-Bridging-Header.h */,
 				17AF16B2198FCD9F00565322 /* JogLogTests */,
@@ -121,6 +127,7 @@
 		1798392C1989371D0047F859 /* JogLog */ = {
 			isa = PBXGroup;
 			children = (
+				178F085B199BFE83000448F9 /* RunView.swift */,
 				17D5F2CE199A4B7E00D9AF80 /* NoteView.swift */,
 				1773453A19910FA70038F304 /* JLDate.swift */,
 				17983952198C2CE30047F859 /* HelpView.swift */,
@@ -266,6 +273,7 @@
 				1798393E1989371D0047F859 /* AppDelegate.swift in Sources */,
 				179839481989371D0047F859 /* RockerCell.swift in Sources */,
 				179839441989371D0047F859 /* Mileage.swift in Sources */,
+				178F085C199BFE83000448F9 /* RunView.swift in Sources */,
 				17D5F2CF199A4B7E00D9AF80 /* NoteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -405,6 +413,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = NO;
 				INFOPLIST_FILE = Rocker1/Info.plist;
 				"INFOPLIST_FILE[sdk=*]" = JogLog/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
@@ -424,6 +433,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = NO;
 				INFOPLIST_FILE = Rocker1/Info.plist;
 				"INFOPLIST_FILE[sdk=*]" = JogLog/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;

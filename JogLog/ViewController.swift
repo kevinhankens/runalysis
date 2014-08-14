@@ -50,6 +50,9 @@ class ViewController: UIViewController {
     // Tracks a background view that can be used for sub actions.
     var actionView: UIView?
     
+    // Tracks the run button.
+    var runButton: UIButton?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -112,16 +115,17 @@ class ViewController: UIViewController {
         container.addSubview(summary)
         self.updateSummary()
         
-        // Add a help button
-        let helpButton = UIButton()
-        helpButton.frame = CGRectMake(0, ypos, self.view.bounds.width, 20.00)
-        helpButton.setTitle("?", forState: UIControlState.Normal)
-        helpButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
-        helpButton.backgroundColor = GlobalTheme.getBackgroundColor()
-        helpButton.addTarget(self, action: "displayHelpViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
-        container.addSubview(helpButton)
+        // Add a Run button
+        let runButton = UIButton()
+        runButton.frame = CGRectMake(0, ypos, self.view.bounds.width, 20.00)
+        runButton.setTitle("Run", forState: UIControlState.Normal)
+        runButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
+        runButton.backgroundColor = GlobalTheme.getBackgroundColor()
+        runButton.addTarget(self, action: "displayRunViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        self.runButton = runButton
+        container.addSubview(runButton)
         
-        self.scrollContentHeight = ypos + CGFloat(helpButton.frame.height)
+        self.scrollContentHeight = ypos + CGFloat(runButton.frame.height)
         
         self.scrollView = container
         self.view.addSubview(container)
@@ -144,6 +148,19 @@ class ViewController: UIViewController {
         // Display the cells and possibly the help page.
         self.rollCellsDown()
         self.checkVersionChange()
+    }
+    
+    /*!
+     * Handles the run button click.
+     */
+    func displayRunViewFromButton(button: UIButton) {
+        if let a = self.actionView as? UIView {
+            let r = RunView.createRunView(a.bounds.height, cellWidth: a.bounds.width, parent: self)
+            a.addSubview(r)
+            self.closeAllRockersExcept(except: nil)
+            self.rollCellsUp()
+            button.enabled = false
+        }
     }
     
     /*!

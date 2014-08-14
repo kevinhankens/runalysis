@@ -34,5 +34,12 @@
 	<string>Main</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+	<key>NSLocationUsageDescription</key>
+	<string>I would like to access your location to map your course.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>I would like to access your location to map your course.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>I would like to access your location to map your course.</string>
 </dict>
 </plist>
