@@ -14,12 +14,17 @@ class NoteView : UIView, UITextViewDelegate {
     // The date representation that we are working with.
     var dayNum: JLDate = JLDate.createFromDate(NSDate())
     
-    // The core data storage.
+    // The core data storage for mileage.
     var store: MileageStore = MileageStore()
     
-    var label: UILabel?
+    // The core data storage for routes.
+    var routeStore: RouteStore = RouteStore()
     
-    var prevDay: JLDate?
+    // The ID of the currently viewed route.
+    var routeId: NSNumber = 0
+    
+    // Tracks the label on the page.
+    var label: UILabel?
     
     // The note that should be saved to the db.
     var note: UITextView?
@@ -27,13 +32,28 @@ class NoteView : UIView, UITextViewDelegate {
     // The rocker cell that triggered this view, for redrawing.
     var triggeringCell: RockerCell?
     
+    // Tracks the parent view controller.
     var parent: ViewController?
     
+    /*!
+     * Factory method to create a NoteView object.
+     *
+     * @param CGFloat x
+     * @param CGFloat y
+     * @param CGFloat width
+     * @param CGFloat height
+     * @param ViewController parent
+     * @param RockerCell cell
+     * @param JLDate dayNum
+     *
+     * @return NoteView
+     */
     class func createNoteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, parent: ViewController, cell: RockerCell, dayNum: JLDate)->NoteView {
     
         let container = NoteView(frame: CGRectMake(x, y, width, height))
         container.parent = parent
         container.triggeringCell = cell
+        container.dayNum = dayNum
         
         var ypos = CGFloat(10.0)
         
@@ -48,6 +68,22 @@ class NoteView : UIView, UITextViewDelegate {
         container.addSubview(backButton)
         
         ypos += backButton.frame.height + 10
+        
+        // Attempt to get any routes for today.
+        let routeId = container.routeStore.getFirstRoutIdForDate(date: container.dayNum.date.timeIntervalSince1970)
+        if let routeDate = routeId as? NSNumber {
+            container.routeId = routeDate
+            let routeButton = UIButton()
+            routeButton.frame = CGRectMake(10, ypos, container.bounds.width/2, 20.00)
+            routeButton.setTitle("View Route", forState: UIControlState.Normal)
+            routeButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
+            routeButton.backgroundColor = GlobalTheme.getBackgroundColor()
+            routeButton.sizeToFit()
+            routeButton.addTarget(container, action: "launchRouteView:", forControlEvents: UIControlEvents.TouchUpInside)
+            container.addSubview(routeButton)
+            
+            ypos += routeButton.frame.height + 10
+        }
         
         // @todo add a swipe gesture to move the daynum and possibly the week.
         let noteLabel = UILabel(frame: CGRect(x: 10, y: ypos, width: container.bounds.width - 10, height: 20.00))
@@ -80,8 +116,18 @@ class NoteView : UIView, UITextViewDelegate {
         return container
     }
     
-    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer!)->Bool {
-        return true
+    /*!
+     * Segues to the "route" view.
+     *
+     * @param UIButton sender
+     *
+     * @return void
+     */
+    func launchRouteView(sender: UIButton) {
+        if let p = self.parent as? ViewController {
+            p.modalRouteId = self.routeId
+            p.launchRouteView()
+        }
     }
     
     /*!
@@ -159,6 +205,11 @@ class NoteView : UIView, UITextViewDelegate {
         self.removeFromSuperview()
     }
     
+    /*!
+     * Updates the currently viewed day.
+     *
+     * @param JLDate day
+     */
     func updateDay(day: JLDate) {
         self.dayNum = day
         
@@ -174,10 +225,14 @@ class NoteView : UIView, UITextViewDelegate {
         }
     }
     
+    /*!
+     * Saves the currently entered note
+     */
     func saveNote() {
         if let n = self.note as? UITextView {
             let day = self.dayNum.nextDay(increment: 0)
             let text = n.text.stringByAppendingString("")
+            // @todo, this breaks saving for some reason.
             // Save the note to the db asynchronously.
             //dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
                 //println("saving d: \(day.number) text: \(text)")

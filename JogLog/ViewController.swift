@@ -53,6 +53,10 @@ class ViewController: UIViewController {
     // Tracks the run button.
     var runButton: UIButton?
     
+    var modalRouteId: NSNumber = 0
+    
+    var presented = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -63,7 +67,7 @@ class ViewController: UIViewController {
         // Locate the week we are on by finding the most recent Sunday.
         self.sunday = JLDate.createFromWeekStart(number: self.daysOfWeek[0])
         
-        self.view.backgroundColor = UIColor.blackColor()
+        self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
         let height:CGFloat = 50.0
         
@@ -116,6 +120,7 @@ class ViewController: UIViewController {
         self.updateSummary()
         
         // Add a Run button
+        // @todo, make this part of the cells?
         let runButton = UIButton()
         runButton.frame = CGRectMake(0, ypos, self.view.bounds.width, 20.00)
         runButton.setTitle("Run", forState: UIControlState.Normal)
@@ -146,8 +151,21 @@ class ViewController: UIViewController {
      */
     override func viewDidAppear(animated: Bool) {
         // Display the cells and possibly the help page.
-        self.rollCellsDown()
-        self.checkVersionChange()
+        if !self.presented {
+            self.rollCellsDown()
+            self.checkVersionChange()
+            self.presented = true
+        }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+        if let v = segue.destinationViewController as? RouteViewController {
+            v.routeId = self.modalRouteId
+        }
+    }
+    
+    func launchRouteView() {
+        self.performSegueWithIdentifier("routeViewSegue", sender: self)
     }
     
     /*!

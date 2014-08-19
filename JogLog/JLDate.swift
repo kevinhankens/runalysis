@@ -57,6 +57,10 @@ class JLDate {
         return "yyyyMMdd"
     }
     
+    class func getDateFormatFull()->NSString {
+        return "yyyyMMddHHm"
+    }
+    
     /*!
      * Specifies the short date format.
      *
@@ -134,8 +138,11 @@ class JLDate {
      * @return JLDate
      */
     class func createFromDate(date: NSDate)->JLDate {
+        let calendar = NSCalendar.currentCalendar()
+        let components = calendar.components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay, fromDate: date)
+        
         let mileage = JLDate()
-        mileage.date = date
+        mileage.date = calendar.dateFromComponents(components)
         mileage.number = JLDate.dateToNumber(date)
         return mileage
     }
@@ -180,8 +187,8 @@ class JLDate {
      */
     class func numberToDate(mileage: NSNumber)->NSDate {
         let format = NSDateFormatter()
-        format.dateFormat = JLDate.getDateFormat()
-        let date = format.dateFromString(mileage.stringValue)
+        format.dateFormat = JLDate.getDateFormatFull()
+        let date = format.dateFromString(mileage.stringValue + "000")
         return date
     }
     

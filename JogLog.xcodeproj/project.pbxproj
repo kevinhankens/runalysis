@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17435937199E783D000472AF /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17435936199E783D000472AF /* Route.swift */; };
+		17435939199E799F000472AF /* RouteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17435938199E799F000472AF /* RouteStore.swift */; };
+		1743593B19A239E1000472AF /* RouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1743593A19A239E1000472AF /* RouteViewController.swift */; };
 		1773453B19910FA70038F304 /* JLDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453A19910FA70038F304 /* JLDate.swift */; };
 		1773453C19910FB80038F304 /* JLDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453A19910FA70038F304 /* JLDate.swift */; };
 		1773453E199112900038F304 /* JLDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453D199112900038F304 /* JLDateTests.swift */; };
@@ -42,6 +45,7 @@
 		17AF16C5198FEC6F00565322 /* SummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393B1989371D0047F859 /* SummaryCell.swift */; };
 		17AF16C6198FEC6F00565322 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393C1989371D0047F859 /* ViewController.swift */; };
 		17AF16C7198FEC6F00565322 /* WeekHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393D1989371D0047F859 /* WeekHeader.swift */; };
+		17CE2E0719A2490A00303598 /* RouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CE2E0619A2490A00303598 /* RouteView.swift */; };
 		17D5F2CF199A4B7E00D9AF80 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D5F2CE199A4B7E00D9AF80 /* NoteView.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +60,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		17435936199E783D000472AF /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
+		17435938199E799F000472AF /* RouteStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteStore.swift; sourceTree = "<group>"; };
+		1743593A19A239E1000472AF /* RouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteViewController.swift; sourceTree = "<group>"; };
 		1773453A19910FA70038F304 /* JLDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLDate.swift; sourceTree = "<group>"; };
 		1773453D199112900038F304 /* JLDateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JLDateTests.swift; path = JogLogTests/JLDateTests.swift; sourceTree = SOURCE_ROOT; };
 		1773453F199122CA0038F304 /* MileageStoreMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MileageStoreMock.swift; sourceTree = "<group>"; };
@@ -82,6 +89,7 @@
 		17AF16B3198FCD9F00565322 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17AF16B4198FCD9F00565322 /* JogLogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JogLogTests.swift; sourceTree = "<group>"; };
 		17AF16B7198FD80B00565322 /* RockerCellTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerCellTests.swift; sourceTree = "<group>"; };
+		17CE2E0619A2490A00303598 /* RouteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteView.swift; sourceTree = "<group>"; };
 		17D5F2CE199A4B7E00D9AF80 /* NoteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,6 +135,10 @@
 		1798392C1989371D0047F859 /* JogLog */ = {
 			isa = PBXGroup;
 			children = (
+				17CE2E0619A2490A00303598 /* RouteView.swift */,
+				1743593A19A239E1000472AF /* RouteViewController.swift */,
+				17435936199E783D000472AF /* Route.swift */,
+				17435938199E799F000472AF /* RouteStore.swift */,
 				178F085B199BFE83000448F9 /* RunView.swift */,
 				17D5F2CE199A4B7E00D9AF80 /* NoteView.swift */,
 				1773453A19910FA70038F304 /* JLDate.swift */,
@@ -263,10 +275,13 @@
 			files = (
 				1798394C1989371D0047F859 /* WeekHeader.swift in Sources */,
 				17983953198C2CE30047F859 /* HelpView.swift in Sources */,
+				1743593B19A239E1000472AF /* RouteViewController.swift in Sources */,
 				179839461989371D0047F859 /* MileageStore.swift in Sources */,
+				17435937199E783D000472AF /* Route.swift in Sources */,
 				1798394A1989371D0047F859 /* SummaryCell.swift in Sources */,
 				1798394B1989371D0047F859 /* ViewController.swift in Sources */,
 				179839491989371D0047F859 /* RockerStepper.swift in Sources */,
+				17435939199E799F000472AF /* RouteStore.swift in Sources */,
 				179839431989371D0047F859 /* JogLog.xcdatamodeld in Sources */,
 				1773453C19910FB80038F304 /* JLDate.swift in Sources */,
 				179839401989371D0047F859 /* GlobalTheme.swift in Sources */,
@@ -274,6 +289,7 @@
 				179839481989371D0047F859 /* RockerCell.swift in Sources */,
 				179839441989371D0047F859 /* Mileage.swift in Sources */,
 				178F085C199BFE83000448F9 /* RunView.swift in Sources */,
+				17CE2E0719A2490A00303598 /* RouteView.swift in Sources */,
 				17D5F2CF199A4B7E00D9AF80 /* NoteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

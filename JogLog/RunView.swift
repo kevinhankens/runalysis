@@ -23,8 +23,17 @@ class RunView: UIView, CLLocationManagerDelegate {
     // If there was an error.
     var errorCaught: Bool = false
     
+    // Tracks the route storage engine.
+    var routeStore: RouteStore = RouteStore()
+    
+    let routeId = NSDate().timeIntervalSince1970
+    
     // Tracks the current location.
     var current: CLLocationCoordinate2D?
+    
+    var lastUpdateTime: NSTimeInterval = 0.0
+    
+    let updateInterval: NSTimeInterval = 4.0
     
     /*!
      * Factory method to create a RunView.
@@ -101,12 +110,16 @@ class RunView: UIView, CLLocationManagerDelegate {
         var locationObj = locationArray.lastObject as CLLocation
         var coord = locationObj.coordinate
         
-        
-        if let p = self.posLabel as? UILabel {
-            if let c = self.current as? CLLocationCoordinate2D {
-                if c.latitude != coord.latitude || c.longitude != coord.longitude {
-                    p.text = self.coordToString(coord)
-                    self.current = coord
+        if (locationObj.timestamp.timeIntervalSince1970 - self.lastUpdateTime > self.updateInterval) {
+            self.lastUpdateTime = locationObj.timestamp.timeIntervalSince1970
+            if let p = self.posLabel as? UILabel {
+                if let c = self.current as? CLLocationCoordinate2D {
+                    if c.latitude != coord.latitude || c.longitude != coord.longitude {
+                        p.text = self.coordToString(coord)
+                        self.current = coord
+                        // Write to db.
+                        self.routeStore.storeRoutePoint(self.routeId, date: self.lastUpdateTime, latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: 0)
+                    }
                 }
             }
         }
