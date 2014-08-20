@@ -177,7 +177,7 @@ class ViewController: UIViewController {
             a.addSubview(r)
             self.closeAllRockersExcept(except: nil)
             self.rollCellsUp()
-            button.enabled = false
+            button.alpha = 0.0
         }
     }
     

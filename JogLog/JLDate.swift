@@ -58,7 +58,7 @@ class JLDate {
     }
     
     class func getDateFormatFull()->NSString {
-        return "yyyyMMddHHm"
+        return "EEEE, MMM d @h:m"
     }
     
     /*!

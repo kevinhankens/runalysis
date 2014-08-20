@@ -119,8 +119,9 @@ class RouteStore {
         var fetch = NSFetchRequest(entityName: "Route")
         fetch.returnsDistinctResults = true
         let comp = prev ? "<" : ">"
+        let sort = prev ? false : true
         fetch.predicate = NSPredicate(format: "routeid \(comp) \(day)")
-        let sorter = NSSortDescriptor(key: "routeid", ascending: true)
+        let sorter = NSSortDescriptor(key: "routeid", ascending: sort)
         fetch.sortDescriptors = [sorter]
         fetch.fetchLimit = 1
         var result = self.context.executeFetchRequest(fetch, error: &error)

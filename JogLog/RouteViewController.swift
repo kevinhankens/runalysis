@@ -25,6 +25,8 @@ class RouteViewController: UIViewController {
     // The currently viewed route.
     var routeView: RouteView?
     
+    var dateLabel: UILabel?
+    
     /*!
      * Overrides UIViewController::viewDidLoad()
      */
@@ -60,6 +62,25 @@ class RouteViewController: UIViewController {
         self.routeView = routeView
         
         self.view.addSubview(routeView)
+        
+        ypos = ypos + routeView.bounds.height + 10
+        
+        let dl = UILabel(frame: CGRectMake(10, ypos, self.view.bounds.width, 20))
+        dl.text = "-"
+        dl.textColor = GlobalTheme.getNormalTextColor()
+        self.dateLabel = dl
+        self.updateDateLabel()
+        
+        self.view.addSubview(dl)
+    }
+    
+    func updateDateLabel() {
+        if let dl = self.dateLabel as? UILabel {
+            let date = NSDate(timeIntervalSince1970:self.routeId)
+            let format = NSDateFormatter()
+            format.dateFormat = JLDate.getDateFormatFull()
+            dl.text = format.stringFromDate(date)
+        }
     }
     
     /*!
@@ -92,6 +113,7 @@ class RouteViewController: UIViewController {
                 if let rv = self.routeView as? RouteView {
                     self.routeId = r
                     rv.changeRoute(r)
+                    self.updateDateLabel()
                 }
             }
         }

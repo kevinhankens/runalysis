@@ -37,7 +37,7 @@ class RouteView: UIView {
     
     // The scale between the grid points and the canvas points.
     var gridRatio = 0.0
-
+    
     /*!
      * Factory method to create a RouteView object.
      *
@@ -51,11 +51,9 @@ class RouteView: UIView {
      */
     class func createRouteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, routeId: NSNumber)->RouteView {
         
-        let route = RouteView(frame: CGRectMake(x, y, width, height))
+        let route = RouteView(frame: CGRectMake(x, y, width, width))
         
-        route.routeId = routeId
-        route.points = route.routeStore.getPointsForId(route.routeId)
-        route.determineGrid()
+        route.changeRoute(routeId)
         
         return route
     }
@@ -71,6 +69,7 @@ class RouteView: UIView {
         self.routeId = id
         self.points = self.routeStore.getPointsForId(self.routeId)
         self.determineGrid()
+        
         self.setNeedsDisplay()
     }
     
@@ -151,8 +150,12 @@ class RouteView: UIView {
                 //println("lon: \(p.longitude)")
                 //println("x: \(px)")
                 //println("y: \(py)")
+                //println("miny: \(self.bounds.minY)")
+                //println("maxy: \(self.bounds.maxY)")
+                //println("minx: \(self.bounds.minX)")
+                //println("maxx: \(self.bounds.maxX)")
                
-                if px < self.bounds.maxX && px > self.bounds.minX && py < self.bounds.maxY && py > self.bounds.minY {
+                if px <= self.bounds.maxX && px >= self.bounds.minX && py <= self.bounds.maxY && py >= self.bounds.minY {
                     if start {
                         CGContextMoveToPoint(context, px, py)
                         start = false
