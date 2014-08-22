@@ -5,6 +5,24 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6190.4"/>
     </dependencies>
     <scenes>
+        <!--Run View Controller-->
+        <scene sceneID="uS7-jr-Tjg">
+            <objects>
+                <viewController id="6QU-Ea-KrW" customClass="RunViewController" customModule="JogLog" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="P31-4w-x8c"/>
+                        <viewControllerLayoutGuide type="bottom" id="cdF-2y-G4V"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Oop-3n-R2t">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3aP-qn-xOh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="184" y="-602"/>
+        </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -20,6 +38,7 @@
                     </view>
                     <connections>
                         <segue destination="NCu-7E-iwe" kind="presentation" identifier="routeViewSegue" id="8m6-yz-TT1"/>
+                        <segue destination="6QU-Ea-KrW" kind="presentation" identifier="runViewSegue" id="WhQ-Zg-pua"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

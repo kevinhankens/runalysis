@@ -19,8 +19,8 @@ class RouteViewController: UIViewController {
     // The id of this route, which is a timestamp.
     var routeId: NSNumber = 0
     
-    // The storate of routes.
-    var routeStore: RouteStore = RouteStore()
+    // The storage of routes.
+    var routeStore: RouteStore?
     
     // The currently viewed route.
     var routeView: RouteView?
@@ -49,7 +49,7 @@ class RouteViewController: UIViewController {
         ypos = ypos + backButton.frame.height + 10
         
         // Create a RouteView to display the results.
-        let routeView = RouteView.createRouteView(0, y: ypos, width: self.view.bounds.width, height: self.view.bounds.width, routeId: self.routeId)
+        let routeView = RouteView.createRouteView(0, y: ypos, width: self.view.bounds.width, height: self.view.bounds.width, routeId: self.routeId, routeStore: self.routeStore!)
         
         // Add swipe gestures to change the route.
         let routeSwipeLeft = UISwipeGestureRecognizer(target: self, action: "routeSwipeGesture:")
@@ -107,7 +107,7 @@ class RouteViewController: UIViewController {
             }
             
             // Update the ID of the route
-            let next = self.routeStore.getNextRouteId(self.routeId, prev: previous)
+            let next = self.routeStore!.getNextRouteId(self.routeId, prev: previous)
             
             if let r = next as? NSNumber {
                 if let rv = self.routeView as? RouteView {

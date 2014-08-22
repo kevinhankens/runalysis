@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class RouteStore {
+class RouteStore: NSObject {
 
     /*!
      * @var NSManagedObjectContext
@@ -43,7 +43,7 @@ class RouteStore {
      *
      * @return void
      */
-    func storeRoutePoint(routeid: NSNumber, date: NSNumber, latitude: NSNumber, longitude: NSNumber, altitude: NSNumber, velocity: NSNumber) {
+    func storeRoutePoint(routeid: NSNumber, date: NSNumber, latitude: NSNumber, longitude: NSNumber, altitude: NSNumber, velocity: NSNumber)->RoutePoint {
         
         var route = NSEntityDescription.insertNewObjectForEntityForName("Route", inManagedObjectContext: self.context) as Route
         
@@ -54,7 +54,17 @@ class RouteStore {
         route.altitude = altitude
         route.velocity = velocity
  
-        self.saveContext()
+        //self.saveContext()
+        
+        let rp = RoutePoint()
+        rp.routeid = routeid
+        rp.date = date
+        rp.latitude = latitude
+        rp.longitude = longitude
+        rp.altitude = altitude
+        rp.velocity = velocity
+        
+        return rp
     }
     
     /*!
@@ -141,8 +151,8 @@ class RouteStore {
      *
      * @return [Route]
      */
-    func getPointsForId(routeId: NSNumber)->[Route] {
-        var list = [Route]()
+    func getPointsForId(routeId: NSNumber)->[RoutePoint] {
+        var list = [RoutePoint]()
         var error: NSError? = nil
         
         var last: NSNumber = 0
@@ -162,7 +172,16 @@ class RouteStore {
         var result = self.context.executeFetchRequest(fetch, error: &error)
         
         for resultItem: AnyObject in result {
-            list.append(resultItem as Route)
+            if let r = resultItem as? Route {
+                let rp = RoutePoint()
+                rp.routeid = r.routeid
+                rp.date = r.date
+                rp.latitude = r.latitude
+                rp.longitude = r.longitude
+                rp.altitude = r.altitude
+                rp.velocity = r.velocity
+                list.append(rp)
+            }
         }
         
         return list

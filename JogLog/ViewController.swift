@@ -12,6 +12,9 @@ import UIKit
  * Main view controller.
  */
 class ViewController: UIViewController {
+    
+    // Tracks the Core Location Manager.
+    var locationManager: CLLocationManager?
    
     // The day to start on, defaults to localized Sunday.
     // @todo make the start configurable.
@@ -57,6 +60,10 @@ class ViewController: UIViewController {
     
     var presented = false
     
+    let routeStore = RouteStore()
+    
+    let mileageStore = MileageStore()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -101,7 +108,7 @@ class ViewController: UIViewController {
         let format = NSDateFormatter()
         format.dateFormat = "EEEE"
         for day in self.daysOfWeek {
-            cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: self.cellPosOffScreen, day: dayNum, summary: summary, controller: self, store: nil)
+            cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: self.cellPosOffScreen, day: dayNum, summary: summary, controller: self, store: self.mileageStore, routeStore: self.routeStore)
             cell.finalY = ypos
             //self.view.addSubview(cell)
             self.mileageCells += cell
@@ -131,9 +138,18 @@ class ViewController: UIViewController {
         container.addSubview(runButton)
         
         self.scrollContentHeight = ypos + CGFloat(runButton.frame.height)
-        
         self.scrollView = container
         self.view.addSubview(container)
+        
+        // Set up location manager.
+        var lm = CLLocationManager()
+        lm.desiredAccuracy = kCLLocationAccuracyBest
+        // IOS7 does not respond.
+        if lm.respondsToSelector(Selector("requestAlwaysAuthorization")) {
+            lm.requestAlwaysAuthorization()
+        }
+        self.locationManager = lm
+ 
     }
     
     /*!
@@ -160,7 +176,13 @@ class ViewController: UIViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
         if let v = segue.destinationViewController as? RouteViewController {
+            v.routeStore = self.routeStore
             v.routeId = self.modalRouteId
+        }
+        else if let v = segue.destinationViewController as? RunViewController {
+            v.routeStore = self.routeStore
+            v.routeId = self.modalRouteId
+            v.locationManager = self.locationManager
         }
     }
     
@@ -172,13 +194,7 @@ class ViewController: UIViewController {
      * Handles the run button click.
      */
     func displayRunViewFromButton(button: UIButton) {
-        if let a = self.actionView as? UIView {
-            let r = RunView.createRunView(a.bounds.height, cellWidth: a.bounds.width, parent: self)
-            a.addSubview(r)
-            self.closeAllRockersExcept(except: nil)
-            self.rollCellsUp()
-            button.alpha = 0.0
-        }
+        self.performSegueWithIdentifier("runViewSegue", sender: self)
     }
     
     /*!
@@ -264,7 +280,7 @@ class ViewController: UIViewController {
     func closeAllRockersExcept(except: RockerCell? = nil, duration: Double = 0.1) {
         for cell in self.mileageCells {
             if var e = except as? RockerCell {
-                if cell.dayNum.number != e.dayNum.number {
+                if cell.dayNum!.number != e.dayNum!.number {
                     cell.closeCover(duration: duration)
                 }
             }
@@ -344,13 +360,13 @@ class ViewController: UIViewController {
             if let a = self.actionView as? UIView {
                 for v in a.subviews {
                     if let n = v as? NoteView {
-                        var day = n.dayNum
+                        var day = n.dayNum!
                         switch swipeGesture.direction {
                         case UISwipeGestureRecognizerDirection.Left:
-                            day = n.dayNum.nextDay(increment: 7)
+                            day = n.dayNum!.nextDay(increment: 7)
                             break;
                         case UISwipeGestureRecognizerDirection.Right:
-                            day = n.dayNum.prevDay(increment: 7)
+                            day = n.dayNum!.prevDay(increment: 7)
                             break;
                         default:
                             break;

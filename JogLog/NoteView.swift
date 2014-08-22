@@ -12,13 +12,13 @@ import UIKit
 class NoteView : UIView, UITextViewDelegate {
     
     // The date representation that we are working with.
-    var dayNum: JLDate = JLDate.createFromDate(NSDate())
+    var dayNum: JLDate?
     
     // The core data storage for mileage.
-    var store: MileageStore = MileageStore()
+    var store: MileageStore?
     
     // The core data storage for routes.
-    var routeStore: RouteStore = RouteStore()
+    var routeStore: RouteStore?
     
     // The ID of the currently viewed route.
     var routeId: NSNumber = 0
@@ -48,12 +48,14 @@ class NoteView : UIView, UITextViewDelegate {
      *
      * @return NoteView
      */
-    class func createNoteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, parent: ViewController, cell: RockerCell, dayNum: JLDate)->NoteView {
+    class func createNoteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, parent: ViewController, cell: RockerCell, dayNum: JLDate, mileageStore: MileageStore, routeStore: RouteStore)->NoteView {
     
         let container = NoteView(frame: CGRectMake(x, y, width, height))
         container.parent = parent
         container.triggeringCell = cell
         container.dayNum = dayNum
+        container.routeStore = routeStore
+        container.store = mileageStore
         
         var ypos = CGFloat(10.0)
         
@@ -70,7 +72,7 @@ class NoteView : UIView, UITextViewDelegate {
         ypos += backButton.frame.height + 10
         
         // Attempt to get any routes for today.
-        let routeId = container.routeStore.getFirstRoutIdForDate(date: container.dayNum.date.timeIntervalSince1970)
+        let routeId = container.routeStore!.getFirstRoutIdForDate(date: container.dayNum!.date.timeIntervalSince1970)
         if let routeDate = routeId as? NSNumber {
             container.routeId = routeDate
             let routeButton = UIButton()
@@ -140,13 +142,13 @@ class NoteView : UIView, UITextViewDelegate {
     func daySwipeGesture(gesture: UIGestureRecognizer) {
         if let g = gesture as? UISwipeGestureRecognizer {
             // Update the day of the note.
-            var day = self.dayNum
+            var day = self.dayNum!
             switch g.direction {
             case UISwipeGestureRecognizerDirection.Left:
-                day = self.dayNum.nextDay(increment: 1)
+                day = self.dayNum!.nextDay(increment: 1)
                 break;
             case UISwipeGestureRecognizerDirection.Right:
-                day = self.dayNum.prevDay(increment: 1)
+                day = self.dayNum!.prevDay(increment: 1)
                 break;
             default:
                 break;
@@ -190,7 +192,7 @@ class NoteView : UIView, UITextViewDelegate {
      */
     func returnToRootView(sender: UIButton) {
         if let n = self.note as? UITextView {
-            let day = self.dayNum
+            let day = self.dayNum!
             let text = n.text
             self.saveNote()
             n.resignFirstResponder()
@@ -214,7 +216,7 @@ class NoteView : UIView, UITextViewDelegate {
         self.dayNum = day
         
         // Storage engine.
-        let mileageData = self.store.getMileageForDate(self.dayNum)
+        let mileageData = self.store!.getMileageForDate(self.dayNum!)
         
         if let l = self.label as? UILabel {
             l.text = day.toStringMedium()
@@ -230,14 +232,14 @@ class NoteView : UIView, UITextViewDelegate {
      */
     func saveNote() {
         if let n = self.note as? UITextView {
-            let day = self.dayNum.nextDay(increment: 0)
+            let day = self.dayNum!.nextDay(increment: 0)
             let text = n.text.stringByAppendingString("")
             // @todo, this breaks saving for some reason.
             // Save the note to the db asynchronously.
             //dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
                 //println("saving d: \(day.number) text: \(text)")
-                self.store.setNoteForDay(day, note: text)
-                self.store.saveContext()
+                self.store!.setNoteForDay(day, note: text)
+                self.store!.saveContext()
                 //})
         }
     }

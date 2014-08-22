@@ -28,7 +28,7 @@ import CoreData
  *  println("retrieved: \(test2)")
  *  ms.saveContext()
  */
-class MileageStore {
+class MileageStore: NSObject {
     
     /*!
      * @var NSManagedObjectContext

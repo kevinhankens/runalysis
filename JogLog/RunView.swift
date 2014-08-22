@@ -14,19 +14,17 @@ class RunView: UIView, CLLocationManagerDelegate {
     // Tracks the Core Location Manager.
     var locationManager: CLLocationManager?
     
-    // Tracks the parent view controller.
-    var parent: ViewController?
-    
     // If there was an error.
     var errorCaught: Bool = false
     
     // Tracks the route storage engine.
-    var routeStore: RouteStore = RouteStore()
+    var routeStore: RouteStore?
     
     let routeId = Int(NSDate().timeIntervalSince1970)
     
     // Tracks the current location.
-    var current: CLLocationCoordinate2D?
+    var currentLat = CLLocationDegrees(0)
+    var currentLon = CLLocationDegrees(0)
     
     var lastUpdateTime: NSTimeInterval = 0.0
     
@@ -43,41 +41,24 @@ class RunView: UIView, CLLocationManagerDelegate {
      *
      * @param CGFloat cellWidth
      *
-     * @param ViewController parent
-     *
      * @return RunView
      */
     class func createRunView(cellHeight: CGFloat, cellWidth:
-        CGFloat, parent: ViewController? = nil)->RunView {
+        CGFloat, routeStore: RouteStore, locationManager: CLLocationManager)->RunView {
             
-        let runView = RunView(frame: CGRect(x: 0, y: 0, width: cellWidth, height: cellHeight))
+        let runView = RunView(frame: CGRect(x: 0, y: 50, width: cellWidth, height: cellHeight))
             
-        runView.parent = parent
+        runView.routeStore = routeStore
             
-        var lm = CLLocationManager()
-        lm.delegate = runView
-        lm.desiredAccuracy = kCLLocationAccuracyBest
-        // IOS7 does not respond.
-        if lm.respondsToSelector(Selector("requestAlwaysAuthorization")) {
-            lm.requestAlwaysAuthorization()
+        locationManager.startUpdatingLocation()
+        locationManager.delegate = runView
+        runView.locationManager = locationManager
+        if let l = locationManager.location {
+            runView.currentLat = l.coordinate.latitude.advancedBy(Double(0.0))
+            runView.currentLon = l.coordinate.longitude.advancedBy(Double(0.0))
         }
-        lm.startUpdatingLocation()
-        runView.locationManager = lm
-        runView.current = lm.location?.coordinate
             
         var ypos: CGFloat = 10
-            
-        // Back button to dismiss this view.
-        let backButton = UIButton()
-        backButton.frame = CGRectMake(10, ypos, runView.bounds.width/2, 20.00)
-        backButton.setTitle("< Back", forState: UIControlState.Normal)
-        backButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
-        backButton.backgroundColor = GlobalTheme.getBackgroundColor()
-        backButton.sizeToFit()
-        backButton.addTarget(runView, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchUpInside)
-        runView.addSubview(backButton)
-            
-        ypos = ypos + backButton.frame.height + 20
             
         // Control button for recording the run.
         let record = UIButton()
@@ -92,7 +73,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         ypos = ypos + record.frame.height + 20
             
         // Create a RouteView to display the results.
-        let routeView = RouteView.createRouteView(0, y: ypos, width: runView.bounds.width, height: runView.bounds.width, routeId: runView.routeId)
+            let routeView = RouteView.createRouteView(0, y: ypos, width: runView.bounds.width, height: runView.bounds.width, routeId: runView.routeId, routeStore: routeStore)
         runView.routeView = routeView
             
         runView.addSubview(routeView)
@@ -138,23 +119,35 @@ class RunView: UIView, CLLocationManagerDelegate {
         var locationArray = locations as NSArray
         var locationObj = locationArray.lastObject as CLLocation
         var coord = locationObj.coordinate
+        var distance: Double = 0
+        var velocity: Double = 0
         
         if self.recording {
             if (locationObj.timestamp.timeIntervalSince1970 - self.lastUpdateTime > self.updateInterval) {
-                self.lastUpdateTime = locationObj.timestamp.timeIntervalSince1970
-                if let c = self.current as? CLLocationCoordinate2D {
-                    if c.latitude != coord.latitude || c.longitude != coord.longitude {
-                        self.current = coord
+                let updateTime = locationObj.timestamp.timeIntervalSince1970
+                    if (self.currentLat != 0 && self.currentLon != 0) && self.currentLat != coord.latitude || currentLon != coord.longitude {
+                        
+                        // Velocity calculation
+                        if self.lastUpdateTime > 0 && self.currentLat != 0 && currentLon != 0 {
+                            distance = sqrt(Double(pow(fabs(currentLat - coord.latitude), 2)) + Double(pow(fabs(currentLon - coord.longitude), 2)))
+                            velocity = distance/(Double(updateTime) - Double(self.lastUpdateTime))
+                        }
+                    
                         // Write to db.
                         // @todo use a timer to account for pauses.
-                        self.routeStore.storeRoutePoint(self.routeId, date: self.lastUpdateTime, latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: 0)
+                        var route = self.routeStore!.storeRoutePoint(self.routeId, date: Int(updateTime), latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: velocity)
                         // Redraw the map
                         if let rv = self.routeView as? RouteView {
-                            rv.changeRoute(rv.routeId)
+                            //rv.changeRoute(self.routeId)
+                            rv.points.append(route)
+                            rv.displayLatest()
                         }
+                        
+                        self.lastUpdateTime = updateTime.advancedBy(Double(0.0))
+                        self.currentLat = coord.latitude.advancedBy(Double(0.0))
+                        self.currentLon = coord.longitude.advancedBy(Double(0.0))
                     }
                 }
-            }
         }
     }
     
@@ -175,27 +168,4 @@ class RunView: UIView, CLLocationManagerDelegate {
         }
     }
     
-    /*!
-     * Handles the return to root.
-     *
-     * @param UIButton sender
-     *
-     * @return void
-     */
-    func returnToRootView(sender: UIButton) {
-        self.locationManager?.stopUpdatingLocation()
-        
-        // Stop running and roll the rocker cells down in the parent view.
-        if let p = self.parent as? ViewController {
-            p.view.endEditing(true)
-            p.rollCellsDown()
-            if let b = p.runButton as? UIButton {
-                // @todo this is a bit gross.
-                b.alpha = 1.0
-            }
-        }
-        
-        self.removeFromSuperview()
-    }
-
 }

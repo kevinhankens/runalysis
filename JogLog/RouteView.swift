@@ -15,13 +15,13 @@ import UIKit
 class RouteView: UIView {
     
     // The core data storage of routes.
-    var routeStore = RouteStore()
+    var routeStore: RouteStore?
     
     // The currently viewed route ID.
     var routeId: NSNumber = 0
     
     // A list of points for the current route.
-    var points: [Route]?
+    var points: [RoutePoint] = [RoutePoint]()
     
     // The minimum x value of the route points.
     var gridMinX = 0.0
@@ -38,6 +38,10 @@ class RouteView: UIView {
     // The scale between the grid points and the canvas points.
     var gridRatio = 0.0
     
+    var lowVelocity: Double = 0
+    var highVelocity: Double = 0
+    var averageVelocity: Double = 0
+    
     /*!
      * Factory method to create a RouteView object.
      *
@@ -49,15 +53,16 @@ class RouteView: UIView {
      *
      * @return RouteView
      */
-    class func createRouteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, routeId: NSNumber)->RouteView {
+    class func createRouteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, routeId: NSNumber, routeStore: RouteStore)->RouteView {
         
         let route = RouteView(frame: CGRectMake(x, y, width, width))
         
+        route.routeStore = routeStore
         route.changeRoute(routeId)
         
         return route
     }
-
+    
     /*!
      * Updates the currently viewed route.
      *
@@ -66,11 +71,46 @@ class RouteView: UIView {
      * @return void
      */
     func changeRoute(id: NSNumber) {
-        self.routeId = id
-        self.points = self.routeStore.getPointsForId(self.routeId)
-        self.determineGrid()
+        self.points.removeAll(keepCapacity: true)
+        if id != self.routeId {
+            self.routeId = id
+        }
+        let routePoints = self.routeStore!.getPointsForId(self.routeId)
         
+        for p in routePoints {
+            self.points.append(p)
+        }
+        
+        self.determineGrid()
+        self.determineVelocity()
         self.setNeedsDisplay()
+    }
+    
+    func displayLatest() {
+        self.determineGrid()
+        self.determineVelocity()
+        self.setNeedsDisplay()
+    }
+    
+    func determineVelocity() {
+        self.lowVelocity = 0
+        self.highVelocity = 0
+        self.averageVelocity = 0
+        var count = 0
+        var total: Double = 0
+        for p in self.points {
+            if p.velocity < self.lowVelocity {
+                self.lowVelocity = p.velocity
+            }
+            else if p.velocity > self.highVelocity {
+                self.highVelocity = p.velocity
+            }
+            total += Double(p.velocity)
+            count++
+        }
+        if count > 0 {
+            self.averageVelocity = total/Double(count)
+        }
     }
     
     /*!
@@ -79,34 +119,33 @@ class RouteView: UIView {
      * @return void
      */
     func determineGrid() {
-        if let list = self.points as? [Route] {
-            if !list.isEmpty {
-                self.gridMinX = list[0].longitude
-                self.gridMaxX = list[0].longitude
-                self.gridMinY = list[0].latitude
-                self.gridMaxY = list[0].latitude
+        if !self.points.isEmpty {
+            self.gridMinX = self.points[0].longitude
+            self.gridMaxX = self.points[0].longitude
+            self.gridMinY = self.points[0].latitude
+            self.gridMaxY = self.points[0].latitude
+        }
+        for p in self.points {
+            if p.longitude > self.gridMaxX {
+                self.gridMaxX = p.longitude
             }
-            for p in list {
-                if p.longitude > self.gridMaxX {
-                    self.gridMaxX = p.longitude
-                }
-                else if p.longitude < self.gridMinX {
-                    self.gridMinX = p.longitude
-                }
-                if p.latitude > self.gridMaxY {
-                    self.gridMaxY = p.latitude
-                }
-                else if p.latitude < self.gridMinY {
-                    self.gridMinY = p.latitude
-                }
+            else if p.longitude < self.gridMinX {
+                self.gridMinX = p.longitude
+            }
+            if p.latitude > self.gridMaxY {
+                self.gridMaxY = p.latitude
+            }
+            else if p.latitude < self.gridMinY {
+                self.gridMinY = p.latitude
             }
         }
         
-        let diffX = self.gridMaxX - self.gridMinX
-        let diffY = self.gridMaxY - self.gridMinY
+        let diffX = fabs(self.gridMaxX - self.gridMinX)
+        let diffY = fabs(self.gridMaxY - self.gridMinY)
+        
         if (diffX > diffY) {
             if diffX > 0 {
-                self.gridRatio = Double(self.frame.width) / fabs(diffX)
+                self.gridRatio = Double(self.frame.width) / diffX
             }
             else {
                 self.gridRatio = 1
@@ -114,7 +153,7 @@ class RouteView: UIView {
         }
         else {
             if diffY > 0 {
-                self.gridRatio = Double(self.frame.height) / fabs(diffY)
+                self.gridRatio = Double(self.frame.height) / diffY
             }
             else {
                 self.gridRatio = 1
@@ -136,36 +175,51 @@ class RouteView: UIView {
         let context = UIGraphicsGetCurrentContext()
         CGContextFillRect(context, self.bounds)
         CGContextSetLineWidth(context, 2.0)
-        CGContextSetStrokeColorWithColor(context, GlobalTheme.getActualColor().CGColor)
+        
+        let velocityDiff = self.highVelocity - self.lowVelocity
+        let velocityThird = velocityDiff/3.0
+        let velocitySixth = (velocityDiff/3.0) * 2.0
         
         var px: CGFloat = 0.0
         var py: CGFloat = 0.0
+        var cx: CGFloat = 0.0
+        var cy: CGFloat = 0.0
+        var ptime: NSNumber = 0
         var start = true
-        if let list = self.points as? [Route] {
-            for p in list {
-                px = CGFloat((p.longitude.doubleValue - self.gridMinX) * self.gridRatio)
-                py = CGFloat(self.frame.height) - CGFloat((p.latitude.doubleValue - self.gridMinY) * self.gridRatio)
-                //println("r: \(self.gridRatio)")
-                //println("lat: \(p.latitude)")
-                //println("lon: \(p.longitude)")
-                //println("x: \(px)")
-                //println("y: \(py)")
-                //println("miny: \(self.bounds.minY)")
-                //println("maxy: \(self.bounds.maxY)")
-                //println("minx: \(self.bounds.minX)")
-                //println("maxx: \(self.bounds.maxX)")
-               
-                if px <= self.bounds.maxX && px >= self.bounds.minX && py <= self.bounds.maxY && py >= self.bounds.minY {
-                    if start {
-                        CGContextMoveToPoint(context, px, py)
-                        start = false
-                    }
-                    else {
-                        CGContextAddLineToPoint(context, px, py)
-                    }
-                }
+        for p in self.points {
+            cx = CGFloat((p.longitude.doubleValue - self.gridMinX) * self.gridRatio)
+            cy = CGFloat(self.frame.height) - CGFloat((p.latitude.doubleValue - self.gridMinY) * self.gridRatio)
+            
+            if start {
+                start = false
             }
-            CGContextStrokePath(context)
+            else {
+                CGContextBeginPath(context);
+                CGContextMoveToPoint(context, px, py);
+                CGContextAddLineToPoint(context, cx, cy);
+                if p.velocity >= self.lowVelocity && p.velocity <= velocityThird {
+                    CGContextSetStrokeColorWithColor(context, UIColor.redColor().CGColor)
+                }
+                else if p.velocity > velocityThird && p.velocity <= velocitySixth {
+                    CGContextSetStrokeColorWithColor(context, UIColor.yellowColor().CGColor)
+                }
+                else {
+                    CGContextSetStrokeColorWithColor(context, UIColor.greenColor().CGColor)
+                }
+                CGContextStrokePath(context);
+            }
+            px = cx
+            py = cy
+            ptime = p.date
+            //println("r: \(self.gridRatio)")
+            //println("lat: \(p.latitude)")
+            //println("lon: \(p.longitude)")
+            //println("x: \(px)")
+            //println("y: \(py)")
+            //println("miny: \(self.bounds.minY)")
+            //println("maxy: \(self.bounds.maxY)")
+            //println("minx: \(self.bounds.minX)")
+            //println("maxx: \(self.bounds.maxX)")
         }
     }
 

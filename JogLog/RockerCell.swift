@@ -50,10 +50,12 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
     
     // The date of this cell.
     // @todo poorly named variable.
-    var dayNum: JLDate = JLDate.createFromDate(NSDate())
+    var dayNum: JLDate?
     
     // The core data storage.
-    var store: MileageStore = MileageStore()
+    var store: MileageStore?
+    
+    var routeStore: RouteStore?
     
     // Tracks the summary cell to update when mileages change.
     var summary: SummaryCell?
@@ -84,7 +86,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
      * @return RockerCell
      */
     class func createCell(centerText: String, cellHeight: CGFloat, cellWidth:
-        CGFloat, cellY: CGFloat, day: JLDate, summary: SummaryCell?, controller: UIViewController?, store: MileageStore?)->RockerCell {
+        CGFloat, cellY: CGFloat, day: JLDate, summary: SummaryCell?, controller: UIViewController?, store: MileageStore, routeStore: RouteStore)->RockerCell {
         // @todo cgrect size should be args
         // @todo make this 100% width
         // @todo make the steppers injectable?
@@ -92,9 +94,8 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
         let container = RockerCell(frame: CGRectMake(0, cellY, cellWidth, cellHeight))
         container.dayNum = day
             
-        if let st = store as? MileageStore {
-            container.store = st
-        }
+        container.store = store
+        container.routeStore = routeStore
             
         // A background color view.
         let leftBg = UIView(frame: CGRect(x: 0, y: 0, width: container.bounds.width/2, height: container.bounds.height))
@@ -109,7 +110,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
         container.summary = summary
         container.controller = controller
             
-        let mileageData = container.store.getMileageForDate(day)
+        let mileageData = container.store!.getMileageForDate(day)
         
         // Create a control panel under the main visible cell.
         let leftControl = RockerStepper(frame: CGRect(x: 3, y: 10, width: 30.00, height: 20.00))
@@ -200,7 +201,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
         if let c = self.controller as? ViewController {
             if let a = c.actionView as? UIView {
                 // @todo too much control here, needs delegate.
-                let n = NoteView.createNoteView(0, y: 0, width: a.bounds.width, height: a.bounds.height, parent: c, cell: self, dayNum: self.dayNum)
+                let n = NoteView.createNoteView(0, y: 0, width: a.bounds.width, height: a.bounds.height, parent: c, cell: self, dayNum: self.dayNum!, mileageStore: self.store!, routeStore: self.routeStore!)
                 a.addSubview(n)
                 c.closeAllRockersExcept(except: nil)
                 c.rollCellsUp()
@@ -311,7 +312,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
      * @return void.
      */   
     func updateDate(day: JLDate) {
-        let mileageData = self.store.getMileageForDate(day)
+        let mileageData = self.store!.getMileageForDate(day)
         let lc = self.leftControl! as UIStepper
         let ll = self.leftLabel! as UILabel
         let rc = self.rightControl! as UIStepper
@@ -358,8 +359,8 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
     func saveMileage() {
         let l = self.leftControl! as UIStepper
         let r = self.rightControl! as UIStepper
-        self.store.setMileageForDay(self.dayNum, planned: l.value, actual: r.value, note: "")
-        self.store.saveContext()
+        self.store!.setMileageForDay(self.dayNum!, planned: l.value, actual: r.value, note: "")
+        self.store!.saveContext()
         
         if let summary = self.summary as? SummaryCell {
             summary.updateValues()
