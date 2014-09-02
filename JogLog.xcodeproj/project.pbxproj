@@ -229,6 +229,11 @@
 					178151B61972F1240029EB87 = {
 						CreatedOnToolsVersion = 6.0;
 						DevelopmentTeam = 4CV5ERH6SG;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					178151CB1972F1240029EB87 = {
 						CreatedOnToolsVersion = 6.0;

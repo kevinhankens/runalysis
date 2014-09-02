@@ -176,9 +176,8 @@ class RouteView: UIView {
         CGContextFillRect(context, self.bounds)
         CGContextSetLineWidth(context, 2.0)
         
-        let velocityDiff = self.highVelocity - self.lowVelocity
-        let velocityThird = velocityDiff/3.0
-        let velocitySixth = (velocityDiff/3.0) * 2.0
+        let velocityDiffBottom = self.averageVelocity - self.lowVelocity
+        let velocityDiffTop = self.highVelocity - self.averageVelocity
         
         var px: CGFloat = 0.0
         var py: CGFloat = 0.0
@@ -197,14 +196,20 @@ class RouteView: UIView {
                 CGContextBeginPath(context);
                 CGContextMoveToPoint(context, px, py);
                 CGContextAddLineToPoint(context, cx, cy);
-                if p.velocity >= self.lowVelocity && p.velocity <= velocityThird {
-                    CGContextSetStrokeColorWithColor(context, UIColor.redColor().CGColor)
+                if p.velocity < self.lowVelocity + velocityDiffBottom/2.5 {
+                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedOne().CGColor)
                 }
-                else if p.velocity > velocityThird && p.velocity <= velocitySixth {
-                    CGContextSetStrokeColorWithColor(context, UIColor.yellowColor().CGColor)
+                else if p.velocity < self.lowVelocity + ((velocityDiffBottom/2.5) * 2) {
+                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedTwo().CGColor)
+                }
+                else if p.velocity < self.lowVelocity + ((velocityDiffTop/2.5) * 2) {
+                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedThree().CGColor)
+                }
+                else if p.velocity < self.highVelocity - ((velocityDiffTop/2.5)) {
+                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedFour().CGColor)
                 }
                 else {
-                    CGContextSetStrokeColorWithColor(context, UIColor.greenColor().CGColor)
+                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedFive().CGColor)
                 }
                 CGContextStrokePath(context);
             }

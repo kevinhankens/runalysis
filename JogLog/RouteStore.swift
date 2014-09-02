@@ -54,7 +54,7 @@ class RouteStore: NSObject {
         route.altitude = altitude
         route.velocity = velocity
  
-        //self.saveContext()
+        self.saveContext()
         
         let rp = RoutePoint()
         rp.routeid = routeid
@@ -166,6 +166,9 @@ class RouteStore: NSObject {
         }
         
         var fetch = NSFetchRequest(entityName: "Route")
+        
+        let sorter = NSSortDescriptor(key: "date", ascending: true)
+        fetch.sortDescriptors = [sorter]
         
         fetch.predicate = NSPredicate(format: "routeid == \(last)")
         

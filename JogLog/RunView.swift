@@ -22,9 +22,8 @@ class RunView: UIView, CLLocationManagerDelegate {
     
     let routeId = Int(NSDate().timeIntervalSince1970)
     
-    // Tracks the current location.
-    var currentLat = CLLocationDegrees(0)
-    var currentLon = CLLocationDegrees(0)
+    // Tracks the previous location.
+    var prev = CLLocation()
     
     var lastUpdateTime: NSTimeInterval = 0.0
     
@@ -54,8 +53,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         locationManager.delegate = runView
         runView.locationManager = locationManager
         if let l = locationManager.location {
-            runView.currentLat = l.coordinate.latitude.advancedBy(Double(0.0))
-            runView.currentLon = l.coordinate.longitude.advancedBy(Double(0.0))
+            runView.prev = RunView.createLocationCopy(l)
         }
             
         var ypos: CGFloat = 10
@@ -79,6 +77,18 @@ class RunView: UIView, CLLocationManagerDelegate {
         runView.addSubview(routeView)
            
         return runView
+    }
+
+    /*!
+     * Creates a copy of a specified location.
+     *
+     * @param CLLocation location
+     *
+     * @return CLLocation
+     */
+    class func createLocationCopy(location: CLLocation)->CLLocation {
+        var newLocation = CLLocation(coordinate: location.coordinate, altitude: location.altitude, horizontalAccuracy: location.horizontalAccuracy, verticalAccuracy: location.verticalAccuracy, course: location.course, speed: location.speed, timestamp: location.timestamp)
+        return newLocation
     }
     
     /*!
@@ -119,23 +129,28 @@ class RunView: UIView, CLLocationManagerDelegate {
         var locationArray = locations as NSArray
         var locationObj = locationArray.lastObject as CLLocation
         var coord = locationObj.coordinate
+        var alt = locationObj.altitude
+        var hdistance: Double = 0
         var distance: Double = 0
         var velocity: Double = 0
         
         if self.recording {
             if (locationObj.timestamp.timeIntervalSince1970 - self.lastUpdateTime > self.updateInterval) {
                 let updateTime = locationObj.timestamp.timeIntervalSince1970
-                    if (self.currentLat != 0 && self.currentLon != 0) && self.currentLat != coord.latitude || currentLon != coord.longitude {
+                    if (self.prev.coordinate.latitude != coord.latitude || self.prev.coordinate.longitude != coord.longitude) {
                         
                         // Velocity calculation
-                        if self.lastUpdateTime > 0 && self.currentLat != 0 && currentLon != 0 {
-                            distance = sqrt(Double(pow(fabs(currentLat - coord.latitude), 2)) + Double(pow(fabs(currentLon - coord.longitude), 2)))
+                        if (self.lastUpdateTime > 0 && self.prev.coordinate.latitude != 0 && self.prev.coordinate.longitude != 0) {
+                            var formercoord = CLLocationCoordinate2D(latitude: self.prev.coordinate.latitude, longitude: self.prev.coordinate.longitude)
+                            var former = CLLocation(coordinate: formercoord, altitude: self.prev.altitude, horizontalAccuracy: locationObj.horizontalAccuracy, verticalAccuracy: locationObj.verticalAccuracy, course: locationObj.course, speed: locationObj.speed, timestamp: locationObj.timestamp)
+                            hdistance = locationObj.distanceFromLocation(former)
+                            distance = sqrt(Double(pow(fabs(self.prev.altitude - alt), 2) + Double(pow(hdistance, 2))))
                             velocity = distance/(Double(updateTime) - Double(self.lastUpdateTime))
                         }
                     
                         // Write to db.
                         // @todo use a timer to account for pauses.
-                        var route = self.routeStore!.storeRoutePoint(self.routeId, date: Int(updateTime), latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: velocity)
+                        var route = self.routeStore!.storeRoutePoint(self.routeId, date: updateTime, latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: velocity)
                         // Redraw the map
                         if let rv = self.routeView as? RouteView {
                             //rv.changeRoute(self.routeId)
@@ -144,8 +159,7 @@ class RunView: UIView, CLLocationManagerDelegate {
                         }
                         
                         self.lastUpdateTime = updateTime.advancedBy(Double(0.0))
-                        self.currentLat = coord.latitude.advancedBy(Double(0.0))
-                        self.currentLon = coord.longitude.advancedBy(Double(0.0))
+                        self.prev = RunView.createLocationCopy(locationObj)
                     }
                 }
         }

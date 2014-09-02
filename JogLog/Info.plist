@@ -20,26 +20,29 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>I would like to access your location to map your course.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>I would like to access your location to map your course.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>I would like to access your location to map your course.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
 	</array>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-	<key>NSLocationUsageDescription</key>
-	<string>I would like to access your location to map your course.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>I would like to access your location to map your course.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>I would like to access your location to map your course.</string>
 </dict>
 </plist>
