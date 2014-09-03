@@ -43,7 +43,7 @@ class RouteStore: NSObject {
      *
      * @return void
      */
-    func storeRoutePoint(routeid: NSNumber, date: NSNumber, latitude: NSNumber, longitude: NSNumber, altitude: NSNumber, velocity: NSNumber)->RoutePoint {
+    func storeRoutePoint(routeid: NSNumber, date: NSNumber, latitude: NSNumber, longitude: NSNumber, altitude: NSNumber, velocity: NSNumber, distance_traveled: NSNumber)->RoutePoint {
         
         var route = NSEntityDescription.insertNewObjectForEntityForName("Route", inManagedObjectContext: self.context) as Route
         
@@ -53,6 +53,7 @@ class RouteStore: NSObject {
         route.longitude = longitude
         route.altitude = altitude
         route.velocity = velocity
+        route.distance = distance_traveled
  
         self.saveContext()
         
@@ -63,6 +64,7 @@ class RouteStore: NSObject {
         rp.longitude = longitude
         rp.altitude = altitude
         rp.velocity = velocity
+        rp.distance = distance_traveled
         
         return rp
     }
@@ -183,6 +185,7 @@ class RouteStore: NSObject {
                 rp.longitude = r.longitude
                 rp.altitude = r.altitude
                 rp.velocity = r.velocity
+                rp.distance = r.distance
                 list.append(rp)
             }
         }

@@ -9,6 +9,7 @@
     <entity name="Route" representedClassName="JogLog.Route" syncable="YES">
         <attribute name="altitude" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="date" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="distance" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="latitude" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="routeid" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
@@ -16,6 +17,6 @@
     </entity>
     <elements>
         <element name="Mileage" positionX="-63" positionY="-18" width="128" height="105"/>
-        <element name="Route" positionX="-63" positionY="9" width="128" height="28"/>
+        <element name="Route" positionX="-63" positionY="9" width="128" height="150"/>
     </elements>
 </model>

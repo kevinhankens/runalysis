@@ -17,5 +17,6 @@ class Route: NSManagedObject {
     @NSManaged var longitude: NSNumber
     @NSManaged var altitude: NSNumber
     @NSManaged var velocity: NSNumber
+    @NSManaged var distance: NSNumber
     
 }

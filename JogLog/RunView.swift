@@ -71,7 +71,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         ypos = ypos + record.frame.height + 20
             
         // Create a RouteView to display the results.
-            let routeView = RouteView.createRouteView(0, y: ypos, width: runView.bounds.width, height: runView.bounds.width, routeId: runView.routeId, routeStore: routeStore)
+        let routeView = RouteView.createRouteView(0, y: ypos, width: runView.bounds.width, height: runView.bounds.width, routeId: runView.routeId, routeStore: routeStore)
         runView.routeView = routeView
             
         runView.addSubview(routeView)
@@ -150,7 +150,7 @@ class RunView: UIView, CLLocationManagerDelegate {
                     
                         // Write to db.
                         // @todo use a timer to account for pauses.
-                        var route = self.routeStore!.storeRoutePoint(self.routeId, date: updateTime, latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: velocity)
+                        var route = self.routeStore!.storeRoutePoint(self.routeId, date: updateTime, latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: velocity, distance_traveled: distance)
                         // Redraw the map
                         if let rv = self.routeView as? RouteView {
                             //rv.changeRoute(self.routeId)

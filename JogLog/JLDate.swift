@@ -57,8 +57,13 @@ class JLDate {
         return "yyyyMMdd"
     }
     
+    /*!
+     * Specifies the date format of full date view including time.
+     *
+     * @return NSString
+     */
     class func getDateFormatFull()->NSString {
-        return "EEEE, MMM d @h:m"
+        return "EEEE, MMM d @h:mm"
     }
     
     /*!

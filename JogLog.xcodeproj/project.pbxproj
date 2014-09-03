@@ -30,6 +30,7 @@
 		1798394C1989371D0047F859 /* WeekHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393D1989371D0047F859 /* WeekHeader.swift */; };
 		17983951198A86320047F859 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1798392E1989371D0047F859 /* Main.storyboard */; };
 		17983953198C2CE30047F859 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17983952198C2CE30047F859 /* HelpView.swift */; };
+		17A49DCA19B7B9C1002DAC82 /* RouteSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A49DC919B7B9C1002DAC82 /* RouteSummary.swift */; };
 		17AF16B6198FCD9F00565322 /* JogLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17AF16B4198FCD9F00565322 /* JogLogTests.swift */; };
 		17AF16B8198FD80B00565322 /* RockerCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17AF16B7198FD80B00565322 /* RockerCellTests.swift */; };
 		17AF16B9198FD99F00565322 /* RockerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179839391989371D0047F859 /* RockerCell.swift */; };
@@ -88,6 +89,7 @@
 		1798393C1989371D0047F859 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		1798393D1989371D0047F859 /* WeekHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekHeader.swift; sourceTree = "<group>"; };
 		17983952198C2CE30047F859 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
+		17A49DC919B7B9C1002DAC82 /* RouteSummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteSummary.swift; sourceTree = "<group>"; };
 		17AF16B3198FCD9F00565322 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17AF16B4198FCD9F00565322 /* JogLogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JogLogTests.swift; sourceTree = "<group>"; };
 		17AF16B7198FD80B00565322 /* RockerCellTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerCellTests.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 		1798392C1989371D0047F859 /* JogLog */ = {
 			isa = PBXGroup;
 			children = (
+				17A49DC919B7B9C1002DAC82 /* RouteSummary.swift */,
 				17CE2E0A19A6D12300303598 /* RoutePoint.swift */,
 				17CE2E0819A6A04800303598 /* RunViewController.swift */,
 				17CE2E0619A2490A00303598 /* RouteView.swift */,
@@ -286,6 +289,7 @@
 			files = (
 				1798394C1989371D0047F859 /* WeekHeader.swift in Sources */,
 				17983953198C2CE30047F859 /* HelpView.swift in Sources */,
+				17A49DCA19B7B9C1002DAC82 /* RouteSummary.swift in Sources */,
 				1743593B19A239E1000472AF /* RouteViewController.swift in Sources */,
 				179839461989371D0047F859 /* MileageStore.swift in Sources */,
 				17435937199E783D000472AF /* Route.swift in Sources */,

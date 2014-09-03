@@ -23,6 +23,9 @@ class RouteView: UIView {
     // A list of points for the current route.
     var points: [RoutePoint] = [RoutePoint]()
     
+    // Provides a summary of the array of RoutePoint objects.
+    var summary: RouteSummary?
+    
     // The minimum x value of the route points.
     var gridMinX = 0.0
     
@@ -38,10 +41,6 @@ class RouteView: UIView {
     // The scale between the grid points and the canvas points.
     var gridRatio = 0.0
     
-    var lowVelocity: Double = 0
-    var highVelocity: Double = 0
-    var averageVelocity: Double = 0
-    
     /*!
      * Factory method to create a RouteView object.
      *
@@ -56,10 +55,10 @@ class RouteView: UIView {
     class func createRouteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, routeId: NSNumber, routeStore: RouteStore)->RouteView {
         
         let route = RouteView(frame: CGRectMake(x, y, width, width))
+        route.summary = RouteSummary.createRouteSummary(route.points)
         
         route.routeStore = routeStore
         route.changeRoute(routeId)
-        
         return route
     }
     
@@ -81,36 +80,13 @@ class RouteView: UIView {
             self.points.append(p)
         }
         
-        self.determineGrid()
-        self.determineVelocity()
-        self.setNeedsDisplay()
+        self.displayLatest()
     }
     
     func displayLatest() {
+        self.summary?.updateRoute(self.points)
         self.determineGrid()
-        self.determineVelocity()
         self.setNeedsDisplay()
-    }
-    
-    func determineVelocity() {
-        self.lowVelocity = 0
-        self.highVelocity = 0
-        self.averageVelocity = 0
-        var count = 0
-        var total: Double = 0
-        for p in self.points {
-            if p.velocity < self.lowVelocity {
-                self.lowVelocity = p.velocity
-            }
-            else if p.velocity > self.highVelocity {
-                self.highVelocity = p.velocity
-            }
-            total += Double(p.velocity)
-            count++
-        }
-        if count > 0 {
-            self.averageVelocity = total/Double(count)
-        }
     }
     
     /*!
@@ -176,9 +152,6 @@ class RouteView: UIView {
         CGContextFillRect(context, self.bounds)
         CGContextSetLineWidth(context, 2.0)
         
-        let velocityDiffBottom = self.averageVelocity - self.lowVelocity
-        let velocityDiffTop = self.highVelocity - self.averageVelocity
-        
         var px: CGFloat = 0.0
         var py: CGFloat = 0.0
         var cx: CGFloat = 0.0
@@ -196,21 +169,22 @@ class RouteView: UIView {
                 CGContextBeginPath(context);
                 CGContextMoveToPoint(context, px, py);
                 CGContextAddLineToPoint(context, cx, cy);
-                if p.velocity < self.lowVelocity + velocityDiffBottom/2.5 {
+
+                switch p.relativeVelocity {
+                case 0:
+                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedOne().CGColor)
+                case 1:
+                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedTwo().CGColor)
+                case 2:
+                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedThree().CGColor)
+                case 3:
+                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedFour().CGColor)
+                case 4:
+                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedFive().CGColor)
+                default:
                     CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedOne().CGColor)
                 }
-                else if p.velocity < self.lowVelocity + ((velocityDiffBottom/2.5) * 2) {
-                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedTwo().CGColor)
-                }
-                else if p.velocity < self.lowVelocity + ((velocityDiffTop/2.5) * 2) {
-                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedThree().CGColor)
-                }
-                else if p.velocity < self.highVelocity - ((velocityDiffTop/2.5)) {
-                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedFour().CGColor)
-                }
-                else {
-                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedFive().CGColor)
-                }
+
                 CGContextStrokePath(context);
             }
             px = cx
