@@ -91,7 +91,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let storeURL = self.applicationDocumentsDirectory.URLByAppendingPathComponent("JogLog.sqlite")
             var error: NSError? = nil
             _persistentStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-            if _persistentStoreCoordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil, error: &error) == nil {
+            var psc_options = [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true]
+            if _persistentStoreCoordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: psc_options, error: &error) == nil {
                 /*
                 Replace this implementation with code to handle the error appropriately.
 

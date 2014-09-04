@@ -14,8 +14,14 @@ import UIKit
  */
 class RouteSummary: NSObject {
     
+    // Tracks the route store.
+    var routeStore: RouteStore?
+    
+    // Tracks the current route ID.
+    var routeId: NSNumber = 0
+    
     // Tracks a list of route points.
-    var points: [RoutePoint]?
+    var points: [RoutePoint] = [RoutePoint]()
     
     // The lowest velocity, currently 0.
     var velocity_low: CLLocationSpeed = Double(0)
@@ -39,23 +45,63 @@ class RouteSummary: NSObject {
      *
      * @return RouteSummary
      */
-    class func createRouteSummary(points: [RoutePoint])->RouteSummary {
+    class func createRouteSummary(routeId: NSNumber, routeStore: RouteStore)->RouteSummary {
             
         let rsv = RouteSummary()
-            
-        rsv.updateRoute(points)
+        
+        rsv.routeStore = routeStore
+        
+        rsv.updateRoute(routeId)
             
         return rsv
     }
 
     /*!
      * Upstes the summary to a new set of points.
-     *
-     * @param [RoutePoint] points
      */
-    func updateRoute(points: [RoutePoint]) {
-        self.points = points
+    func updateRoute(id: NSNumber) {
+        if id != self.routeId {
+            self.routeId = id
+        }
+        self.points.removeAll(keepCapacity: true)
+        let routePoints = self.routeStore!.getPointsForId(self.routeId)
+        for p in routePoints {
+            self.points.append(p)
+        }
+        
         self.calculateSummary()
+    }
+    
+    func addPoint(point: RoutePoint) {
+    
+    }
+    
+    func getTotalAndPace()->String {
+        return "\(self.totalInMiles()) miles @\(self.avgVelocityInMinutesPerMile())"
+    }
+    
+    func totalInMiles()->String {
+        let totalMiles = self.distance_total * Double(0.00062137)
+        let rounded = round(totalMiles * 100)/100
+        let miles = Int(rounded)
+        let fraction = Int((rounded - Double(miles)) * 100)
+        return "\(miles).\(fraction)"
+    }
+    
+    func avgVelocityInMilesPerHour()->Double {
+        let milesPerSecond = self.velocity_mean * Double(0.00062137)
+        return milesPerSecond * Double(3600)
+    }
+    
+    func avgVelocityInMinutesPerMile()->String {
+        let milesperminute = self.avgVelocityInMilesPerHour()/Double(60)
+        if milesperminute > 0 {
+            let minutespermile = Double(1)/milesperminute
+            let minutes = Int(minutespermile)
+            let seconds = Int(round((minutespermile - Double(minutes)) * 60))
+            return "\(String(minutes)):\(String(seconds))"
+        }
+        return "0:00"
     }
     
     /*!
@@ -84,27 +130,25 @@ class RouteSummary: NSObject {
         var total = Double(0)
         var started = false
         
-        if let points = self.points as? [RoutePoint] {
-            for point in points {
-                if !started {
-                    // skip the first one as 0 velocity skews the averages.
-                    started = true
-                    continue
-                }
-                if point.velocity < self.velocity_low {
-                    // @todo low is always 0.
-                    self.velocity_low = point.velocity
-                }
-                else if point.velocity > self.velocity_high {
-                    self.velocity_high = point.velocity
-                }
-                self.distance_total += Double(point.distance)
+        for point in self.points {
+            if !started {
+                // skip the first one as 0 velocity skews the averages.
+                started = true
+                continue
+            }
+            if point.velocity < self.velocity_low {
+                // @todo low is always 0.
+                self.velocity_low = point.velocity
+            }
+            else if point.velocity > self.velocity_high {
+                self.velocity_high = point.velocity
+            }
+            self.distance_total += Double(point.distance)
                 total += Double(point.velocity)
                 count++
-            }
-            if count > 0 {
-                self.velocity_mean = total/Double(count)
-            }
+        }
+        if count > 0 {
+            self.velocity_mean = total/Double(count)
         }
     }
     
@@ -118,12 +162,10 @@ class RouteSummary: NSObject {
         }
         var rel = 0
         
-        if let points = self.points as? [RoutePoint] {
-            for point in points {
-                rel = self.getRelativeVelocity(point)
-                point.relativeVelocity = rel
-                self.distribution[rel]++
-            }
+        for point in self.points {
+            rel = self.getRelativeVelocity(point)
+            point.relativeVelocity = rel
+            self.distribution[rel]++
         }
     }
     

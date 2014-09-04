@@ -20,9 +20,6 @@ class RouteView: UIView {
     // The currently viewed route ID.
     var routeId: NSNumber = 0
     
-    // A list of points for the current route.
-    var points: [RoutePoint] = [RoutePoint]()
-    
     // Provides a summary of the array of RoutePoint objects.
     var summary: RouteSummary?
     
@@ -41,6 +38,8 @@ class RouteView: UIView {
     // The scale between the grid points and the canvas points.
     var gridRatio = 0.0
     
+    var distLabel: UILabel?
+    
     /*!
      * Factory method to create a RouteView object.
      *
@@ -55,10 +54,19 @@ class RouteView: UIView {
     class func createRouteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, routeId: NSNumber, routeStore: RouteStore)->RouteView {
         
         let route = RouteView(frame: CGRectMake(x, y, width, width))
-        route.summary = RouteSummary.createRouteSummary(route.points)
+        route.summary = RouteSummary.createRouteSummary(routeId, routeStore: routeStore)
         
         route.routeStore = routeStore
         route.changeRoute(routeId)
+        
+        var ypos = route.frame.height
+        
+        let distLabel = UILabel(frame: CGRectMake(10, ypos, route.bounds.width, 20))
+        distLabel.text = route.summary!.getTotalAndPace()
+        distLabel.textColor = GlobalTheme.getNormalTextColor()
+        route.distLabel = distLabel
+        route.addSubview(distLabel)
+        
         return route
     }
     
@@ -70,21 +78,21 @@ class RouteView: UIView {
      * @return void
      */
     func changeRoute(id: NSNumber) {
-        self.points.removeAll(keepCapacity: true)
         if id != self.routeId {
             self.routeId = id
-        }
-        let routePoints = self.routeStore!.getPointsForId(self.routeId)
-        
-        for p in routePoints {
-            self.points.append(p)
         }
         
         self.displayLatest()
     }
     
+    /*!
+     *
+     */
     func displayLatest() {
-        self.summary?.updateRoute(self.points)
+        self.summary?.updateRoute(self.routeId)
+        if let dl = self.distLabel as? UILabel {
+            dl.text = self.summary!.getTotalAndPace()
+        }
         self.determineGrid()
         self.setNeedsDisplay()
     }
@@ -95,13 +103,13 @@ class RouteView: UIView {
      * @return void
      */
     func determineGrid() {
-        if !self.points.isEmpty {
-            self.gridMinX = self.points[0].longitude
-            self.gridMaxX = self.points[0].longitude
-            self.gridMinY = self.points[0].latitude
-            self.gridMaxY = self.points[0].latitude
+        if !self.summary!.points.isEmpty {
+            self.gridMinX = self.summary!.points[0].longitude
+            self.gridMaxX = self.summary!.points[0].longitude
+            self.gridMinY = self.summary!.points[0].latitude
+            self.gridMaxY = self.summary!.points[0].latitude
         }
-        for p in self.points {
+        for p in self.summary!.points {
             if p.longitude > self.gridMaxX {
                 self.gridMaxX = p.longitude
             }
@@ -158,7 +166,7 @@ class RouteView: UIView {
         var cy: CGFloat = 0.0
         var ptime: NSNumber = 0
         var start = true
-        for p in self.points {
+        for p in self.summary!.points {
             cx = CGFloat((p.longitude.doubleValue - self.gridMinX) * self.gridRatio)
             cy = CGFloat(self.frame.height) - CGFloat((p.latitude.doubleValue - self.gridMinY) * self.gridRatio)
             

@@ -137,31 +137,31 @@ class RunView: UIView, CLLocationManagerDelegate {
         if self.recording {
             if (locationObj.timestamp.timeIntervalSince1970 - self.lastUpdateTime > self.updateInterval) {
                 let updateTime = locationObj.timestamp.timeIntervalSince1970
-                    if (self.prev.coordinate.latitude != coord.latitude || self.prev.coordinate.longitude != coord.longitude) {
+                if (self.prev.coordinate.latitude != coord.latitude || self.prev.coordinate.longitude != coord.longitude) {
                         
-                        // Velocity calculation
-                        if (self.lastUpdateTime > 0 && self.prev.coordinate.latitude != 0 && self.prev.coordinate.longitude != 0) {
-                            var formercoord = CLLocationCoordinate2D(latitude: self.prev.coordinate.latitude, longitude: self.prev.coordinate.longitude)
-                            var former = CLLocation(coordinate: formercoord, altitude: self.prev.altitude, horizontalAccuracy: locationObj.horizontalAccuracy, verticalAccuracy: locationObj.verticalAccuracy, course: locationObj.course, speed: locationObj.speed, timestamp: locationObj.timestamp)
-                            hdistance = locationObj.distanceFromLocation(former)
-                            distance = sqrt(Double(pow(fabs(self.prev.altitude - alt), 2) + Double(pow(hdistance, 2))))
-                            velocity = distance/(Double(updateTime) - Double(self.lastUpdateTime))
-                        }
-                    
-                        // Write to db.
-                        // @todo use a timer to account for pauses.
-                        var route = self.routeStore!.storeRoutePoint(self.routeId, date: updateTime, latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: velocity, distance_traveled: distance)
-                        // Redraw the map
-                        if let rv = self.routeView as? RouteView {
-                            //rv.changeRoute(self.routeId)
-                            rv.points.append(route)
-                            rv.displayLatest()
-                        }
-                        
-                        self.lastUpdateTime = updateTime.advancedBy(Double(0.0))
-                        self.prev = RunView.createLocationCopy(locationObj)
+                    // Velocity calculation
+                    if (self.lastUpdateTime > 0 && self.prev.coordinate.latitude != 0 && self.prev.coordinate.longitude != 0) {
+                        var formercoord = CLLocationCoordinate2D(latitude: self.prev.coordinate.latitude, longitude: self.prev.coordinate.longitude)
+                        var former = CLLocation(coordinate: formercoord, altitude: self.prev.altitude, horizontalAccuracy: locationObj.horizontalAccuracy, verticalAccuracy: locationObj.verticalAccuracy, course: locationObj.course, speed: locationObj.speed, timestamp: locationObj.timestamp)
+                        hdistance = locationObj.distanceFromLocation(former)
+                        distance = sqrt(Double(pow(fabs(self.prev.altitude - alt), 2) + Double(pow(hdistance, 2))))
+                        velocity = distance/(Double(updateTime) - Double(self.lastUpdateTime))
                     }
+                
+                    // Write to db.
+                    // @todo use a timer to account for pauses.
+                    var route = self.routeStore!.storeRoutePoint(self.routeId, date: updateTime, latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: velocity, distance_traveled: distance)
+                    // Redraw the map
+                    if let rv = self.routeView as? RouteView {
+                        // @todo this needs a wrapper
+                        rv.summary!.points.append(route)
+                        rv.displayLatest()
+                    }
+                    
+                    self.lastUpdateTime = updateTime.advancedBy(Double(0.0))
+                    self.prev = RunView.createLocationCopy(locationObj)
                 }
+            }
         }
     }
     

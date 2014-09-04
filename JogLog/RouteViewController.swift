@@ -63,7 +63,7 @@ class RouteViewController: UIViewController {
         
         self.view.addSubview(routeView)
         
-        ypos = ypos + routeView.bounds.height + 10
+        ypos = ypos + routeView.frame.height + 40
         
         let dl = UILabel(frame: CGRectMake(10, ypos, self.view.bounds.width, 20))
         dl.text = "-"
