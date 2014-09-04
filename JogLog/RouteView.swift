@@ -103,24 +103,28 @@ class RouteView: UIView {
      * @return void
      */
     func determineGrid() {
-        if !self.summary!.points.isEmpty {
-            self.gridMinX = self.summary!.points[0].longitude
-            self.gridMaxX = self.summary!.points[0].longitude
-            self.gridMinY = self.summary!.points[0].latitude
-            self.gridMaxY = self.summary!.points[0].latitude
-        }
-        for p in self.summary!.points {
-            if p.longitude > self.gridMaxX {
-                self.gridMaxX = p.longitude
+        if self.summary!.points?.count > 0 {
+            if let zp = self.summary!.points![0] as? Route {
+                self.gridMinX = zp.longitude
+                self.gridMaxX = zp.longitude
+                self.gridMinY = zp.latitude
+                self.gridMaxY = zp.latitude
             }
-            else if p.longitude < self.gridMinX {
-                self.gridMinX = p.longitude
-            }
-            if p.latitude > self.gridMaxY {
-                self.gridMaxY = p.latitude
-            }
-            else if p.latitude < self.gridMinY {
-                self.gridMinY = p.latitude
+            for point in self.summary!.points! {
+                if let p = point as? Route {
+                    if p.longitude > self.gridMaxX {
+                        self.gridMaxX = p.longitude
+                    }
+                    else if p.longitude < self.gridMinX {
+                        self.gridMinX = p.longitude
+                    }
+                    if p.latitude > self.gridMaxY {
+                        self.gridMaxY = p.latitude
+                    }
+                    else if p.latitude < self.gridMinY {
+                        self.gridMinY = p.latitude
+                    }
+                }
             }
         }
         
@@ -158,7 +162,7 @@ class RouteView: UIView {
     override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         CGContextFillRect(context, self.bounds)
-        CGContextSetLineWidth(context, 2.0)
+        CGContextSetLineWidth(context, 3.0)
         
         var px: CGFloat = 0.0
         var py: CGFloat = 0.0
@@ -166,7 +170,9 @@ class RouteView: UIView {
         var cy: CGFloat = 0.0
         var ptime: NSNumber = 0
         var start = true
-        for p in self.summary!.points {
+        if self.summary!.points?.count > 0 {
+        for point in self.summary!.points! {
+            if let p = point as? Route {
             cx = CGFloat((p.longitude.doubleValue - self.gridMinX) * self.gridRatio)
             cy = CGFloat(self.frame.height) - CGFloat((p.latitude.doubleValue - self.gridMinY) * self.gridRatio)
             
@@ -208,6 +214,8 @@ class RouteView: UIView {
             //println("minx: \(self.bounds.minX)")
             //println("maxx: \(self.bounds.maxX)")
         }
+        }
+    }
     }
 
 }

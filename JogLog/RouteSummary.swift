@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 /*!
- * Provides a summary of a list of RoutePoint objects.
+ * Provides a summary of a list of Route objects.
  */
 class RouteSummary: NSObject {
     
@@ -21,7 +21,7 @@ class RouteSummary: NSObject {
     var routeId: NSNumber = 0
     
     // Tracks a list of route points.
-    var points: [RoutePoint] = [RoutePoint]()
+    var points: [AnyObject]?
     
     // The lowest velocity, currently 0.
     var velocity_low: CLLocationSpeed = Double(0)
@@ -40,8 +40,6 @@ class RouteSummary: NSObject {
 
     /*!
      * Factory method to create a summary.
-     *
-     * @param [RoutePoint] points
      *
      * @return RouteSummary
      */
@@ -63,17 +61,10 @@ class RouteSummary: NSObject {
         if id != self.routeId {
             self.routeId = id
         }
-        self.points.removeAll(keepCapacity: true)
-        let routePoints = self.routeStore!.getPointsForId(self.routeId)
-        for p in routePoints {
-            self.points.append(p)
-        }
+        // @todo can we skip this if the screen is locked?
+        self.points = self.routeStore!.getPointsForId(self.routeId)
         
         self.calculateSummary()
-    }
-    
-    func addPoint(point: RoutePoint) {
-    
     }
     
     func getTotalAndPace()->String {
@@ -130,22 +121,26 @@ class RouteSummary: NSObject {
         var total = Double(0)
         var started = false
         
-        for point in self.points {
-            if !started {
-                // skip the first one as 0 velocity skews the averages.
-                started = true
-                continue
+        if self.points?.count > 0 {
+            for p in self.points! {
+                if let point = p as? Route {
+                    if !started {
+                        // skip the first one as 0 velocity skews the averages.
+                        started = true
+                        continue
+                    }
+                    if point.velocity < self.velocity_low {
+                        // @todo low is always 0.
+                        self.velocity_low = point.velocity
+                    }
+                    else if point.velocity > self.velocity_high {
+                        self.velocity_high = point.velocity
+                    }
+                    self.distance_total += Double(point.distance)
+                    total += Double(point.velocity)
+                    count++
+                }
             }
-            if point.velocity < self.velocity_low {
-                // @todo low is always 0.
-                self.velocity_low = point.velocity
-            }
-            else if point.velocity > self.velocity_high {
-                self.velocity_high = point.velocity
-            }
-            self.distance_total += Double(point.distance)
-                total += Double(point.velocity)
-                count++
         }
         if count > 0 {
             self.velocity_mean = total/Double(count)
@@ -156,27 +151,34 @@ class RouteSummary: NSObject {
      * Calculates the distribution of velocities.
      */
     func calculateDistribution() {
+        var rel = 0
+        // For some reason trying to adjust self.distribution is very expensive. So do it in a local var and update once at the end.
+        var tmp = [0,0,0,0,0]
+        
+        if self.points?.count > 0 {
+            for p in self.points! {
+                if let point = p as? Route {
+                    rel = self.getRelativeVelocity(point)
+                    point.relativeVelocity = rel
+                    tmp[rel]++
+                }
+            }
+        }
+        
         var i = 0
         for i = 0; i < 5; i++ {
-            self.distribution[i] = 0
-        }
-        var rel = 0
-        
-        for point in self.points {
-            rel = self.getRelativeVelocity(point)
-            point.relativeVelocity = rel
-            self.distribution[rel]++
+            self.distribution[i] = tmp[i]
         }
     }
     
     /*!
      * Gets the relative velocity of a point compared to the high, low and average.
      *
-     * @param RoutePoint point
+     * @param Route point
      *
      * @return NSNumber
      */
-    func getRelativeVelocity(point: RoutePoint)->NSNumber {
+    func getRelativeVelocity(point: Route)->NSNumber {
         let velocityDiffBottom = self.velocity_mean - self.velocity_low
         let velocityDiffTop = self.velocity_high - self.velocity_mean
         var rel = 0

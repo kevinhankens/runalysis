@@ -154,7 +154,8 @@ class RunView: UIView, CLLocationManagerDelegate {
                     // Redraw the map
                     if let rv = self.routeView as? RouteView {
                         // @todo this needs a wrapper
-                        rv.summary!.points.append(route)
+                        //rv.summary!.points?.append(route)
+                        rv.summary!.updateRoute(self.routeId)
                         rv.displayLatest()
                     }
                     

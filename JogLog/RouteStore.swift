@@ -43,7 +43,7 @@ class RouteStore: NSObject {
      *
      * @return void
      */
-    func storeRoutePoint(routeid: NSNumber, date: NSNumber, latitude: NSNumber, longitude: NSNumber, altitude: NSNumber, velocity: NSNumber, distance_traveled: NSNumber)->RoutePoint {
+    func storeRoutePoint(routeid: NSNumber, date: NSNumber, latitude: NSNumber, longitude: NSNumber, altitude: NSNumber, velocity: NSNumber, distance_traveled: NSNumber)->Route {
         
         var route = NSEntityDescription.insertNewObjectForEntityForName("Route", inManagedObjectContext: self.context) as Route
         
@@ -57,16 +57,18 @@ class RouteStore: NSObject {
  
         self.saveContext()
         
-        let rp = RoutePoint()
-        rp.routeid = routeid
-        rp.date = date
-        rp.latitude = latitude
-        rp.longitude = longitude
-        rp.altitude = altitude
-        rp.velocity = velocity
-        rp.distance = distance_traveled
+        return route
         
-        return rp
+        //let rp = RoutePoint()
+        //rp.routeid = routeid
+        //rp.date = date
+        //rp.latitude = latitude
+        //rp.longitude = longitude
+        //rp.altitude = altitude
+        //rp.velocity = velocity
+        //rp.distance = distance_traveled
+        
+        //return rp
     }
     
     /*!
@@ -97,7 +99,7 @@ class RouteStore: NSObject {
      *
      * @param NSNumber date
      * 
-     * @return void
+     * @return NSNumber?
      */
     func getFirstRoutIdForDate(date: NSNumber = 0)->NSNumber? {
         let endDate: NSNumber = (60 * 60 * 24) + date
@@ -124,7 +126,7 @@ class RouteStore: NSObject {
      * @param NSNumber day
      * @param Bool prev
      *
-     * @return NSNumber
+     * @return NSNumber?
      */
     func getNextRouteId(day: NSNumber, prev: Bool = false)->NSNumber? {
         var error: NSError? = nil
@@ -153,8 +155,8 @@ class RouteStore: NSObject {
      *
      * @return [Route]
      */
-    func getPointsForId(routeId: NSNumber)->[RoutePoint] {
-        var list = [RoutePoint]()
+    func getPointsForId(routeId: NSNumber)->[AnyObject] {
+        //var list = [RoutePoint]()
         var error: NSError? = nil
         
         var last: NSNumber = 0
@@ -176,6 +178,8 @@ class RouteStore: NSObject {
         
         var result = self.context.executeFetchRequest(fetch, error: &error)
         
+        return result
+        /*
         for resultItem: AnyObject in result {
             if let r = resultItem as? Route {
                 let rp = RoutePoint()
@@ -191,6 +195,7 @@ class RouteStore: NSObject {
         }
         
         return list
+        */
     }
 
 }

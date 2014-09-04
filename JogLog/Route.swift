@@ -18,5 +18,6 @@ class Route: NSManagedObject {
     @NSManaged var altitude: NSNumber
     @NSManaged var velocity: NSNumber
     @NSManaged var distance: NSNumber
+    var relativeVelocity: NSNumber = 0
     
 }
