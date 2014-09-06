@@ -160,9 +160,12 @@ class RouteView: UIView {
      * @return void
      */
     override func drawRect(rect: CGRect) {
+        var mileCounter = 0
+        var mileTest = 0
+        var total = Double(0)
+        
         let context = UIGraphicsGetCurrentContext()
         CGContextFillRect(context, self.bounds)
-        CGContextSetLineWidth(context, 3.0)
         
         var px: CGFloat = 0.0
         var py: CGFloat = 0.0
@@ -180,10 +183,6 @@ class RouteView: UIView {
                 start = false
             }
             else {
-                CGContextBeginPath(context);
-                CGContextMoveToPoint(context, px, py);
-                CGContextAddLineToPoint(context, cx, cy);
-
                 switch p.relativeVelocity {
                 case 0:
                     CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedOne().CGColor)
@@ -198,8 +197,28 @@ class RouteView: UIView {
                 default:
                     CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedOne().CGColor)
                 }
-
+                
+                CGContextSetLineWidth(context, 4.0)
+                CGContextBeginPath(context);
+                CGContextMoveToPoint(context, px, py);
+                CGContextAddLineToPoint(context, cx, cy);
                 CGContextStrokePath(context);
+                
+                CGContextSetLineWidth(context, 1.0)
+                var center = CGPointMake(cx, cy)
+                CGContextAddArc(context, center.x, center.y, CGFloat(2.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
+                CGContextStrokePath(context);
+                
+                // Draw a mile marker
+                total += p.distance.doubleValue * Double(0.00062137)
+                mileTest = Int(total)
+                if mileTest > mileCounter {
+                    mileCounter = mileTest
+                    var center = CGPointMake(cx, cy)
+                    CGContextAddArc(context, center.x, center.y, CGFloat(12.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
+                    CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().CGColor)
+                    CGContextStrokePath(context);
+                }
             }
             px = cx
             py = cy

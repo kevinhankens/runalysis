@@ -49,7 +49,7 @@ class RouteViewController: UIViewController {
         ypos = ypos + backButton.frame.height + 10
         
         // Create a RouteView to display the results.
-        let routeView = RouteView.createRouteView(0, y: ypos, width: self.view.bounds.width, height: self.view.bounds.width, routeId: self.routeId, routeStore: self.routeStore!)
+        let routeView = RouteView.createRouteView(0, y: ypos, width: self.view.bounds.width - 5, height: self.view.bounds.width - 5, routeId: self.routeId, routeStore: self.routeStore!)
         
         // Add swipe gestures to change the route.
         let routeSwipeLeft = UISwipeGestureRecognizer(target: self, action: "routeSwipeGesture:")

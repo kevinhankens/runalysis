@@ -67,30 +67,58 @@ class RouteSummary: NSObject {
         self.calculateSummary()
     }
     
+    /*!
+     * Gets a label for the total mileage with the pace.
+     *
+     * @return String
+     */
     func getTotalAndPace()->String {
         return "\(self.totalInMiles()) miles @\(self.avgVelocityInMinutesPerMile())"
     }
     
+    /*!
+     * Gets the total in miles.
+     *
+     * @return String
+     */
     func totalInMiles()->String {
         let totalMiles = self.distance_total * Double(0.00062137)
         let rounded = round(totalMiles * 100)/100
         let miles = Int(rounded)
         let fraction = Int((rounded - Double(miles)) * 100)
+        var fracton_string = "\(fraction)"
+        if fraction < 10 {
+            fracton_string = "0\(fraction)"
+        }
         return "\(miles).\(fraction)"
     }
     
+    /*!
+     * Gets the average velocity in miles per hour.
+     *
+     * @return Double
+     */
     func avgVelocityInMilesPerHour()->Double {
         let milesPerSecond = self.velocity_mean * Double(0.00062137)
         return milesPerSecond * Double(3600)
     }
     
+    /*!
+     * Gets a label for the average pace in minutes per mile.
+     *
+     * @return String
+     */
     func avgVelocityInMinutesPerMile()->String {
         let milesperminute = self.avgVelocityInMilesPerHour()/Double(60)
         if milesperminute > 0 {
             let minutespermile = Double(1)/milesperminute
             let minutes = Int(minutespermile)
             let seconds = Int(round((minutespermile - Double(minutes)) * 60))
-            return "\(String(minutes)):\(String(seconds))"
+            var seconds_string = "\(String(seconds))"
+            if seconds < 10 {
+                var seconds_string = "0\(String(seconds))"
+            }
+            return "\(String(minutes)):\(seconds_string)"
         }
         return "0:00"
     }

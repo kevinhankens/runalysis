@@ -155,6 +155,7 @@ class RunView: UIView, CLLocationManagerDelegate {
                     if let rv = self.routeView as? RouteView {
                         // @todo this needs a wrapper
                         //rv.summary!.points?.append(route)
+                        // @todo this is horrible for performance.
                         rv.summary!.updateRoute(self.routeId)
                         rv.displayLatest()
                     }

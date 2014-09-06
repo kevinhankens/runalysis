@@ -57,23 +57,23 @@ class GlobalTheme {
     }
     
     class func getSpeedOne()->UIColor {
-        return UIColor(red: 255/255, green: 38/255, blue: 38/255, alpha: 1.0)
+        return UIColor(red: 255/255, green: 66/255, blue: 66/255, alpha: 1.0)
     }
     
     class func getSpeedTwo()->UIColor {
-        return UIColor(red: 255/255, green: 197/255, blue: 38/255, alpha: 1.0)
+        return UIColor(red: 255/255, green: 135/255, blue: 66/255, alpha: 1.0)
     }
     
     class func getSpeedThree()->UIColor {
-        return UIColor(red: 255/255, green: 248/255, blue: 38/255, alpha: 1.0)
+        return UIColor(red: 255/255, green: 255/255, blue: 66/255, alpha: 1.0)
     }
     
     class func getSpeedFour()->UIColor {
-        return UIColor(red: 183/255, green: 255/255, blue: 38/255, alpha: 1.0)
+        return UIColor(red: 135/255, green: 255/255, blue: 66/255, alpha: 1.0)
     }
     
     class func getSpeedFive()->UIColor {
-        return UIColor(red: 85/255, green: 255/255, blue: 38/255, alpha: 1.0)
+        return UIColor(red: 66/255, green: 255/255, blue: 66/255, alpha: 1.0)
     }
     
 }
