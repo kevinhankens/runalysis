@@ -38,8 +38,6 @@ class RouteView: UIView {
     // The scale between the grid points and the canvas points.
     var gridRatio = 0.0
     
-    var distLabel: UILabel?
-    
     /*!
      * Factory method to create a RouteView object.
      *
@@ -48,40 +46,29 @@ class RouteView: UIView {
      * @param CGFloat width
      * @param CGFloat height
      * @param NSNumber routeId
+     * @param RouteStore routeStore
+     * @param RouteSummary routeSummary
      *
      * @return RouteView
      */
-    class func createRouteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, routeId: NSNumber, routeStore: RouteStore)->RouteView {
+    class func createRouteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, routeId: NSNumber, routeStore: RouteStore, routeSummary: RouteSummary)->RouteView {
         
         let route = RouteView(frame: CGRectMake(x, y, width, width))
-        route.summary = RouteSummary.createRouteSummary(routeId, routeStore: routeStore)
-        
+        route.summary = routeSummary
         route.routeStore = routeStore
-        route.changeRoute(routeId)
+        route.updateRoute()
         
         var ypos = route.frame.height
-        
-        let distLabel = UILabel(frame: CGRectMake(10, ypos, route.bounds.width, 20))
-        distLabel.text = route.summary!.getTotalAndPace()
-        distLabel.textColor = GlobalTheme.getNormalTextColor()
-        route.distLabel = distLabel
-        route.addSubview(distLabel)
-        
+       
         return route
     }
     
     /*!
      * Updates the currently viewed route.
      *
-     * @param NSNumber id
-     *
      * @return void
      */
-    func changeRoute(id: NSNumber) {
-        if id != self.routeId {
-            self.routeId = id
-        }
-        
+    func updateRoute() {
         self.displayLatest()
     }
     
@@ -89,10 +76,6 @@ class RouteView: UIView {
      *
      */
     func displayLatest() {
-        self.summary?.updateRoute(self.routeId)
-        if let dl = self.distLabel as? UILabel {
-            dl.text = self.summary!.getTotalAndPace()
-        }
         self.determineGrid()
         self.setNeedsDisplay()
     }
@@ -133,7 +116,7 @@ class RouteView: UIView {
         
         if (diffX > diffY) {
             if diffX > 0 {
-                self.gridRatio = Double(self.frame.width) / diffX
+                self.gridRatio = Double(self.frame.width - 20) / diffX
             }
             else {
                 self.gridRatio = 1
@@ -141,7 +124,7 @@ class RouteView: UIView {
         }
         else {
             if diffY > 0 {
-                self.gridRatio = Double(self.frame.height) / diffY
+                self.gridRatio = Double(self.frame.height - 20) / diffY
             }
             else {
                 self.gridRatio = 1
@@ -173,11 +156,12 @@ class RouteView: UIView {
         var cy: CGFloat = 0.0
         var ptime: NSNumber = 0
         var start = true
+        var speedColor = GlobalTheme.getSpeedOne().CGColor
         if self.summary!.points?.count > 0 {
         for point in self.summary!.points! {
             if let p = point as? Route {
-            cx = CGFloat((p.longitude.doubleValue - self.gridMinX) * self.gridRatio)
-            cy = CGFloat(self.frame.height) - CGFloat((p.latitude.doubleValue - self.gridMinY) * self.gridRatio)
+            cx = CGFloat((p.longitude.doubleValue - self.gridMinX) * self.gridRatio) + 10.0
+            cy = CGFloat(self.frame.height) - CGFloat((p.latitude.doubleValue - self.gridMinY) * self.gridRatio) - 10.0
             
             if start {
                 start = false
@@ -185,20 +169,22 @@ class RouteView: UIView {
             else {
                 switch p.relativeVelocity {
                 case 0:
-                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedOne().CGColor)
+                    speedColor = GlobalTheme.getSpeedOne().CGColor
                 case 1:
-                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedTwo().CGColor)
+                    speedColor = GlobalTheme.getSpeedTwo().CGColor
                 case 2:
-                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedThree().CGColor)
+                    speedColor = GlobalTheme.getSpeedThree().CGColor
                 case 3:
-                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedFour().CGColor)
+                    speedColor = GlobalTheme.getSpeedFour().CGColor
                 case 4:
-                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedFive().CGColor)
+                    speedColor = GlobalTheme.getSpeedFive().CGColor
                 default:
-                    CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedOne().CGColor)
+                    speedColor = GlobalTheme.getSpeedOne().CGColor
                 }
                 
-                CGContextSetLineWidth(context, 4.0)
+                CGContextSetStrokeColorWithColor(context, speedColor)
+                
+                CGContextSetLineWidth(context, 3.0)
                 CGContextBeginPath(context);
                 CGContextMoveToPoint(context, px, py);
                 CGContextAddLineToPoint(context, cx, cy);
@@ -206,8 +192,10 @@ class RouteView: UIView {
                 
                 CGContextSetLineWidth(context, 1.0)
                 var center = CGPointMake(cx, cy)
-                CGContextAddArc(context, center.x, center.y, CGFloat(2.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
-                CGContextStrokePath(context);
+                CGContextAddArc(context, center.x, center.y, CGFloat(1.5), CGFloat(0), CGFloat(2*M_PI), Int32(0))
+                CGContextSetFillColorWithColor(context, speedColor);
+                CGContextFillPath(context);
+                //CGContextStrokePath(context);
                 
                 // Draw a mile marker
                 total += p.distance.doubleValue * Double(0.00062137)

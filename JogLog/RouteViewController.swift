@@ -14,7 +14,7 @@ import UIKit
  * an event. We can use this to scroll through routes and view details via
  * RootView objects. In retrospect, "route view" is a terrible name.
  */
-class RouteViewController: UIViewController {
+class RouteViewController: UIViewController, UIScrollViewDelegate {
     
     // The id of this route, which is a timestamp.
     var routeId: NSNumber = 0
@@ -22,10 +22,18 @@ class RouteViewController: UIViewController {
     // The storage of routes.
     var routeStore: RouteStore?
     
+    var routeSummary: RouteSummary?
+    
     // The currently viewed route.
     var routeView: RouteView?
     
+    var routeAnalysisView: RouteAnalysisView?
+    
     var dateLabel: UILabel?
+    
+    var distLabel: UILabel?
+    
+    var scrollContainer: UIScrollView?
     
     /*!
      * Overrides UIViewController::viewDidLoad()
@@ -49,7 +57,10 @@ class RouteViewController: UIViewController {
         ypos = ypos + backButton.frame.height + 10
         
         // Create a RouteView to display the results.
-        let routeView = RouteView.createRouteView(0, y: ypos, width: self.view.bounds.width - 5, height: self.view.bounds.width - 5, routeId: self.routeId, routeStore: self.routeStore!)
+        let container = UIScrollView(frame: CGRectMake(0, ypos, self.view.bounds.width + 5, self.view.bounds.width))
+        
+        self.routeSummary = RouteSummary.createRouteSummary(self.routeId, routeStore: self.routeStore!)
+        let routeView = RouteView.createRouteView(0, y: 0, width: self.view.bounds.width - 5, height: self.view.bounds.width - 5, routeId: self.routeId, routeStore: self.routeStore!, routeSummary: self.routeSummary!)
         
         // Add swipe gestures to change the route.
         let routeSwipeLeft = UISwipeGestureRecognizer(target: self, action: "routeSwipeGesture:")
@@ -59,28 +70,40 @@ class RouteViewController: UIViewController {
         let routeSwipeRight = UISwipeGestureRecognizer(target: self, action: "routeSwipeGesture:")
         routeSwipeRight.direction = UISwipeGestureRecognizerDirection.Right
         routeView.addGestureRecognizer(routeSwipeRight)
+        
+        // Scrolling
+        container.minimumZoomScale = 1.0
+        container.maximumZoomScale = 3.0
+        container.contentSize = CGSizeMake(self.view.bounds.width, self.view.bounds.height)
+        container.delegate = self
+        
         self.routeView = routeView
+        self.scrollContainer = container
         
-        self.view.addSubview(routeView)
+        container.addSubview(routeView)
+        self.view.addSubview(container)
         
-        ypos = ypos + routeView.frame.height + 40
+        ypos = ypos + routeView.frame.height + 10
         
-        let dl = UILabel(frame: CGRectMake(10, ypos, self.view.bounds.width, 20))
-        dl.text = "-"
-        dl.textColor = GlobalTheme.getNormalTextColor()
-        self.dateLabel = dl
-        self.updateDateLabel()
-        
-        self.view.addSubview(dl)
+        // @todo what is the height of this view?
+        let rav = RouteAnalysisView.createRouteAnalysisView(self.view.bounds.width, cellWidth: self.view.bounds.width, x: 0, y: ypos, routeSummary: self.routeSummary!)
+        self.view.addSubview(rav)
+        self.routeAnalysisView = rav
+
     }
     
-    func updateDateLabel() {
-        if let dl = self.dateLabel as? UILabel {
-            let date = NSDate(timeIntervalSince1970:self.routeId)
-            let format = NSDateFormatter()
-            format.dateFormat = JLDate.getDateFormatFull()
-            dl.text = format.stringFromDate(date)
+    func viewForZoomingInScrollView(scrollView: UIScrollView!)->UIView! {
+        return self.routeView
+    }
+    
+    func scrollViewDidEndZooming(scrollView: UIScrollView!, withView view: UIView!, atScale scale: CGFloat) {
+        if let rv = self.routeView as? RouteView {
+            //let newRect = CGRectMake(rv.bounds.minX, rv.bounds.minY, rv.bounds.width, rv.bounds.height)
+            //rv.setNeedsDisplayInRect(newRect)
+            //rv.contentScaleFactor = scale
         }
+        // @todo can we redraw at scale?
+        //self.routeView!.setNeedsDisplay()
     }
     
     /*!
@@ -111,9 +134,13 @@ class RouteViewController: UIViewController {
             
             if let r = next as? NSNumber {
                 if let rv = self.routeView as? RouteView {
-                    self.routeId = r
-                    rv.changeRoute(r)
-                    self.updateDateLabel()
+                    if let av = self.routeAnalysisView as? RouteAnalysisView {
+                        self.routeId = r
+                        self.routeSummary?.updateRoute(self.routeId)
+                        // @todo set the route id in the summary here.
+                        rv.updateRoute()
+                        av.updateLabels()
+                    }
                 }
             }
         }

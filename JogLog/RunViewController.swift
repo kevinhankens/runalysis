@@ -19,6 +19,8 @@ class RunViewController: UIViewController {
     var routeId: NSNumber = 0
     
     var runView: RunView?
+    
+    var routeAnalysisView: RouteAnalysisView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +40,11 @@ class RunViewController: UIViewController {
         
         ypos = ypos + backButton.frame.height + 10
         
-        let r = RunView.createRunView(self.view.bounds.width, cellWidth: self.view.bounds.width, routeStore: self.routeStore!, locationManager: self.locationManager!)
+        let routeId = Int(NSDate().timeIntervalSince1970)
+        
+        let routeSummary = RouteSummary.createRouteSummary(routeId, routeStore: self.routeStore!)
+        
+        let r = RunView.createRunView(self.view.bounds.width, cellWidth: self.view.bounds.width, routeStore: self.routeStore!, locationManager: self.locationManager!, routeSummary: routeSummary)
         self.runView = r
         self.view.addSubview(r)
     }

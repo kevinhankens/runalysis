@@ -33,6 +33,8 @@ class RunView: UIView, CLLocationManagerDelegate {
     
     var routeView: RouteView?
     
+    var routeAnalysisView: RouteAnalysisView?
+    
     /*!
      * Factory method to create a RunView.
      *
@@ -43,7 +45,7 @@ class RunView: UIView, CLLocationManagerDelegate {
      * @return RunView
      */
     class func createRunView(cellHeight: CGFloat, cellWidth:
-        CGFloat, routeStore: RouteStore, locationManager: CLLocationManager)->RunView {
+        CGFloat, routeStore: RouteStore, locationManager: CLLocationManager, routeSummary: RouteSummary)->RunView {
             
         let runView = RunView(frame: CGRect(x: 0, y: 50, width: cellWidth, height: cellHeight))
             
@@ -60,7 +62,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             
         // Control button for recording the run.
         let record = UIButton()
-        record.frame = CGRectMake(10, ypos, runView.bounds.width/2, 20.00)
+        record.frame = CGRectMake(0, ypos, runView.bounds.width, 20.00)
         record.setTitle("Start", forState: UIControlState.Normal)
         record.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
         record.backgroundColor = GlobalTheme.getBackgroundColor()
@@ -68,14 +70,24 @@ class RunView: UIView, CLLocationManagerDelegate {
         record.addTarget(runView, action: "toggleRecordPause:", forControlEvents: UIControlEvents.TouchUpInside)
         runView.addSubview(record)
             
-        ypos = ypos + record.frame.height + 20
+        ypos += record.frame.height + 10
             
         // Create a RouteView to display the results.
-        let routeView = RouteView.createRouteView(0, y: ypos, width: runView.bounds.width, height: runView.bounds.width, routeId: runView.routeId, routeStore: routeStore)
+        let routeView = RouteView.createRouteView(0, y: ypos, width: runView.bounds.width, height: runView.bounds.width, routeId: runView.routeId, routeStore: routeStore, routeSummary: routeSummary)
         runView.routeView = routeView
-            
         runView.addSubview(routeView)
-           
+            
+        ypos = ypos + routeView.frame.height + 10
+            
+        // @todo what is the height of this view?
+        let rav = RouteAnalysisView.createRouteAnalysisView(40.0, cellWidth: runView.bounds.width, x: 0, y: ypos, routeSummary: routeSummary)
+        runView.addSubview(rav)
+        runView.routeAnalysisView = rav
+        rav.userInteractionEnabled = false
+            
+        record.frame.origin.y = routeView.frame.minY + (routeView.frame.height/2)
+        runView.bringSubviewToFront(record)
+          
         return runView
     }
 
@@ -153,11 +165,12 @@ class RunView: UIView, CLLocationManagerDelegate {
                     var route = self.routeStore!.storeRoutePoint(self.routeId, date: updateTime, latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: velocity, distance_traveled: distance)
                     // Redraw the map
                     if let rv = self.routeView as? RouteView {
-                        // @todo this needs a wrapper
-                        //rv.summary!.points?.append(route)
                         // @todo this is horrible for performance.
                         rv.summary!.updateRoute(self.routeId)
                         rv.displayLatest()
+                        if let rav = self.routeAnalysisView as? RouteAnalysisView {
+                            rav.updateLabels()
+                        }
                     }
                     
                     self.lastUpdateTime = updateTime.advancedBy(Double(0.0))

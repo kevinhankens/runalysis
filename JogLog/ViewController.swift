@@ -128,6 +128,7 @@ class ViewController: UIViewController {
         
         // Add a Run button
         // @todo, make this part of the cells?
+        ypos += 10
         let runButton = UIButton()
         runButton.frame = CGRectMake(0, ypos, self.view.bounds.width, 20.00)
         runButton.setTitle("Run", forState: UIControlState.Normal)
