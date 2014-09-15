@@ -62,15 +62,16 @@ class RunView: UIView, CLLocationManagerDelegate {
             
         // Control button for recording the run.
         let record = UIButton()
-        record.frame = CGRectMake(0, ypos, runView.bounds.width, 20.00)
+        record.frame = CGRectMake(0, ypos, runView.bounds.width, 45.00)
         record.setTitle("Start", forState: UIControlState.Normal)
         record.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
-        record.backgroundColor = GlobalTheme.getBackgroundColor()
+        record.titleLabel.font = UIFont.systemFontOfSize(40.0)
+        //record.backgroundColor = GlobalTheme.getBackgroundColor()
         //record.sizeToFit()
         record.addTarget(runView, action: "toggleRecordPause:", forControlEvents: UIControlEvents.TouchUpInside)
         runView.addSubview(record)
             
-        ypos += record.frame.height + 10
+        //ypos += record.frame.height + 10
             
         // Create a RouteView to display the results.
         let routeView = RouteView.createRouteView(0, y: ypos, width: runView.bounds.width, height: runView.bounds.width, routeId: runView.routeId, routeStore: routeStore, routeSummary: routeSummary)

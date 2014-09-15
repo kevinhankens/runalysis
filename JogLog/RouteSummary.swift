@@ -73,7 +73,7 @@ class RouteSummary: NSObject {
      * @return String
      */
     func getTotalAndPace()->String {
-        return "\(self.totalInMiles()) miles @\(self.avgVelocityInMinutesPerMile())"
+        return "\(self.totalInMiles())m @\(self.avgVelocityInMinutesPerMile())"
     }
     
     /*!
@@ -115,8 +115,8 @@ class RouteSummary: NSObject {
             let minutes = Int(minutespermile)
             let seconds = Int(round((minutespermile - Double(minutes)) * 60))
             var seconds_string = "\(String(seconds))"
-            if seconds < 10 {
-                var seconds_string = "0\(String(seconds))"
+            if seconds < Int(10) {
+                seconds_string = "0\(String(seconds))"
             }
             return "\(String(minutes)):\(seconds_string)"
         }

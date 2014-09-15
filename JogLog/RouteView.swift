@@ -58,7 +58,7 @@ class RouteView: UIView {
         route.routeStore = routeStore
         route.updateRoute()
         
-        var ypos = route.frame.height
+        route.sizeToFit()
        
         return route
     }

@@ -16,6 +16,8 @@ class RouteAnalysisView: UIView {
     var labelDate: UILabel?
     
     var labelAverage: UILabel?
+    
+    var labelTimer: UILabel?
 
     class func createRouteAnalysisView(cellHeight: CGFloat, cellWidth: CGFloat, x: CGFloat, y: CGFloat, routeSummary: RouteSummary)->RouteAnalysisView {
         
@@ -31,15 +33,26 @@ class RouteAnalysisView: UIView {
         rav.labelDate = dl
         rav.addSubview(dl)
         
-        ypos += dl.bounds.height + 10
+        ypos += dl.bounds.height
         
-        let al = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 20))
+        let al = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 45))
         al.text = "-"
-        al.textColor = GlobalTheme.getNormalTextColor()
+        al.textColor = GlobalTheme.getSpeedThree()
+        al.font = UIFont.systemFontOfSize(40.0)
         rav.labelAverage = al
         rav.addSubview(al)
         
+        ypos += dl.bounds.height
+        
+        let tl = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 20))
+        tl.text = "-"
+        tl.textColor = GlobalTheme.getNormalTextColor()
+        rav.labelTimer = tl
+        rav.addSubview(tl)
+        
         rav.updateLabels()
+        
+        rav.sizeToFit()
         
         return rav
     }

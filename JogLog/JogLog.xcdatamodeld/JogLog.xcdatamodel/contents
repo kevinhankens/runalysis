@@ -8,7 +8,7 @@
     </entity>
     <entity name="Route" representedClassName="JogLog.Route" syncable="YES">
         <attribute name="altitude" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="date" attributeType="Integer 64" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="date" attributeType="Double" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="distance" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="latitude" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
