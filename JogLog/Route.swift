@@ -13,6 +13,7 @@ class Route: NSManagedObject {
 
     @NSManaged var routeid: NSNumber
     @NSManaged var date: NSNumber
+    @NSManaged var interval: NSNumber
     @NSManaged var latitude: NSNumber
     @NSManaged var longitude: NSNumber
     @NSManaged var altitude: NSNumber

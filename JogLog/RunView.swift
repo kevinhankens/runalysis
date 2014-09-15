@@ -25,7 +25,7 @@ class RunView: UIView, CLLocationManagerDelegate {
     // Tracks the previous location.
     var prev = CLLocation()
     
-    var lastUpdateTime: NSTimeInterval = 0.0
+    var lastUpdateTime: NSDate = NSDate.date()
     
     let updateInterval: NSTimeInterval = 4.0
     
@@ -34,6 +34,10 @@ class RunView: UIView, CLLocationManagerDelegate {
     var routeView: RouteView?
     
     var routeAnalysisView: RouteAnalysisView?
+    
+    var stopwatch: NSTimer?
+    
+    var duration: NSTimeInterval = NSDate().timeIntervalSinceNow
     
     /*!
      * Factory method to create a RunView.
@@ -64,7 +68,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         let record = UIButton()
         record.frame = CGRectMake(0, ypos, runView.bounds.width, 45.00)
         record.setTitle("Start", forState: UIControlState.Normal)
-        record.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
+        record.setTitleColor(GlobalTheme.getSpeedFive(), forState: UIControlState.Normal)
         record.titleLabel.font = UIFont.systemFontOfSize(40.0)
         //record.backgroundColor = GlobalTheme.getBackgroundColor()
         //record.sizeToFit()
@@ -88,8 +92,19 @@ class RunView: UIView, CLLocationManagerDelegate {
             
         record.frame.origin.y = routeView.frame.minY + (routeView.frame.height/2)
         runView.bringSubviewToFront(record)
+            
+        runView.stopwatch = NSTimer.scheduledTimerWithTimeInterval(0.1, target: runView, selector: Selector("updateStopwatch"), userInfo: nil, repeats: true)
           
         return runView
+    }
+    
+    func updateStopwatch() {
+        if self.recording {
+            if let rav = self.routeAnalysisView as? RouteAnalysisView {
+                var interval = fabs(self.lastUpdateTime.timeIntervalSinceNow)
+                rav.updateDuration(self.duration + interval)
+            }
+        }
     }
 
     /*!
@@ -112,11 +127,23 @@ class RunView: UIView, CLLocationManagerDelegate {
     func toggleRecordPause(sender: UIButton) {
         if self.recording {
             self.recording = false
-            sender.setTitle("Start", forState: UIControlState.Normal)
+            sender.setTitle("Resume", forState: UIControlState.Normal)
+            sender.setTitleColor(GlobalTheme.getSpeedFive(), forState: UIControlState.Normal)
+            if let loc = self.locationManager as? CLLocationManager {
+                let locationObj = RunView.createLocationCopy(loc.location)
+                let interval = fabs(self.lastUpdateTime.timeIntervalSinceNow)
+                self.storePoint(locationObj, interval: interval)
+            }
         }
         else {
             self.recording = true
             sender.setTitle("Pause", forState: UIControlState.Normal)
+            sender.setTitleColor(GlobalTheme.getSpeedOne(), forState: UIControlState.Normal)
+            self.lastUpdateTime = NSDate.date()
+            if let loc = self.locationManager as? CLLocationManager {
+                self.prev = RunView.createLocationCopy(loc.location)
+                self.storePoint(self.prev, interval: 0.0)
+            }
         }
     }
     
@@ -142,43 +169,49 @@ class RunView: UIView, CLLocationManagerDelegate {
         var locationArray = locations as NSArray
         var locationObj = locationArray.lastObject as CLLocation
         var coord = locationObj.coordinate
-        var alt = locationObj.altitude
-        var hdistance: Double = 0
-        var distance: Double = 0
-        var velocity: Double = 0
-        
+        var interval: NSTimeInterval = 0.0
+       
         if self.recording {
-            if (locationObj.timestamp.timeIntervalSince1970 - self.lastUpdateTime > self.updateInterval) {
-                let updateTime = locationObj.timestamp.timeIntervalSince1970
+            interval = fabs(self.lastUpdateTime.timeIntervalSinceDate(locationObj.timestamp))
+            if (interval > self.updateInterval) {
                 if (self.prev.coordinate.latitude != coord.latitude || self.prev.coordinate.longitude != coord.longitude) {
-                        
-                    // Velocity calculation
-                    if (self.lastUpdateTime > 0 && self.prev.coordinate.latitude != 0 && self.prev.coordinate.longitude != 0) {
-                        var formercoord = CLLocationCoordinate2D(latitude: self.prev.coordinate.latitude, longitude: self.prev.coordinate.longitude)
-                        var former = CLLocation(coordinate: formercoord, altitude: self.prev.altitude, horizontalAccuracy: locationObj.horizontalAccuracy, verticalAccuracy: locationObj.verticalAccuracy, course: locationObj.course, speed: locationObj.speed, timestamp: locationObj.timestamp)
-                        hdistance = locationObj.distanceFromLocation(former)
-                        distance = sqrt(Double(pow(fabs(self.prev.altitude - alt), 2) + Double(pow(hdistance, 2))))
-                        velocity = distance/(Double(updateTime) - Double(self.lastUpdateTime))
-                    }
-                
-                    // Write to db.
-                    // @todo use a timer to account for pauses.
-                    var route = self.routeStore!.storeRoutePoint(self.routeId, date: updateTime, latitude: coord.latitude, longitude: coord.longitude, altitude: locationObj.altitude, velocity: velocity, distance_traveled: distance)
-                    // Redraw the map
-                    if let rv = self.routeView as? RouteView {
-                        // @todo this is horrible for performance.
-                        rv.summary!.updateRoute(self.routeId)
-                        rv.displayLatest()
-                        if let rav = self.routeAnalysisView as? RouteAnalysisView {
-                            rav.updateLabels()
-                        }
-                    }
-                    
-                    self.lastUpdateTime = updateTime.advancedBy(Double(0.0))
-                    self.prev = RunView.createLocationCopy(locationObj)
+                    self.storePoint(locationObj, interval: interval)
                 }
             }
         }
+    }
+    
+    func storePoint(location: CLLocation, interval: NSTimeInterval) {
+        var coord = location.coordinate
+        var alt = location.altitude
+        var hdistance: Double = 0
+        var distance: Double = 0
+        var velocity: Double = 0
+ 
+        // Velocity calculation
+        if (self.prev.coordinate.latitude != 0 && self.prev.coordinate.longitude != 0) {
+            var formercoord = CLLocationCoordinate2D(latitude: self.prev.coordinate.latitude, longitude: self.prev.coordinate.longitude)
+            var former = CLLocation(coordinate: formercoord, altitude: self.prev.altitude, horizontalAccuracy: location.horizontalAccuracy, verticalAccuracy: location.verticalAccuracy, course: location.course, speed: location.speed, timestamp: location.timestamp)
+            hdistance = location.distanceFromLocation(former)
+            distance = sqrt(Double(pow(fabs(self.prev.altitude - alt), 2) + Double(pow(hdistance, 2))))
+            velocity = distance/interval
+        }
+    
+        // Write to db.
+        var route = self.routeStore!.storeRoutePoint(self.routeId, date: location.timestamp.timeIntervalSince1970, latitude: coord.latitude, longitude: coord.longitude, altitude: location.altitude, velocity: velocity, distance_traveled: distance, interval: interval)
+        // Redraw the map
+        if let rv = self.routeView as? RouteView {
+            // @todo this is horrible for performance.
+            rv.summary!.updateRoute(self.routeId)
+            rv.displayLatest()
+            if let rav = self.routeAnalysisView as? RouteAnalysisView {
+                rav.updateLabels()
+            }
+        }
+                    
+        self.duration += fabs(self.lastUpdateTime.timeIntervalSinceNow)
+        self.lastUpdateTime = location.timestamp.dateByAddingTimeInterval(0.0)
+        self.prev = RunView.createLocationCopy(location)
     }
     
     /*!

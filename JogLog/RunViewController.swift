@@ -31,8 +31,8 @@ class RunViewController: UIViewController {
         
         // Add a back button to return to the "root" view.
         let backButton = UIButton()
-        backButton.frame = CGRectMake(0, ypos, self.view.bounds.width, 20.00)
-        backButton.setTitle("Back", forState: UIControlState.Normal)
+        backButton.frame = CGRectMake(0, ypos, self.view.bounds.width/2, 20.00)
+        backButton.setTitle("< Back", forState: UIControlState.Normal)
         backButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
         backButton.backgroundColor = GlobalTheme.getBackgroundColor()
         backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)

@@ -154,7 +154,7 @@ class RouteView: UIView {
         var py: CGFloat = 0.0
         var cx: CGFloat = 0.0
         var cy: CGFloat = 0.0
-        var ptime: NSNumber = 0
+        //var ptime: NSNumber = 0.0
         var start = true
         var speedColor = GlobalTheme.getSpeedOne().CGColor
         if self.summary!.points?.count > 0 {
@@ -210,7 +210,7 @@ class RouteView: UIView {
             }
             px = cx
             py = cy
-            ptime = p.date
+            //ptime = p.date
             //println("r: \(self.gridRatio)")
             //println("lat: \(p.latitude)")
             //println("lon: \(p.longitude)")

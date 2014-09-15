@@ -47,8 +47,8 @@ class RouteViewController: UIViewController, UIScrollViewDelegate {
         
         // Add a back button to return to the "root" view.
         let backButton = UIButton()
-        backButton.frame = CGRectMake(0, ypos, self.view.bounds.width, 20.00)
-        backButton.setTitle("Back", forState: UIControlState.Normal)
+        backButton.frame = CGRectMake(0, ypos, self.view.bounds.width/2, 20.00)
+        backButton.setTitle("< Back", forState: UIControlState.Normal)
         backButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
         backButton.backgroundColor = GlobalTheme.getBackgroundColor()
         backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
@@ -134,12 +134,13 @@ class RouteViewController: UIViewController, UIScrollViewDelegate {
             
             if let r = next as? NSNumber {
                 if let rv = self.routeView as? RouteView {
-                    if let av = self.routeAnalysisView as? RouteAnalysisView {
+                    if let rav = self.routeAnalysisView as? RouteAnalysisView {
                         self.routeId = r
                         self.routeSummary?.updateRoute(self.routeId)
                         // @todo set the route id in the summary here.
                         rv.updateRoute()
-                        av.updateLabels()
+                        rav.updateLabels()
+                        rav.updateDuration(self.routeSummary!.duration)
                     }
                 }
             }

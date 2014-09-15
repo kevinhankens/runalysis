@@ -18,7 +18,7 @@ class RouteAnalysisView: UIView {
     var labelAverage: UILabel?
     
     var labelTimer: UILabel?
-
+    
     class func createRouteAnalysisView(cellHeight: CGFloat, cellWidth: CGFloat, x: CGFloat, y: CGFloat, routeSummary: RouteSummary)->RouteAnalysisView {
         
         let rav = RouteAnalysisView(frame: CGRect(x: x, y: y, width: cellWidth, height: cellHeight))
@@ -42,7 +42,7 @@ class RouteAnalysisView: UIView {
         rav.labelAverage = al
         rav.addSubview(al)
         
-        ypos += dl.bounds.height
+        ypos += al.bounds.height
         
         let tl = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 20))
         tl.text = "-"
@@ -51,10 +51,43 @@ class RouteAnalysisView: UIView {
         rav.addSubview(tl)
         
         rav.updateLabels()
+        rav.updateDuration(routeSummary.duration)
         
         rav.sizeToFit()
         
         return rav
+    }
+    
+    func getDuration(new_duration: NSTimeInterval)->NSString {
+        if let summary = self.routeSummary as? RouteSummary {
+            let tmp_minutes = Int(new_duration/60.0)
+            let seconds = new_duration - (Double(tmp_minutes) * Double(60))
+            let rounded_seconds = round(seconds * 10)/10
+            let hours = Int(tmp_minutes/60)
+            let minutes = tmp_minutes - (hours * 60)
+        
+            var string_seconds = "\(rounded_seconds)"
+            if (rounded_seconds < 10) {
+                string_seconds = "0\(rounded_seconds)"
+            }
+            var string_minutes = "\(minutes)"
+            if (minutes < 10) {
+                string_minutes = "0\(minutes)"
+            }
+            var string_hours = "\(hours)"
+            if (hours < 10) {
+                string_hours = "0\(hours)"
+            }
+        
+            return "\(string_hours):\(string_minutes):\(string_seconds)"
+        }
+        return "00:00:00"
+    }
+    
+    func updateDuration(new_duration: NSTimeInterval) {
+        if let tl = self.labelTimer as? UILabel {
+            tl.text = self.getDuration(new_duration)
+        }
     }
     
     func updateLabels() {
@@ -71,5 +104,4 @@ class RouteAnalysisView: UIView {
             }
         }
     }
-
 }

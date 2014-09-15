@@ -37,6 +37,9 @@ class RouteSummary: NSObject {
     
     // Tracks a distribution of velocities relative to the mean.
     var distribution = [0, 0, 0, 0, 0]
+    
+    // Tracks the duration of the run.
+    var duration: Double = Double(0)
 
     /*!
      * Factory method to create a summary.
@@ -73,7 +76,7 @@ class RouteSummary: NSObject {
      * @return String
      */
     func getTotalAndPace()->String {
-        return "\(self.totalInMiles())m @\(self.avgVelocityInMinutesPerMile())"
+        return "\(self.totalInMiles())mi @\(self.avgVelocityInMinutesPerMile())"
     }
     
     /*!
@@ -148,6 +151,7 @@ class RouteSummary: NSObject {
         var count = 0
         var total = Double(0)
         var started = false
+        var duration = Double(0)
         
         if self.points?.count > 0 {
             for p in self.points! {
@@ -157,21 +161,26 @@ class RouteSummary: NSObject {
                         started = true
                         continue
                     }
-                    if point.velocity < self.velocity_low {
-                        // @todo low is always 0.
-                        self.velocity_low = point.velocity
+                    
+                    if point.velocity > Double(0.0) {
+                        if point.velocity < self.velocity_low {
+                            // @todo low is always 0.
+                            self.velocity_low = point.velocity
+                        }
+                        else if point.velocity > self.velocity_high {
+                            self.velocity_high = point.velocity
+                        }
+                        self.distance_total += Double(point.distance)
+                        total += Double(point.velocity)
+                        duration += Double(point.interval)
+                        count++
                     }
-                    else if point.velocity > self.velocity_high {
-                        self.velocity_high = point.velocity
-                    }
-                    self.distance_total += Double(point.distance)
-                    total += Double(point.velocity)
-                    count++
                 }
             }
         }
         if count > 0 {
             self.velocity_mean = total/Double(count)
+            self.duration = duration
         }
     }
     
