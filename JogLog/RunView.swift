@@ -68,7 +68,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         let record = UIButton()
         record.frame = CGRectMake(0, ypos, runView.bounds.width, 45.00)
         record.setTitle("Start", forState: UIControlState.Normal)
-        record.setTitleColor(GlobalTheme.getSpeedFive(), forState: UIControlState.Normal)
+        record.setTitleColor(GlobalTheme.getStartTextColor(), forState: UIControlState.Normal)
         record.titleLabel.font = UIFont.systemFontOfSize(40.0)
         //record.backgroundColor = GlobalTheme.getBackgroundColor()
         //record.sizeToFit()
@@ -128,7 +128,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         if self.recording {
             self.recording = false
             sender.setTitle("Resume", forState: UIControlState.Normal)
-            sender.setTitleColor(GlobalTheme.getSpeedFive(), forState: UIControlState.Normal)
+            sender.setTitleColor(GlobalTheme.getStartTextColor(), forState: UIControlState.Normal)
             if let loc = self.locationManager as? CLLocationManager {
                 let locationObj = RunView.createLocationCopy(loc.location)
                 let interval = fabs(self.lastUpdateTime.timeIntervalSinceNow)
@@ -138,7 +138,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         else {
             self.recording = true
             sender.setTitle("Pause", forState: UIControlState.Normal)
-            sender.setTitleColor(GlobalTheme.getSpeedOne(), forState: UIControlState.Normal)
+            sender.setTitleColor(GlobalTheme.getStopTextColor(), forState: UIControlState.Normal)
             self.lastUpdateTime = NSDate.date()
             if let loc = self.locationManager as? CLLocationManager {
                 self.prev = RunView.createLocationCopy(loc.location)

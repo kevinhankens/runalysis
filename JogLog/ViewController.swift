@@ -130,11 +130,12 @@ class ViewController: UIViewController {
         // @todo, make this part of the cells?
         ypos += 10
         let runButton = UIButton()
-        runButton.frame = CGRectMake(0, ypos, self.view.bounds.width, 20.00)
+        runButton.frame = CGRectMake(0, ypos, self.view.bounds.width, 35.00)
         runButton.setTitle("Run", forState: UIControlState.Normal)
-        runButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
+        runButton.setTitleColor(GlobalTheme.getRunTextColor(), forState: UIControlState.Normal)
         runButton.backgroundColor = GlobalTheme.getBackgroundColor()
         runButton.addTarget(self, action: "displayRunViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        runButton.titleLabel.font = UIFont.systemFontOfSize(30.0)
         self.runButton = runButton
         container.addSubview(runButton)
         

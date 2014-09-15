@@ -89,11 +89,11 @@ class RouteSummary: NSObject {
         let rounded = round(totalMiles * 100)/100
         let miles = Int(rounded)
         let fraction = Int((rounded - Double(miles)) * 100)
-        var fracton_string = "\(fraction)"
+        var fraction_string = "\(fraction)"
         if fraction < 10 {
-            fracton_string = "0\(fraction)"
+            fraction_string = "0\(fraction)"
         }
-        return "\(miles).\(fraction)"
+        return "\(miles).\(fraction_string)"
     }
     
     /*!

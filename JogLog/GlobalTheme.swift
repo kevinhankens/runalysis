@@ -38,13 +38,34 @@ class GlobalTheme {
         return UIColor.whiteColor()
     }
     
+    class func getStartTextColor()->UIColor {
+        return self.getSpeedFive()
+    }
+    
+    class func getStopTextColor()->UIColor {
+        return self.getSpeedOne()
+    }
+    
+    class func getAverageSpeedTextColor()->UIColor {
+        return self.getSpeedThree()
+    }
+    
+    class func getRunTextColor()->UIColor {
+        return self.getSpeedFive()
+    }
+    
+    class func getRockerStepperTintColor()->UIColor {
+        return UIColor.blackColor()
+    }
+    
     /*!
      * Retrieves the global "planned" text color.
      *
      * @return UIColor
      */
     class func getPlannedColor()->UIColor {
-        return UIColor(red: 69/255, green: 118/255, blue: 173/255, alpha: 1.0)
+        return self.getSpeedThree()
+        //return UIColor(red: 69/255, green: 118/255, blue: 173/255, alpha: 1.0)
     }
     
     /*!
@@ -53,7 +74,8 @@ class GlobalTheme {
      * @return UIColor
      */
     class func getActualColor()->UIColor {
-        return UIColor(red: 69/255, green: 173/255, blue: 125/255, alpha: 1.0)
+        return self.getSpeedFive()
+        //return UIColor(red: 69/255, green: 173/255, blue: 125/255, alpha: 1.0)
     }
     
     class func getSpeedOne()->UIColor {

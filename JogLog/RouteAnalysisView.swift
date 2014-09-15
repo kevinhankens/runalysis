@@ -37,7 +37,7 @@ class RouteAnalysisView: UIView {
         
         let al = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 45))
         al.text = "-"
-        al.textColor = GlobalTheme.getSpeedThree()
+        al.textColor = GlobalTheme.getAverageSpeedTextColor()
         al.font = UIFont.systemFontOfSize(40.0)
         rav.labelAverage = al
         rav.addSubview(al)

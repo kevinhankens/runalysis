@@ -118,7 +118,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
         leftControl.addTarget(container, action: "leftMileageIncrease:", forControlEvents: UIControlEvents.ValueChanged)
         leftControl.addTarget(container, action: "leftMileageSave:", forControlEvents: UIControlEvents.TouchUpInside)
         leftControl.value = Double(mileageData.mileagePlanned)
-        leftControl.tintColor = UIColor.whiteColor()
+        leftControl.tintColor = GlobalTheme.getRockerStepperTintColor()
         container.addSubview(leftControl)
         
         let rightControl = RockerStepper(frame: CGRect(x: cellWidth - 95, y: 10, width: 30.00, height: 20.00))
@@ -126,7 +126,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
         rightControl.addTarget(container, action: "rightMileageIncrease:", forControlEvents: UIControlEvents.ValueChanged)
         rightControl.addTarget(container, action: "rightMileageSave:", forControlEvents: UIControlEvents.TouchUpInside)
         rightControl.value = Double(mileageData.mileageActual)
-        rightControl.tintColor = UIColor.whiteColor()
+        rightControl.tintColor = GlobalTheme.getRockerStepperTintColor()
         container.addSubview(rightControl)
         
         // Create a cover view.

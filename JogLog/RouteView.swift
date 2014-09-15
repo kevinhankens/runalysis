@@ -158,71 +158,73 @@ class RouteView: UIView {
         var start = true
         var speedColor = GlobalTheme.getSpeedOne().CGColor
         if self.summary!.points?.count > 0 {
-        for point in self.summary!.points! {
-            if let p = point as? Route {
-            cx = CGFloat((p.longitude.doubleValue - self.gridMinX) * self.gridRatio) + 10.0
-            cy = CGFloat(self.frame.height) - CGFloat((p.latitude.doubleValue - self.gridMinY) * self.gridRatio) - 10.0
-            
-            if start {
-                start = false
-            }
-            else {
-                switch p.relativeVelocity {
-                case 0:
-                    speedColor = GlobalTheme.getSpeedOne().CGColor
-                case 1:
-                    speedColor = GlobalTheme.getSpeedTwo().CGColor
-                case 2:
-                    speedColor = GlobalTheme.getSpeedThree().CGColor
-                case 3:
-                    speedColor = GlobalTheme.getSpeedFour().CGColor
-                case 4:
-                    speedColor = GlobalTheme.getSpeedFive().CGColor
-                default:
-                    speedColor = GlobalTheme.getSpeedOne().CGColor
+            for point in self.summary!.points! {
+                if let p = point as? Route {
+                    cx = CGFloat((p.longitude.doubleValue - self.gridMinX) * self.gridRatio) + 10.0
+                    cy = CGFloat(self.frame.height) - CGFloat((p.latitude.doubleValue - self.gridMinY) * self.gridRatio) - 10.0
+                    
+                    if start || p.velocity.doubleValue > 0.0 {
+                        
+                        if start {
+                            start = false
+                        }
+                        else {
+                            switch p.relativeVelocity {
+                            case 0:
+                                speedColor = GlobalTheme.getSpeedOne().CGColor
+                            case 1:
+                                speedColor = GlobalTheme.getSpeedTwo().CGColor
+                            case 2:
+                                speedColor = GlobalTheme.getSpeedThree().CGColor
+                            case 3:
+                                speedColor = GlobalTheme.getSpeedFour().CGColor
+                            case 4:
+                                speedColor = GlobalTheme.getSpeedFive().CGColor
+                            default:
+                                speedColor = GlobalTheme.getSpeedOne().CGColor
+                            }
+                            
+                            CGContextSetStrokeColorWithColor(context, speedColor)
+                            
+                            CGContextSetLineWidth(context, 3.0)
+                            CGContextBeginPath(context);
+                            CGContextMoveToPoint(context, px, py);
+                            CGContextAddLineToPoint(context, cx, cy);
+                            CGContextStrokePath(context);
+                            
+                            CGContextSetLineWidth(context, 1.0)
+                            var center = CGPointMake(cx, cy)
+                            CGContextAddArc(context, center.x, center.y, CGFloat(1.5), CGFloat(0), CGFloat(2*M_PI), Int32(0))
+                            CGContextSetFillColorWithColor(context, speedColor);
+                            CGContextFillPath(context);
+                            //CGContextStrokePath(context);
+                            
+                            // Draw a mile marker
+                            total += p.distance.doubleValue * Double(0.00062137)
+                            mileTest = Int(total)
+                            if mileTest > mileCounter {
+                                mileCounter = mileTest
+                                var center = CGPointMake(cx, cy)
+                                CGContextAddArc(context, center.x, center.y, CGFloat(12.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
+                                CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().CGColor)
+                                CGContextStrokePath(context);
+                            }
+                        }
+                    }
+                    px = cx
+                    py = cy
+                    //ptime = p.date
+                    //println("r: \(self.gridRatio)")
+                    //println("lat: \(p.latitude)")
+                    //println("lon: \(p.longitude)")
+                    //println("x: \(px)")
+                    //println("y: \(py)")
+                    //println("miny: \(self.bounds.minY)")
+                    //println("maxy: \(self.bounds.maxY)")
+                    //println("minx: \(self.bounds.minX)")
+                    //println("maxx: \(self.bounds.maxX)")
                 }
-                
-                CGContextSetStrokeColorWithColor(context, speedColor)
-                
-                CGContextSetLineWidth(context, 3.0)
-                CGContextBeginPath(context);
-                CGContextMoveToPoint(context, px, py);
-                CGContextAddLineToPoint(context, cx, cy);
-                CGContextStrokePath(context);
-                
-                CGContextSetLineWidth(context, 1.0)
-                var center = CGPointMake(cx, cy)
-                CGContextAddArc(context, center.x, center.y, CGFloat(1.5), CGFloat(0), CGFloat(2*M_PI), Int32(0))
-                CGContextSetFillColorWithColor(context, speedColor);
-                CGContextFillPath(context);
-                //CGContextStrokePath(context);
-                
-                // Draw a mile marker
-                total += p.distance.doubleValue * Double(0.00062137)
-                mileTest = Int(total)
-                if mileTest > mileCounter {
-                    mileCounter = mileTest
-                    var center = CGPointMake(cx, cy)
-                    CGContextAddArc(context, center.x, center.y, CGFloat(12.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
-                    CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().CGColor)
-                    CGContextStrokePath(context);
-                }
             }
-            px = cx
-            py = cy
-            //ptime = p.date
-            //println("r: \(self.gridRatio)")
-            //println("lat: \(p.latitude)")
-            //println("lon: \(p.longitude)")
-            //println("x: \(px)")
-            //println("y: \(py)")
-            //println("miny: \(self.bounds.minY)")
-            //println("maxy: \(self.bounds.maxY)")
-            //println("minx: \(self.bounds.minX)")
-            //println("maxx: \(self.bounds.maxX)")
-        }
         }
     }
-    }
-
 }
