@@ -54,6 +54,10 @@ class GlobalTheme {
         return self.getSpeedFive()
     }
     
+    class func getRecentTextColor()->UIColor {
+        return self.getSpeedThree()
+    }
+    
     class func getRockerStepperTintColor()->UIColor {
         return UIColor.blackColor()
     }

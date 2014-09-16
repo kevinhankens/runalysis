@@ -56,6 +56,8 @@ class ViewController: UIViewController {
     // Tracks the run button.
     var runButton: UIButton?
     
+    var viewButton: UIButton?
+    
     var modalRouteId: NSNumber = 0
     
     var presented = false
@@ -126,18 +128,30 @@ class ViewController: UIViewController {
         container.addSubview(summary)
         self.updateSummary()
         
-        // Add a Run button
-        // @todo, make this part of the cells?
+         // Add a Run button
         ypos += 10
         let runButton = UIButton()
-        runButton.frame = CGRectMake(0, ypos, self.view.bounds.width, 35.00)
+        runButton.frame = CGRectMake(0, ypos, self.view.bounds.width/2, 35.00)
         runButton.setTitle("Run", forState: UIControlState.Normal)
         runButton.setTitleColor(GlobalTheme.getRunTextColor(), forState: UIControlState.Normal)
+        runButton.titleLabel.textAlignment = NSTextAlignment.Center
         runButton.backgroundColor = GlobalTheme.getBackgroundColor()
         runButton.addTarget(self, action: "displayRunViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
         runButton.titleLabel.font = UIFont.systemFontOfSize(30.0)
         self.runButton = runButton
         container.addSubview(runButton)
+        
+        // Add a Run button
+        let viewButton = UIButton()
+        viewButton.frame = CGRectMake(self.view.bounds.width/2, ypos, self.view.bounds.width/2, 35.00)
+        viewButton.setTitle("Latest", forState: UIControlState.Normal)
+        viewButton.setTitleColor(GlobalTheme.getRecentTextColor(), forState: UIControlState.Normal)
+        viewButton.titleLabel.textAlignment = NSTextAlignment.Center
+        viewButton.backgroundColor = GlobalTheme.getBackgroundColor()
+        viewButton.addTarget(self, action: "displayRouteViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        viewButton.titleLabel.font = UIFont.systemFontOfSize(20.0)
+        self.viewButton = viewButton
+        container.addSubview(viewButton)
         
         self.scrollContentHeight = ypos + CGFloat(runButton.frame.height)
         self.scrollView = container
@@ -197,6 +211,13 @@ class ViewController: UIViewController {
      */
     func displayRunViewFromButton(button: UIButton) {
         self.performSegueWithIdentifier("runViewSegue", sender: self)
+    }
+    
+    func displayRouteViewFromButton(button: UIButton) {
+        if let id = self.routeStore.getLatestRouteId() as? NSNumber {
+            self.modalRouteId = id
+        }
+        self.launchRouteView()
     }
     
     /*!

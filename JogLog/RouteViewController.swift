@@ -29,6 +29,8 @@ class RouteViewController: UIViewController, UIScrollViewDelegate {
     
     var routeAnalysisView: RouteAnalysisView?
     
+    var velocityDistributionView: VelocityDistributionView?
+    
     var dateLabel: UILabel?
     
     var distLabel: UILabel?
@@ -86,10 +88,18 @@ class RouteViewController: UIViewController, UIScrollViewDelegate {
         ypos = ypos + routeView.frame.height + 10
         
         // @todo what is the height of this view?
-        let rav = RouteAnalysisView.createRouteAnalysisView(self.view.bounds.width, cellWidth: self.view.bounds.width, x: 0, y: ypos, routeSummary: self.routeSummary!)
+        let rav = RouteAnalysisView.createRouteAnalysisView(80.0, cellWidth: self.view.bounds.width, x: 0, y: ypos, routeSummary: self.routeSummary!)
         self.view.addSubview(rav)
         self.routeAnalysisView = rav
-
+        
+        ypos += rav.frame.height + 10
+        
+        // @todo make a factory method for this.
+        // @todo should this move to the RouteAnalysisView?
+        let dv = VelocityDistributionView(frame: CGRectMake(0, ypos, self.view.bounds.width, 40.0))
+        dv.routeSummary = self.routeSummary!
+        self.view.addSubview(dv)
+        self.velocityDistributionView = dv
     }
     
     func viewForZoomingInScrollView(scrollView: UIScrollView!)->UIView! {
@@ -135,12 +145,15 @@ class RouteViewController: UIViewController, UIScrollViewDelegate {
             if let r = next as? NSNumber {
                 if let rv = self.routeView as? RouteView {
                     if let rav = self.routeAnalysisView as? RouteAnalysisView {
-                        self.routeId = r
-                        self.routeSummary?.updateRoute(self.routeId)
-                        // @todo set the route id in the summary here.
-                        rv.updateRoute()
-                        rav.updateLabels()
-                        rav.updateDuration(self.routeSummary!.duration)
+                        if let vdv = self.velocityDistributionView as? VelocityDistributionView {
+                            self.routeId = r
+                            self.routeSummary?.updateRoute(self.routeId)
+                            // @todo set the route id in the summary here.
+                            rv.updateRoute()
+                            rav.updateLabels()
+                            rav.updateDuration(self.routeSummary!.duration)
+                            vdv.setNeedsDisplay()
+                        }
                     }
                 }
             }

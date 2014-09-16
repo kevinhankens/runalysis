@@ -186,13 +186,13 @@ class RouteView: UIView {
                             
                             CGContextSetStrokeColorWithColor(context, speedColor)
                             
-                            CGContextSetLineWidth(context, 3.0)
+                            CGContextSetLineWidth(context, 4.0)
                             CGContextBeginPath(context);
                             CGContextMoveToPoint(context, px, py);
                             CGContextAddLineToPoint(context, cx, cy);
                             CGContextStrokePath(context);
                             
-                            CGContextSetLineWidth(context, 1.0)
+                            CGContextSetLineWidth(context, 2.0)
                             var center = CGPointMake(cx, cy)
                             CGContextAddArc(context, center.x, center.y, CGFloat(1.5), CGFloat(0), CGFloat(2*M_PI), Int32(0))
                             CGContextSetFillColorWithColor(context, speedColor);
