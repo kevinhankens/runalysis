@@ -62,7 +62,9 @@ class MileageStore: NSObject {
         var error: NSError? = nil
         var fReq: NSFetchRequest = NSFetchRequest(entityName: "Mileage")
         
-        fReq.predicate = NSPredicate(format:"date == \(day.number)")
+        let format_complete = "date == \(day.number.stringValue)"
+        let format_string: NSString = NSString(string: format_complete)
+        fReq.predicate = NSPredicate(format:format_string)
         //fReq.predicate = NSPredicate(format:"id == 1")
         
         //var sorter: NSSortDescriptor = NSSortDescriptor(key: "date" , ascending: false)

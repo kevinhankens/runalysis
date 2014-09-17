@@ -217,7 +217,7 @@ class RouteSummary: NSObject {
         var tmp = [0,0,0,0,0]
         
         if self.points?.count > 0 {
-            for p in self.points! {
+            for p: AnyObject in self.points! {
                 if let point = p as? Route {
                     rel = self.getRelativeVelocity(point)
                     point.relativeVelocity = rel
@@ -244,20 +244,28 @@ class RouteSummary: NSObject {
         let velocityDiffTop = self.velocity_high - self.velocity_mean
         var rel = 0
         
-        if point.velocity < self.velocity_low + velocityDiffBottom/2.5 {
-            rel = 0
-        }
-        else if point.velocity < self.velocity_low + ((velocityDiffBottom/2.5) * 2) {
-            rel = 1
-        }
-        else if point.velocity < self.velocity_high - ((velocityDiffTop/2.5) * 2) {
-            rel = 2
-        }
-        else if point.velocity < self.velocity_high - ((velocityDiffTop/2.5)) {
-            rel = 3
-        }
-        else {
-            rel = 4
+        let testv: AnyObject? = point.valueForKey("velocity")
+        
+        // This is a little overkill, but the simulator occasionally
+        // fails leaving an invalid point in the db due to a null value
+        // for the velocity column. Strange because it's got a default
+        // value of 0. This is the only way I've found to prevent crashing.
+        if let v = testv as? NSNumber {
+            if point.velocity < self.velocity_low + velocityDiffBottom/2.5 {
+                rel = 0
+            }
+            else if point.velocity < self.velocity_low + ((velocityDiffBottom/2.5) * 2) {
+                rel = 1
+            }
+            else if point.velocity < self.velocity_high - ((velocityDiffTop/2.5) * 2) {
+                rel = 2
+            }
+            else if point.velocity < self.velocity_high - ((velocityDiffTop/2.5)) {
+                rel = 3
+            }
+            else {
+                rel = 4
+            }
         }
         
         return rel

@@ -46,59 +46,59 @@ extension NSDateComponents {
  * Tracks the mapping between a date's NSDate and NSNumber
  * representation, e.g. 20140715.
  */
-class JLDate {
+class JLDate: NSObject {
     
     /*!
      * Specifies the date format of numeric date representation, e.g. 20140715
      *
-     * @return NSString
+     * @return String
      */
-    class func getDateFormat()->NSString {
+    class func getDateFormat()->String {
         return "yyyyMMdd"
     }
     
     /*!
      * Specifies the date format of full date view including time.
      *
-     * @return NSString
+     * @return String
      */
-    class func getDateFormatFull()->NSString {
+    class func getDateFormatFull()->String {
         return "EEEE, MMM d h:mm"
     }
     
     /*!
      * Specifies the short date format.
      *
-     * @return NSString
+     * @return String
      */
-    class func getDateFormatShort()->NSString {
+    class func getDateFormatShort()->String {
         return "MM/dd/yyyy"
     }
     
     /*!
      * Specifies the medium date format.
      *
-     * @return NSString
+     * @return String
      */
-    class func getDateFormatMedium()->NSString {
+    class func getDateFormatMedium()->String {
         return "EEEE, MMM d"
     }
     
     /*!
      * Specifies the "day" date format.
      *
-     * @return NSString
+     * @return String
      */
-    class func getDateFormatDay()->NSString {
+    class func getDateFormatDay()->String {
         return "EEEE"
     }
     
     /*!
      * Specifies the numeric day format, e.g. sunday = 1
      *
-     * @return NSString
+     * @return String
      */
-    class func getDateFormatDayNumber()->NSString {
+    class func getDateFormatDayNumber()->String {
         return "c"
     }
    
@@ -264,38 +264,38 @@ class JLDate {
     /*!
      * Creates a "day" string of the date.
      *
-     * @return NSString
+     * @return String
      */
-    func toStringDay()->NSString {
+    func toStringDay()->String {
         return self.toStringFormat(JLDate.getDateFormatDay())
     }
     
     /*!
      * Creates a short human-readable date string.
      *
-     * @return NSString
+     * @return String
      */
-    func toStringShort()->NSString {
+    func toStringShort()->String {
         return self.toStringFormat(JLDate.getDateFormatShort())
     }
     
     /*!
      * Creates a medium human-readable date string.
      *
-     * @return NSString
+     * @return String
      */
-    func toStringMedium()->NSString {
+    func toStringMedium()->String {
         return self.toStringFormat(JLDate.getDateFormatMedium())
     }
     
     /**
      * Convert the current date to a specified format.
      *
-     * @param NSString format
+     * @param String format
      *
-     * @return NSString
+     * @return String
      */
-    func toStringFormat(format: NSString)->NSString {
+    func toStringFormat(format: String)->String {
         let dateFormat = NSDateFormatter()
         dateFormat.dateFormat = format
         return dateFormat.stringFromDate(self.date)

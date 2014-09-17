@@ -163,7 +163,7 @@ class NoteView : UIView, UITextViewDelegate {
             if let p = self.parent? {
                 let s = p.startOfWeek
                 let e = p.endOfWeek
-                let d = day.toStringFormat(JLDate.getDateFormatDayNumber()).integerValue
+                let d = day.toStringFormat(JLDate.getDateFormatDayNumber()).toInt()
                 
                 switch g.direction {
                 case UISwipeGestureRecognizerDirection.Left:

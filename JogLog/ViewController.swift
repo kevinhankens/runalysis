@@ -24,7 +24,7 @@ class ViewController: UIViewController {
     var endOfWeek = 7
     
     // The array of days of the week.
-    var daysOfWeek = [1,2,3,4,5,6,7]
+    var daysOfWeek: [NSNumber] = [1,2,3,4,5,6,7]
     
     // A list of the daily cells created.
     var mileageCells: [RockerCell] = []
