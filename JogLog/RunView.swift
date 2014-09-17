@@ -144,10 +144,16 @@ class RunView: UIView, CLLocationManagerDelegate {
             self.recording = false
             sender.setTitle("Resume", forState: UIControlState.Normal)
             sender.setTitleColor(GlobalTheme.getStartTextColor(), forState: UIControlState.Normal)
-            if let loc = self.locationManager? {
-                let locationObj = RunView.createLocationCopy(loc.location)
-                let interval = fabs(self.lastUpdateTime.timeIntervalSinceNow)
-                self.storePoint(locationObj, interval: interval)
+            if (self.locationManager != nil) {
+                if let loc = self.locationManager? {
+                    // @todo protect unwrapping nil.
+                    let locationObj = RunView.createLocationCopy(loc.location)
+                    let interval = fabs(self.lastUpdateTime.timeIntervalSinceNow)
+                    self.storePoint(locationObj, interval: interval)
+                }
+            }
+            else {
+                self.stopRecordingAndDisplayLocationAlert()
             }
         }
         else {
@@ -155,9 +161,14 @@ class RunView: UIView, CLLocationManagerDelegate {
             sender.setTitle("Pause", forState: UIControlState.Normal)
             sender.setTitleColor(GlobalTheme.getStopTextColor(), forState: UIControlState.Normal)
             self.lastUpdateTime = NSDate.date()
-            if let loc = self.locationManager? {
-                self.prev = RunView.createLocationCopy(loc.location)
-                self.storePoint(self.prev, interval: 0.0)
+            if (self.locationManager != nil) {
+                if let loc = self.locationManager? {
+                    self.prev = RunView.createLocationCopy(loc.location)
+                    self.storePoint(self.prev, interval: 0.0)
+                }
+            }
+            else {
+                self.stopRecordingAndDisplayLocationAlert()
             }
         }
     }
@@ -203,36 +214,39 @@ class RunView: UIView, CLLocationManagerDelegate {
      * @param NSTimeInterval interval
      */
     func storePoint(location: CLLocation, interval: NSTimeInterval) {
-        var coord = location.coordinate
-        var alt = location.altitude
-        var hdistance: Double = 0
-        var distance: Double = 0
-        var velocity: Double = 0
+        if CLLocationCoordinate2DIsValid(location.coordinate) {
+            var coord = location.coordinate
+            var alt = location.altitude
+            var hdistance: Double = 0
+            var distance: Double = 0
+            var velocity: Double = 0
  
-        // Velocity calculation
-        if (self.prev.coordinate.latitude != 0 && self.prev.coordinate.longitude != 0) {
-            var formercoord = CLLocationCoordinate2D(latitude: self.prev.coordinate.latitude, longitude: self.prev.coordinate.longitude)
-            var former = CLLocation(coordinate: formercoord, altitude: self.prev.altitude, horizontalAccuracy: location.horizontalAccuracy, verticalAccuracy: location.verticalAccuracy, course: location.course, speed: location.speed, timestamp: location.timestamp)
-            hdistance = location.distanceFromLocation(former)
-            distance = sqrt(Double(pow(fabs(self.prev.altitude - alt), 2) + Double(pow(hdistance, 2))))
-            velocity = distance/interval
-        }
-    
-        // Write to db.
-        var route = self.routeStore!.storeRoutePoint(self.routeId, date: location.timestamp.timeIntervalSince1970, latitude: coord.latitude, longitude: coord.longitude, altitude: location.altitude, velocity: velocity, distance_traveled: distance, interval: interval)
-        // Redraw the map
-        if let rv = self.routeView? {
-            // @todo this is horrible for performance.
-            rv.summary!.updateRoute(self.routeId)
-            rv.displayLatest()
-            if let rav = self.routeAnalysisView? {
-                rav.updateLabels()
+            // Velocity calculation
+            if (self.prev.coordinate.latitude != 0 && self.prev.coordinate.longitude != 0) {
+                var formercoord = CLLocationCoordinate2D(latitude: self.prev.coordinate.latitude, longitude: self.prev.coordinate.longitude)
+                var former = CLLocation(coordinate: formercoord, altitude: self.prev.altitude, horizontalAccuracy: location.horizontalAccuracy, verticalAccuracy: location.verticalAccuracy, course: location.course, speed: location.speed, timestamp: location.timestamp)
+                hdistance = location.distanceFromLocation(former)
+                distance = sqrt(Double(pow(fabs(self.prev.altitude - alt), 2) + Double(pow(hdistance, 2))))
+                velocity = distance/interval
             }
+        
+    
+            // Write to db.
+            var route = self.routeStore!.storeRoutePoint(self.routeId, date: location.timestamp.timeIntervalSince1970, latitude: coord.latitude, longitude: coord.longitude, altitude: location.altitude, velocity: velocity, distance_traveled: distance, interval: interval)
+            // Redraw the map
+            if let rv = self.routeView? {
+                // @todo this is horrible for performance.
+                rv.summary!.updateRoute(self.routeId)
+                rv.displayLatest()
+                if let rav = self.routeAnalysisView? {
+                    rav.updateLabels()
+                }
+            }
+            
+            self.duration += fabs(self.lastUpdateTime.timeIntervalSinceNow)
+            self.lastUpdateTime = location.timestamp.dateByAddingTimeInterval(0.0)
+            self.prev = RunView.createLocationCopy(location)
         }
-                    
-        self.duration += fabs(self.lastUpdateTime.timeIntervalSinceNow)
-        self.lastUpdateTime = location.timestamp.dateByAddingTimeInterval(0.0)
-        self.prev = RunView.createLocationCopy(location)
     }
     
     /*!
@@ -244,12 +258,19 @@ class RunView: UIView, CLLocationManagerDelegate {
      */
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         self.locationManager?.stopUpdatingLocation()
-        if (error == nil) {
+        if (error != nil) {
             if (self.errorCaught == false) {
                 self.errorCaught = true
+                self.stopRecordingAndDisplayLocationAlert()
                 print(error)
             }
         }
+    }
+    
+    func stopRecordingAndDisplayLocationAlert() {
+        self.recording = false
+        let alert = UIAlertView(title: "Location Error", message: "The GPS signal appears to have been lost. Tracking has been aborted.", delegate: nil, cancelButtonTitle: "OK")
+        alert.show()
     }
     
 }

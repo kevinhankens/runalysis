@@ -50,12 +50,12 @@ class MileSummaryView: UIView {
         
         var minutes_string = "\(minutes)"
         if minutes < 10 {
-            var minutes_string = "0\(minutes)"
+            minutes_string = "0\(minutes)"
         }
     
         var seconds_string = "\(seconds)"
         if seconds < 10 {
-            var seconds_string = "0\(seconds)"
+            seconds_string = "0\(seconds)"
         }
         
         return "Mile \(count) @\(minutes_string):\(seconds_string)"
