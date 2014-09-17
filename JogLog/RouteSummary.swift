@@ -70,7 +70,10 @@ class RouteSummary: NSObject {
      * @param NSNumber id
      */
     func updateRoute(id: NSNumber) {
-        if id != self.routeId {
+        if id == self.routeId {
+            // @todo != creates an error "ambiguous use of !="
+        }
+        else {
             self.routeId = id
         }
         // @todo can we skip this if the screen is locked?

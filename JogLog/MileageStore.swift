@@ -36,7 +36,7 @@ class MileageStore: NSObject {
      */
     var context: NSManagedObjectContext {
         let app = UIApplication.sharedApplication().delegate as AppDelegate
-        return app.managedObjectContext
+        return app.managedObjectContext!
     }
 
     /*!
@@ -70,9 +70,11 @@ class MileageStore: NSObject {
         
         var result = self.context.executeFetchRequest(fReq, error:&error)
 
-        for resultItem : AnyObject in result {
-            var mileageItem = resultItem as Mileage
-            return mileageItem
+        if result != nil {
+            for resultItem : AnyObject in result! {
+                var mileageItem = resultItem as Mileage
+                return mileageItem
+            }
         }
         
         // If we didn't find one, create a new one.

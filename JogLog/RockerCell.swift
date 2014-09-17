@@ -199,7 +199,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
      */
     func respondToTapGesture(tap: UITapGestureRecognizer) {
         if let c = self.controller as? ViewController {
-            if let a = c.actionView as? UIView {
+            if let a = c.actionView? {
                 // @todo too much control here, needs delegate.
                 let n = NoteView.createNoteView(0, y: 0, width: a.bounds.width, height: a.bounds.height, parent: c, cell: self, dayNum: self.dayNum!, mileageStore: self.store!, routeStore: self.routeStore!)
                 a.addSubview(n)
@@ -219,7 +219,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
     func respondToPanGesture(pan: UIPanGestureRecognizer) {
         var v = pan.view as RockerCell
         var c = v.cover! as UIView
-        var translation = pan.translationInView(c.superview) as CGPoint
+        var translation = pan.translationInView(c.superview!) as CGPoint
         var pos = c.center as CGPoint
         
         // Convert the velocity of the pan to a duration.
@@ -293,7 +293,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
     func closeCover(duration: Double = 0.1) {
         if !self.coverIsClosing {
             if let p = self.controller as? ViewController {
-                if let c = self.cover as? UIView {
+                if let c = self.cover? {
                     if (c.center.x != self.coverBoundsNormal) {
                         UIView.animateWithDuration(duration, animations: {
                             c.center.x = self.coverBoundsNormal
@@ -362,7 +362,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
         self.store!.setMileageForDay(self.dayNum!, planned: l.value, actual: r.value, note: "")
         self.store!.saveContext()
         
-        if let summary = self.summary as? SummaryCell {
+        if let summary = self.summary? {
             summary.updateValues()
             summary.setNeedsDisplay()
         }

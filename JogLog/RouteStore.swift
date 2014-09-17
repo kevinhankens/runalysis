@@ -18,7 +18,7 @@ class RouteStore: NSObject {
      */
     var context: NSManagedObjectContext {
         let app = UIApplication.sharedApplication().delegate as AppDelegate
-        return app.managedObjectContext
+        return app.managedObjectContext!
     }
 
     /*!
@@ -77,9 +77,11 @@ class RouteStore: NSObject {
         fetch.fetchLimit = 1
         var result = self.context.executeFetchRequest(fetch, error: &error)
     
-        for resultItem: AnyObject in result {
-            if let r = resultItem as? Route {
-                return r.routeid
+        if result != nil {
+            for resultItem: AnyObject in result! {
+                if let r = resultItem as? Route {
+                    return r.routeid
+                }
             }
         }
         
@@ -103,9 +105,12 @@ class RouteStore: NSObject {
         fetch.sortDescriptors = [sorter]
         fetch.fetchLimit = 1
         var result = self.context.executeFetchRequest(fetch, error: &error)
-        for resultItem: AnyObject in result {
-            if let r = resultItem as? Route {
-                return r.routeid
+        
+        if result != nil {
+            for resultItem: AnyObject in result! {
+                if let r = resultItem as? Route {
+                    return r.routeid
+                }
             }
         }
     
@@ -131,9 +136,12 @@ class RouteStore: NSObject {
         fetch.sortDescriptors = [sorter]
         fetch.fetchLimit = 1
         var result = self.context.executeFetchRequest(fetch, error: &error)
-        for resultItem: AnyObject in result {
-            if let r = resultItem as? Route {
-                return r.routeid
+        
+        if result != nil {
+            for resultItem: AnyObject in result! {
+                if let r = resultItem as? Route {
+                    return r.routeid
+                }
             }
         }
     
@@ -153,7 +161,7 @@ class RouteStore: NSObject {
         
         var last: NSNumber = 0
         if routeId == 0 {
-            if var r = self.getLatestRouteId() as? NSNumber {
+            if var r = self.getLatestRouteId()? {
                 last = r
             }
         }
@@ -170,7 +178,8 @@ class RouteStore: NSObject {
         
         var result = self.context.executeFetchRequest(fetch, error: &error)
         
-        return result
+        // @todo this could return nil, should be an optional, or better yet, a mutable copy of the array.
+        return result!
         /*
         for resultItem: AnyObject in result {
             if let r = resultItem as? Route {

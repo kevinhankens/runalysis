@@ -22,12 +22,17 @@ class RockerStepper: UIStepper {
      *
      * @param CGRect frame
      */
-    init(frame: CGRect) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
         minimumValue = 0.0
         maximumValue = 100.0
         stepValue = 0.25
         autorepeat = true
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        //fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
    
     /*!

@@ -113,7 +113,7 @@ class ViewController: UIViewController {
             cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: self.cellPosOffScreen, day: dayNum, summary: summary, controller: self, store: self.mileageStore, routeStore: self.routeStore)
             cell.finalY = ypos
             //self.view.addSubview(cell)
-            self.mileageCells += cell
+            self.mileageCells.append(cell)
             ypos = ypos + height
             dayNum = dayNum.nextDay()
         }
@@ -134,10 +134,10 @@ class ViewController: UIViewController {
         runButton.frame = CGRectMake(0, ypos, self.view.bounds.width/2, 35.00)
         runButton.setTitle("Run", forState: UIControlState.Normal)
         runButton.setTitleColor(GlobalTheme.getRunTextColor(), forState: UIControlState.Normal)
-        runButton.titleLabel.textAlignment = NSTextAlignment.Center
+        runButton.titleLabel?.textAlignment = NSTextAlignment.Center
         runButton.backgroundColor = GlobalTheme.getBackgroundColor()
         runButton.addTarget(self, action: "displayRunViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
-        runButton.titleLabel.font = UIFont.systemFontOfSize(30.0)
+        runButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
         self.runButton = runButton
         container.addSubview(runButton)
         
@@ -146,10 +146,10 @@ class ViewController: UIViewController {
         viewButton.frame = CGRectMake(self.view.bounds.width/2, ypos, self.view.bounds.width/2, 35.00)
         viewButton.setTitle("Latest", forState: UIControlState.Normal)
         viewButton.setTitleColor(GlobalTheme.getRecentTextColor(), forState: UIControlState.Normal)
-        viewButton.titleLabel.textAlignment = NSTextAlignment.Center
+        viewButton.titleLabel?.textAlignment = NSTextAlignment.Center
         viewButton.backgroundColor = GlobalTheme.getBackgroundColor()
         viewButton.addTarget(self, action: "displayRouteViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
-        viewButton.titleLabel.font = UIFont.systemFontOfSize(20.0)
+        viewButton.titleLabel?.font = UIFont.systemFontOfSize(20.0)
         self.viewButton = viewButton
         container.addSubview(viewButton)
         
@@ -173,7 +173,7 @@ class ViewController: UIViewController {
      */
     override func viewWillAppear(animated: Bool) {
         // Ensure that the UIScrollView knows its content bounds.
-        if let container = self.scrollView as? UIScrollView {
+        if let container = self.scrollView? {
             container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
         }
     }
@@ -214,7 +214,7 @@ class ViewController: UIViewController {
     }
     
     func displayRouteViewFromButton(button: UIButton) {
-        if let id = self.routeStore.getLatestRouteId() as? NSNumber {
+        if let id = self.routeStore.getLatestRouteId()? {
             self.modalRouteId = id
         }
         self.launchRouteView()
@@ -302,8 +302,11 @@ class ViewController: UIViewController {
      */
     func closeAllRockersExcept(except: RockerCell? = nil, duration: Double = 0.1) {
         for cell in self.mileageCells {
-            if var e = except as? RockerCell {
-                if cell.dayNum!.number != e.dayNum!.number {
+            if var e = except? {
+                if cell.dayNum!.number == e.dayNum!.number {
+                    // @todo ambigious use of !=
+                }
+                else {
                     cell.closeCover(duration: duration)
                 }
             }
@@ -380,7 +383,7 @@ class ViewController: UIViewController {
             self.updateHeader()
             
             // Attempt to update the note view if we are editing it.
-            if let a = self.actionView as? UIView {
+            if let a = self.actionView? {
                 for v in a.subviews {
                     if let n = v as? NoteView {
                         var day = n.dayNum!

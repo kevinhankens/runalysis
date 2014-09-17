@@ -116,7 +116,7 @@ class RouteViewController: UIViewController {
     }
     
     func resetContentHeight() {
-        if let container = self.scrollContainer as? UIScrollView {
+        if let container = self.scrollContainer? {
             container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight + self.ravHeight)
         }
     }
@@ -132,7 +132,7 @@ class RouteViewController: UIViewController {
      * UIScrollViewDelegate
      */
     func scrollViewDidEndZooming(scrollView: UIScrollView!, withView view: UIView!, atScale scale: CGFloat) {
-        if let rv = self.routeView as? RouteView {
+        if let rv = self.routeView? {
             //let newRect = CGRectMake(rv.bounds.minX, rv.bounds.minY, rv.bounds.width, rv.bounds.height)
             //rv.setNeedsDisplayInRect(newRect)
             //rv.contentScaleFactor = scale
@@ -167,9 +167,9 @@ class RouteViewController: UIViewController {
             // Update the ID of the route
             let next = self.routeStore!.getNextRouteId(self.routeId, prev: previous)
             
-            if let r = next as? NSNumber {
-                if let rv = self.routeView as? RouteView {
-                    if let rav = self.routeAnalysisView as? RouteAnalysisView {
+            if let r = next? {
+                if let rv = self.routeView? {
+                    if let rav = self.routeAnalysisView? {
                         self.routeId = r
                         self.routeSummary?.updateRoute(self.routeId)
                         // @todo set the route id in the summary here.

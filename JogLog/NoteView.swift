@@ -74,7 +74,7 @@ class NoteView : UIView, UITextViewDelegate {
         // Attempt to get any routes for today.
         // @todo this needs to appear regardless and get repopulated on date change.
         let routeId = container.routeStore!.getFirstRoutIdForDate(date: container.dayNum!.date.timeIntervalSince1970)
-        if let routeDate = routeId as? NSNumber {
+        if let routeDate = routeId? {
             container.routeId = routeDate
             let routeButton = UIButton()
             routeButton.frame = CGRectMake(10, ypos, container.bounds.width/2, 20.00)
@@ -128,7 +128,7 @@ class NoteView : UIView, UITextViewDelegate {
      * @return void
      */
     func launchRouteView(sender: UIButton) {
-        if let p = self.parent as? ViewController {
+        if let p = self.parent? {
             p.modalRouteId = self.routeId
             p.launchRouteView()
         }
@@ -160,7 +160,7 @@ class NoteView : UIView, UITextViewDelegate {
             
             // Potentially update the summary/rockers.
             // @todo this is too much responsibility.
-            if let p = self.parent as? ViewController {
+            if let p = self.parent? {
                 let s = p.startOfWeek
                 let e = p.endOfWeek
                 let d = day.toStringFormat(JLDate.getDateFormatDayNumber()).integerValue
@@ -193,7 +193,7 @@ class NoteView : UIView, UITextViewDelegate {
      * @return void
      */
     func returnToRootView(sender: UIButton) {
-        if let n = self.note as? UITextView {
+        if let n = self.note? {
             let day = self.dayNum!
             let text = n.text
             self.saveNote()
@@ -201,7 +201,7 @@ class NoteView : UIView, UITextViewDelegate {
         }
        
         // Stop editing and roll the rocker cells down in the parent view.
-        if let p = self.parent as? ViewController {
+        if let p = self.parent? {
             p.view.endEditing(true)
             p.rollCellsDown()
         }
@@ -220,11 +220,11 @@ class NoteView : UIView, UITextViewDelegate {
         // Storage engine.
         let mileageData = self.store!.getMileageForDate(self.dayNum!)
         
-        if let l = self.label as? UILabel {
+        if let l = self.label? {
             l.text = day.toStringMedium()
         }
         
-        if let n = self.note as? UITextView {
+        if let n = self.note? {
             n.text = mileageData.note
         }
     }
@@ -233,7 +233,7 @@ class NoteView : UIView, UITextViewDelegate {
      * Saves the currently entered note
      */
     func saveNote() {
-        if let n = self.note as? UITextView {
+        if let n = self.note? {
             let day = self.dayNum!.nextDay(increment: 0)
             let text = n.text.stringByAppendingString("")
             // @todo, this breaks saving for some reason.

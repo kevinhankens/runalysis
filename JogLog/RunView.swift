@@ -79,7 +79,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         record.frame = CGRectMake(0, ypos, runView.bounds.width, 45.00)
         record.setTitle("Start", forState: UIControlState.Normal)
         record.setTitleColor(GlobalTheme.getStartTextColor(), forState: UIControlState.Normal)
-        record.titleLabel.font = UIFont.systemFontOfSize(40.0)
+        record.titleLabel?.font = UIFont.systemFontOfSize(40.0)
         //record.backgroundColor = GlobalTheme.getBackgroundColor()
         //record.sizeToFit()
         record.addTarget(runView, action: "toggleRecordPause:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -113,7 +113,7 @@ class RunView: UIView, CLLocationManagerDelegate {
      */
     func updateStopwatch() {
         if self.recording {
-            if let rav = self.routeAnalysisView as? RouteAnalysisView {
+            if let rav = self.routeAnalysisView? {
                 // How long since we last updated.
                 var interval = fabs(self.lastUpdateTime.timeIntervalSinceNow)
                 // Sets the overall duration in the route analysis view.
@@ -144,7 +144,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             self.recording = false
             sender.setTitle("Resume", forState: UIControlState.Normal)
             sender.setTitleColor(GlobalTheme.getStartTextColor(), forState: UIControlState.Normal)
-            if let loc = self.locationManager as? CLLocationManager {
+            if let loc = self.locationManager? {
                 let locationObj = RunView.createLocationCopy(loc.location)
                 let interval = fabs(self.lastUpdateTime.timeIntervalSinceNow)
                 self.storePoint(locationObj, interval: interval)
@@ -155,7 +155,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             sender.setTitle("Pause", forState: UIControlState.Normal)
             sender.setTitleColor(GlobalTheme.getStopTextColor(), forState: UIControlState.Normal)
             self.lastUpdateTime = NSDate.date()
-            if let loc = self.locationManager as? CLLocationManager {
+            if let loc = self.locationManager? {
                 self.prev = RunView.createLocationCopy(loc.location)
                 self.storePoint(self.prev, interval: 0.0)
             }
@@ -221,11 +221,11 @@ class RunView: UIView, CLLocationManagerDelegate {
         // Write to db.
         var route = self.routeStore!.storeRoutePoint(self.routeId, date: location.timestamp.timeIntervalSince1970, latitude: coord.latitude, longitude: coord.longitude, altitude: location.altitude, velocity: velocity, distance_traveled: distance, interval: interval)
         // Redraw the map
-        if let rv = self.routeView as? RouteView {
+        if let rv = self.routeView? {
             // @todo this is horrible for performance.
             rv.summary!.updateRoute(self.routeId)
             rv.displayLatest()
-            if let rav = self.routeAnalysisView as? RouteAnalysisView {
+            if let rav = self.routeAnalysisView? {
                 rav.updateLabels()
             }
         }
@@ -244,7 +244,7 @@ class RunView: UIView, CLLocationManagerDelegate {
      */
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         self.locationManager?.stopUpdatingLocation()
-        if (error) {
+        if (error == nil) {
             if (self.errorCaught == false) {
                 self.errorCaught = true
                 print(error)
