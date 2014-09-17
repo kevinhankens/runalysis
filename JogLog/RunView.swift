@@ -20,31 +20,41 @@ class RunView: UIView, CLLocationManagerDelegate {
     // Tracks the route storage engine.
     var routeStore: RouteStore?
     
+    // Tracks the current route ID.
     let routeId = Int(NSDate().timeIntervalSince1970)
     
     // Tracks the previous location.
     var prev = CLLocation()
     
+    // Tracks the last time the run was updated.
     var lastUpdateTime: NSDate = NSDate.date()
     
+    // How often to update during a run.
     let updateInterval: NSTimeInterval = 4.0
     
+    // Whether or not we are currently recording.
     var recording: Bool = false
     
+    // Tracks the RouteView object.
     var routeView: RouteView?
     
+    // Tracks the RouteAnalysisView object.
     var routeAnalysisView: RouteAnalysisView?
     
+    // Tracks the timer which is used as a stopwatch.
     var stopwatch: NSTimer?
     
+    // Tracks the duration of the entire run.
     var duration: NSTimeInterval = NSDate().timeIntervalSinceNow
     
     /*!
      * Factory method to create a RunView.
      *
      * @param CGFloat cellHeight
-     *
      * @param CGFloat cellWidth
+     * @param RouteStore routeStore
+     * @param CLLocationManager locationManager
+     * @param TouteSummary routeSummary
      *
      * @return RunView
      */
@@ -98,10 +108,15 @@ class RunView: UIView, CLLocationManagerDelegate {
         return runView
     }
     
+    /*!
+     * NSTimer callback to display the chronograph.
+     */
     func updateStopwatch() {
         if self.recording {
             if let rav = self.routeAnalysisView as? RouteAnalysisView {
+                // How long since we last updated.
                 var interval = fabs(self.lastUpdateTime.timeIntervalSinceNow)
+                // Sets the overall duration in the route analysis view.
                 rav.updateDuration(self.duration + interval)
             }
         }
@@ -181,6 +196,12 @@ class RunView: UIView, CLLocationManagerDelegate {
         }
     }
     
+    /*!
+     * Stores a location point in the database.
+     *
+     * @param CLLocation location
+     * @param NSTimeInterval interval
+     */
     func storePoint(location: CLLocation, interval: NSTimeInterval) {
         var coord = location.coordinate
         var alt = location.altitude

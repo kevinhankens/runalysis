@@ -40,9 +40,16 @@ class RouteSummary: NSObject {
     
     // Tracks the duration of the run.
     var duration: Double = Double(0)
+    
+    var mileTimes: [Double] = []
+    
+    let milesPerMeter = Double(0.00062137)
 
     /*!
      * Factory method to create a summary.
+     *
+     * @param NSNumber routeId
+     * @param RouteStore routeStore
      *
      * @return RouteSummary
      */
@@ -59,6 +66,8 @@ class RouteSummary: NSObject {
 
     /*!
      * Upstes the summary to a new set of points.
+     *
+     * @param NSNumber id
      */
     func updateRoute(id: NSNumber) {
         if id != self.routeId {
@@ -85,7 +94,7 @@ class RouteSummary: NSObject {
      * @return String
      */
     func totalInMiles()->String {
-        let totalMiles = self.distance_total * Double(0.00062137)
+        let totalMiles = self.distance_total * self.milesPerMeter
         let rounded = round(totalMiles * 100)/100
         let miles = Int(rounded)
         let fraction = Int((rounded - Double(miles)) * 100)
@@ -152,6 +161,10 @@ class RouteSummary: NSObject {
         var total = Double(0)
         var started = false
         var duration = Double(0)
+        self.mileTimes.removeAll(keepCapacity: false)
+        var mileCount = 0
+        var mileTime = Double(0.0)
+        var mileTimeTmp = Double(0.0)
         
         if self.points?.count > 0 {
             for p in self.points! {
@@ -174,6 +187,14 @@ class RouteSummary: NSObject {
                         total += Double(point.velocity)
                         duration += Double(point.interval)
                         count++
+                    }
+                    
+                    // Track the miles.
+                    if Int(self.distance_total * self.milesPerMeter) > mileCount {
+                        mileCount++
+                        mileTimeTmp = duration - mileTime
+                        mileTime = duration
+                        self.mileTimes.append(mileTimeTmp)
                     }
                 }
             }

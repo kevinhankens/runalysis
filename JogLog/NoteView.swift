@@ -72,6 +72,7 @@ class NoteView : UIView, UITextViewDelegate {
         ypos += backButton.frame.height + 10
         
         // Attempt to get any routes for today.
+        // @todo this needs to appear regardless and get repopulated on date change.
         let routeId = container.routeStore!.getFirstRoutIdForDate(date: container.dayNum!.date.timeIntervalSince1970)
         if let routeDate = routeId as? NSNumber {
             container.routeId = routeDate
@@ -105,6 +106,7 @@ class NoteView : UIView, UITextViewDelegate {
         
         ypos += noteLabel.frame.height + 10
         
+        // @todo the note view should really be its own controller w/segue.
         let noteView = UITextView(frame: CGRect(x: 10, y: ypos, width: container.bounds.width - 5, height: 200.00))
         noteView.editable = true
         noteView.text = ""

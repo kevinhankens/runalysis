@@ -9,18 +9,33 @@
 import Foundation
 import UIKit
 
+/*!
+ * Displays a visual of the distribution of velocities.
+ */
 class VelocityDistributionView: UIView {
     
+    /*!
+     * Tracks the RouteSummary object.
+     */
     var routeSummary: RouteSummary?
+    
+    /*!
+     * Tracks the padding between the graph bars.
+     */
+    let barPadding = CGFloat(10)
 
+    /*!
+     * Overrides UIView::drawRect().
+     *
+     * Draw a visual representation of the velocity distribution.
+     */
     override func drawRect(rect: CGRect) {
     
         if let summary = self.routeSummary as? RouteSummary {
             let context = UIGraphicsGetCurrentContext()
             CGContextFillRect(context, self.bounds)
         
-            let barWidth = (Int(self.frame.width - 40)/summary.distribution.count) - 5
-            let barPadding = CGFloat(10)
+            let barWidth = (Int(self.frame.width - self.barPadding)/summary.distribution.count) - Int(self.barPadding)
         
             var tx = CGFloat(10)
             var ty = CGFloat(0)
@@ -29,8 +44,8 @@ class VelocityDistributionView: UIView {
             
             var speedColor = GlobalTheme.getSpeedOne().CGColor
         
+            // Find the high point, which will determine the scale.
             var high = 0
-        
             for count in summary.distribution {
                 if count > high {
                     high = count
@@ -57,10 +72,14 @@ class VelocityDistributionView: UIView {
                     speedColor = GlobalTheme.getSpeedOne().CGColor
                 }
                 
+                // Always draw at least a value of one because it looks better.
                 h = count == 0 ? CGFloat(1) : CGFloat(count)
                 h *= scale
+                if h < CGFloat(4) {
+                    h = CGFloat(4)
+                }
                 var rectangle = CGRectMake(tx, ty, w, h);
-                tx = tx + barWidth + barPadding
+                tx = tx + barWidth + self.barPadding
                 CGContextSetFillColorWithColor(context, speedColor);
                 CGContextFillRect(context, rectangle)
                 index++

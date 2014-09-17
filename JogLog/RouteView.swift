@@ -205,6 +205,7 @@ class RouteView: UIView {
                             if mileTest > mileCounter {
                                 mileCounter = mileTest
                                 var center = CGPointMake(cx, cy)
+                                CGContextSetLineWidth(context, 1.0)
                                 CGContextAddArc(context, center.x, center.y, CGFloat(12.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
                                 CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().CGColor)
                                 CGContextStrokePath(context);

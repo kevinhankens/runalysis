@@ -32,6 +32,7 @@
 		17983953198C2CE30047F859 /* HelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17983952198C2CE30047F859 /* HelpView.swift */; };
 		1798483019BF36D100571D35 /* RouteAnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798482F19BF36D100571D35 /* RouteAnalysisView.swift */; };
 		1798483219C7DB5A00571D35 /* VelocityDistributionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798483119C7DB5A00571D35 /* VelocityDistributionView.swift */; };
+		1798483419C8D9B600571D35 /* MileSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798483319C8D9B600571D35 /* MileSummaryView.swift */; };
 		17A49DCA19B7B9C1002DAC82 /* RouteSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A49DC919B7B9C1002DAC82 /* RouteSummary.swift */; };
 		17AF16B6198FCD9F00565322 /* JogLogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17AF16B4198FCD9F00565322 /* JogLogTests.swift */; };
 		17AF16B8198FD80B00565322 /* RockerCellTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17AF16B7198FD80B00565322 /* RockerCellTests.swift */; };
@@ -93,6 +94,7 @@
 		17983952198C2CE30047F859 /* HelpView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelpView.swift; sourceTree = "<group>"; };
 		1798482F19BF36D100571D35 /* RouteAnalysisView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteAnalysisView.swift; sourceTree = "<group>"; };
 		1798483119C7DB5A00571D35 /* VelocityDistributionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VelocityDistributionView.swift; sourceTree = "<group>"; };
+		1798483319C8D9B600571D35 /* MileSummaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MileSummaryView.swift; sourceTree = "<group>"; };
 		17A49DC919B7B9C1002DAC82 /* RouteSummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteSummary.swift; sourceTree = "<group>"; };
 		17AF16B3198FCD9F00565322 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17AF16B4198FCD9F00565322 /* JogLogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JogLogTests.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 		1798392C1989371D0047F859 /* JogLog */ = {
 			isa = PBXGroup;
 			children = (
+				1798483319C8D9B600571D35 /* MileSummaryView.swift */,
 				1798483119C7DB5A00571D35 /* VelocityDistributionView.swift */,
 				1798482F19BF36D100571D35 /* RouteAnalysisView.swift */,
 				17A49DC919B7B9C1002DAC82 /* RouteSummary.swift */,
@@ -309,6 +312,7 @@
 				179839431989371D0047F859 /* JogLog.xcdatamodeld in Sources */,
 				1773453C19910FB80038F304 /* JLDate.swift in Sources */,
 				179839401989371D0047F859 /* GlobalTheme.swift in Sources */,
+				1798483419C8D9B600571D35 /* MileSummaryView.swift in Sources */,
 				1798393E1989371D0047F859 /* AppDelegate.swift in Sources */,
 				179839481989371D0047F859 /* RockerCell.swift in Sources */,
 				179839441989371D0047F859 /* Mileage.swift in Sources */,

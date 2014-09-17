@@ -14,34 +14,44 @@ import UIKit
  * an event. We can use this to scroll through routes and view details via
  * RootView objects. In retrospect, "route view" is a terrible name.
  */
-class RouteViewController: UIViewController, UIScrollViewDelegate {
+class RouteViewController: UIViewController {
     
     // The id of this route, which is a timestamp.
     var routeId: NSNumber = 0
     
-    // The storage of routes.
+    // Tracks the RouteStore object.
     var routeStore: RouteStore?
     
+    // Tracks the RouteSummary object.
     var routeSummary: RouteSummary?
     
     // The currently viewed route.
     var routeView: RouteView?
     
+    // Tracks the RouteAnalysisView object.
     var routeAnalysisView: RouteAnalysisView?
     
-    var velocityDistributionView: VelocityDistributionView?
-    
+    // Tracks the label with the current date.
     var dateLabel: UILabel?
     
+    // Tracks the label with the current distance.
     var distLabel: UILabel?
     
+    // Tracks the container for scrolling/zooming.
     var scrollContainer: UIScrollView?
+    
+    // The height of the content to scroll.
+    var scrollContentHeight = CGFloat(0)
+    
+    var ravHeight = CGFloat(0)
     
     /*!
      * Overrides UIViewController::viewDidLoad()
      */
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let container = UIScrollView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
@@ -54,15 +64,15 @@ class RouteViewController: UIViewController, UIScrollViewDelegate {
         backButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
         backButton.backgroundColor = GlobalTheme.getBackgroundColor()
         backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
-        self.view.addSubview(backButton)
+        container.addSubview(backButton)
         
         ypos = ypos + backButton.frame.height + 10
         
         // Create a RouteView to display the results.
-        let container = UIScrollView(frame: CGRectMake(0, ypos, self.view.bounds.width + 5, self.view.bounds.width))
+        //let container = UIScrollView(frame: CGRectMake(0, ypos, self.view.bounds.width + 5, self.view.bounds.width))
         
         self.routeSummary = RouteSummary.createRouteSummary(self.routeId, routeStore: self.routeStore!)
-        let routeView = RouteView.createRouteView(0, y: 0, width: self.view.bounds.width - 5, height: self.view.bounds.width - 5, routeId: self.routeId, routeStore: self.routeStore!, routeSummary: self.routeSummary!)
+        let routeView = RouteView.createRouteView(0, y: ypos, width: self.view.bounds.width - 5, height: self.view.bounds.width - 5, routeId: self.routeId, routeStore: self.routeStore!, routeSummary: self.routeSummary!)
         
         // Add swipe gestures to change the route.
         let routeSwipeLeft = UISwipeGestureRecognizer(target: self, action: "routeSwipeGesture:")
@@ -74,38 +84,53 @@ class RouteViewController: UIViewController, UIScrollViewDelegate {
         routeView.addGestureRecognizer(routeSwipeRight)
         
         // Scrolling
-        container.minimumZoomScale = 1.0
-        container.maximumZoomScale = 3.0
-        container.contentSize = CGSizeMake(self.view.bounds.width, self.view.bounds.height)
-        container.delegate = self
+        //container.minimumZoomScale = 1.0
+        //container.maximumZoomScale = 3.0
+        //container.contentSize = CGSizeMake(self.view.bounds.width, self.view.bounds.height)
+        //container.delegate = self
         
         self.routeView = routeView
-        self.scrollContainer = container
         
         container.addSubview(routeView)
-        self.view.addSubview(container)
+        //self.view.addSubview(container)
         
         ypos = ypos + routeView.frame.height + 10
         
         // @todo what is the height of this view?
         let rav = RouteAnalysisView.createRouteAnalysisView(80.0, cellWidth: self.view.bounds.width, x: 0, y: ypos, routeSummary: self.routeSummary!)
-        self.view.addSubview(rav)
+        container.addSubview(rav)
         self.routeAnalysisView = rav
         
-        ypos += rav.frame.height + 10
+        self.ravHeight = rav.frame.height + 10
         
-        // @todo make a factory method for this.
-        // @todo should this move to the RouteAnalysisView?
-        let dv = VelocityDistributionView(frame: CGRectMake(0, ypos, self.view.bounds.width, 40.0))
-        dv.routeSummary = self.routeSummary!
-        self.view.addSubview(dv)
-        self.velocityDistributionView = dv
+        self.scrollContentHeight = ypos //+ CGFloat(rav.frame.height)
+        self.scrollContainer = container
+        self.view.addSubview(container)
     }
     
+    /*!
+    * Implements UIViewController::viewWillAppear:animated
+    */
+    override func viewWillAppear(animated: Bool) {
+        self.resetContentHeight()
+    }
+    
+    func resetContentHeight() {
+        if let container = self.scrollContainer as? UIScrollView {
+            container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight + self.ravHeight)
+        }
+    }
+    
+    /*!
+     * UIScrollViewDelegate
+     */
     func viewForZoomingInScrollView(scrollView: UIScrollView!)->UIView! {
         return self.routeView
     }
     
+    /*!
+     * UIScrollViewDelegate
+     */
     func scrollViewDidEndZooming(scrollView: UIScrollView!, withView view: UIView!, atScale scale: CGFloat) {
         if let rv = self.routeView as? RouteView {
             //let newRect = CGRectMake(rv.bounds.minX, rv.bounds.minY, rv.bounds.width, rv.bounds.height)
@@ -145,15 +170,14 @@ class RouteViewController: UIViewController, UIScrollViewDelegate {
             if let r = next as? NSNumber {
                 if let rv = self.routeView as? RouteView {
                     if let rav = self.routeAnalysisView as? RouteAnalysisView {
-                        if let vdv = self.velocityDistributionView as? VelocityDistributionView {
-                            self.routeId = r
-                            self.routeSummary?.updateRoute(self.routeId)
-                            // @todo set the route id in the summary here.
-                            rv.updateRoute()
-                            rav.updateLabels()
-                            rav.updateDuration(self.routeSummary!.duration)
-                            vdv.setNeedsDisplay()
-                        }
+                        self.routeId = r
+                        self.routeSummary?.updateRoute(self.routeId)
+                        // @todo set the route id in the summary here.
+                        rv.updateRoute()
+                        rav.updateLabels()
+                        self.ravHeight = rav.frame.height
+                        rav.updateDuration(self.routeSummary!.duration)
+                        self.resetContentHeight()
                     }
                 }
             }

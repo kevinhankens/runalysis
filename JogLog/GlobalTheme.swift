@@ -38,26 +38,56 @@ class GlobalTheme {
         return UIColor.whiteColor()
     }
     
+    /*!
+     * Retrieves the color for the "start" controls.
+     *
+     * @return UIColor
+     */
     class func getStartTextColor()->UIColor {
         return self.getSpeedFive()
     }
     
+    /*!
+     * Retrieves the color for the "stop" controls.
+     *
+     * @return UIColor
+     */
     class func getStopTextColor()->UIColor {
         return self.getSpeedOne()
     }
     
+    /*!
+     * Retrieves the color for the average speed text.
+     *
+     * @return UIColor
+     */
     class func getAverageSpeedTextColor()->UIColor {
         return self.getSpeedThree()
     }
     
+    /*!
+     * Retrieves the color for the "run" controls.
+     *
+     * @return UIColor
+     */
     class func getRunTextColor()->UIColor {
         return self.getSpeedFive()
     }
     
+    /*!
+     * Retrieves the color for the "recent" controls.
+     *
+     * @return UIColor
+     */
     class func getRecentTextColor()->UIColor {
         return self.getSpeedThree()
     }
     
+    /*!
+     * Retrieves the tint color for the rocker steppers.
+     *
+     * @return UIColor
+     */
     class func getRockerStepperTintColor()->UIColor {
         return UIColor.blackColor()
     }
