@@ -14,9 +14,6 @@ class RunView: UIView, CLLocationManagerDelegate {
     // Tracks the Core Location Manager.
     var locationManager: CLLocationManager?
     
-    // If there was an error.
-    var errorCaught: Bool = false
-    
     // Tracks the route storage engine.
     var routeStore: RouteStore?
     
@@ -34,6 +31,9 @@ class RunView: UIView, CLLocationManagerDelegate {
     
     // Whether or not we are currently recording.
     var recording: Bool = false
+    
+    // Tracks whether there was a CLLocationManager failure.
+    var failed: Bool = false
     
     // Tracks the RouteView object.
     var routeView: RouteView?
@@ -140,6 +140,9 @@ class RunView: UIView, CLLocationManagerDelegate {
      * @param UIButton sender
      */
     func toggleRecordPause(sender: UIButton) {
+        if self.failed {
+            return
+        }
         if self.recording {
             self.recording = false
             sender.setTitle("Resume", forState: UIControlState.Normal)
@@ -163,6 +166,8 @@ class RunView: UIView, CLLocationManagerDelegate {
             self.lastUpdateTime = NSDate.date()
             if (self.locationManager != nil) {
                 if let loc = self.locationManager? {
+                    // In the simulator the location object occasionally fails.
+                    // @todo disable button.
                     self.prev = RunView.createLocationCopy(loc.location)
                     self.storePoint(self.prev, interval: 0.0)
                 }
@@ -230,9 +235,11 @@ class RunView: UIView, CLLocationManagerDelegate {
                 velocity = distance/interval
             }
         
+            // Steps coming soon.
+            let steps = 0
     
             // Write to db.
-            var route = self.routeStore!.storeRoutePoint(self.routeId, date: location.timestamp.timeIntervalSince1970, latitude: coord.latitude, longitude: coord.longitude, altitude: location.altitude, velocity: velocity, distance_traveled: distance, interval: interval)
+            var route = self.routeStore!.storeRoutePoint(self.routeId, date: location.timestamp.timeIntervalSince1970, latitude: coord.latitude, longitude: coord.longitude, altitude: location.altitude, velocity: velocity, distance_traveled: distance, interval: interval, steps: steps)
             // Redraw the map
             if let rv = self.routeView? {
                 // @todo this is horrible for performance.
@@ -259,8 +266,8 @@ class RunView: UIView, CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         self.locationManager?.stopUpdatingLocation()
         if (error != nil) {
-            if (self.errorCaught == false) {
-                self.errorCaught = true
+            if (self.failed == false) {
+                self.failed = true
                 self.stopRecordingAndDisplayLocationAlert()
                 print(error)
             }
@@ -269,6 +276,7 @@ class RunView: UIView, CLLocationManagerDelegate {
     
     func stopRecordingAndDisplayLocationAlert() {
         self.recording = false
+        self.failed = true
         let alert = UIAlertView(title: "Location Error", message: "The GPS signal appears to have been lost. Tracking has been aborted.", delegate: nil, cancelButtonTitle: "OK")
         alert.show()
     }

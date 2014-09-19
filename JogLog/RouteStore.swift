@@ -45,7 +45,7 @@ class RouteStore: NSObject {
      *
      * @return void
      */
-    func storeRoutePoint(routeid: NSNumber, date: NSNumber, latitude: NSNumber, longitude: NSNumber, altitude: NSNumber, velocity: NSNumber, distance_traveled: NSNumber, interval: NSNumber)->Route {
+    func storeRoutePoint(routeid: NSNumber, date: NSNumber, latitude: NSNumber, longitude: NSNumber, altitude: NSNumber, velocity: NSNumber, distance_traveled: NSNumber, interval: NSNumber, steps: NSNumber)->Route {
         
         var route = NSEntityDescription.insertNewObjectForEntityForName("Route", inManagedObjectContext: self.context) as Route
         
@@ -57,6 +57,7 @@ class RouteStore: NSObject {
         route.velocity = velocity
         route.distance = distance_traveled
         route.interval = interval
+        route.steps = steps
  
         self.saveContext()
         

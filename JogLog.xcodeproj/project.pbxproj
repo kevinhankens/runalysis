@@ -78,6 +78,8 @@
 		178D50ED1981AEE000173703 /* Rocker1-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Rocker1-Bridging-Header.h"; sourceTree = "<group>"; };
 		178F085B199BFE83000448F9 /* RunView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunView.swift; sourceTree = "<group>"; };
 		178F085D199BFF0E000448F9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		1795533E19CB61A3007DC033 /* JogLog1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JogLog1.xcdatamodel; sourceTree = "<group>"; };
+		1795533F19CC79AF007DC033 /* JogLog2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JogLog2.xcdatamodel; sourceTree = "<group>"; };
 		1798392D1989371D0047F859 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1798392F1989371D0047F859 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		179839301989371D0047F859 /* GlobalTheme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalTheme.swift; sourceTree = "<group>"; };
@@ -559,9 +561,11 @@
 		179839331989371D0047F859 /* JogLog.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				1795533E19CB61A3007DC033 /* JogLog1.xcdatamodel */,
+				1795533F19CC79AF007DC033 /* JogLog2.xcdatamodel */,
 				179839341989371D0047F859 /* JogLog.xcdatamodel */,
 			);
-			currentVersion = 179839341989371D0047F859 /* JogLog.xcdatamodel */;
+			currentVersion = 1795533F19CC79AF007DC033 /* JogLog2.xcdatamodel */;
 			path = JogLog.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

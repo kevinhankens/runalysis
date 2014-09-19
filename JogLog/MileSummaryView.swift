@@ -15,6 +15,8 @@ class MileSummaryView: UIView {
     
     var mileLabels: [UILabel] = []
     
+    var labelHeight = CGFloat(20)
+    
     func updateLabels() {
     
         if let summary = self.routeSummary? {
@@ -27,7 +29,7 @@ class MileSummaryView: UIView {
             
             var count = 1
             for time in summary.mileTimes {
-                var l = UILabel(frame: CGRectMake(10, ypos, self.bounds.width, 20))
+                var l = UILabel(frame: CGRectMake(10, ypos, self.bounds.width, self.labelHeight))
                 l.text = "\(self.formatLabel(count, duration: time))"
                 l.textColor = GlobalTheme.getNormalTextColor()
                 self.mileLabels.append(l)
@@ -35,7 +37,7 @@ class MileSummaryView: UIView {
                 ypos += l.frame.height + 5
                 count++
             }
-            let f = CGRectMake(self.frame.minX, self.frame.minY, self.frame.width, ypos)
+            let f = CGRectMake(self.frame.minX, self.frame.minY, self.frame.width, ypos + self.labelHeight)
             self.frame = f
             self.sizeToFit()
         }

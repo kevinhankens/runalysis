@@ -75,8 +75,8 @@ class VelocityDistributionView: UIView {
                 // Always draw at least a value of one because it looks better.
                 h = count == 0 ? CGFloat(1) : CGFloat(count)
                 h *= scale
-                if h < CGFloat(4) {
-                    h = CGFloat(4)
+                if h < CGFloat(2) {
+                    h = CGFloat(2)
                 }
                 var rectangle = CGRectMake(tx, ty, w, h);
                 tx = tx + CGFloat(barWidth) + self.barPadding

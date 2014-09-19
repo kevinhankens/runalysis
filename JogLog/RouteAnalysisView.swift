@@ -170,7 +170,7 @@ class RouteAnalysisView: UIView {
         
         if let mv = self.mileSummaryView? {
             mv.updateLabels()
-            height += mv.frame.height
+            height += mv.frame.height + CGFloat(20)
             
             let f = CGRectMake(self.frame.minX, self.frame.minY, self.frame.width, height)
             self.frame = f

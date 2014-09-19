@@ -179,7 +179,7 @@ class RouteSummary: NSObject {
                     }
                     
                     if point.velocity > Double(0.0) {
-                        if point.velocity < self.velocity_low {
+                        if point.velocity < self.velocity_low || self.velocity_low == Double(0) {
                             // @todo low is always 0.
                             self.velocity_low = point.velocity
                         }
@@ -240,6 +240,9 @@ class RouteSummary: NSObject {
      * @return NSNumber
      */
     func getRelativeVelocity(point: Route)->NSNumber {
+        let velocityDiff = self.velocity_high - self.velocity_low
+        let velocityStep = velocityDiff/5
+        
         let velocityDiffBottom = self.velocity_mean - self.velocity_low
         let velocityDiffTop = self.velocity_high - self.velocity_mean
         var rel = 0
@@ -251,16 +254,20 @@ class RouteSummary: NSObject {
         // for the velocity column. Strange because it's got a default
         // value of 0. This is the only way I've found to prevent crashing.
         if let v = testv as? NSNumber {
-            if point.velocity < self.velocity_low + velocityDiffBottom/2.5 {
+            //if point.velocity < self.velocity_low + velocityDiffBottom/2.5 {
+            if point.velocity < self.velocity_low + velocityStep {
                 rel = 0
             }
-            else if point.velocity < self.velocity_low + ((velocityDiffBottom/2.5) * 2) {
+            //else if point.velocity < self.velocity_low + ((velocityDiffBottom/2.5) * 2) {
+            else if point.velocity < self.velocity_low + (velocityStep * 2) {
                 rel = 1
             }
-            else if point.velocity < self.velocity_high - ((velocityDiffTop/2.5) * 2) {
+            //else if point.velocity < self.velocity_high - ((velocityDiffTop/2.5) * 2) {
+            else if point.velocity < self.velocity_low + (velocityStep * 3) {
                 rel = 2
             }
-            else if point.velocity < self.velocity_high - ((velocityDiffTop/2.5)) {
+            //else if point.velocity < self.velocity_high - ((velocityDiffTop/2.5)) {
+            else if point.velocity < self.velocity_low + (velocityStep * 4) {
                 rel = 3
             }
             else {
