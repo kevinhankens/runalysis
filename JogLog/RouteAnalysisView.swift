@@ -17,6 +17,8 @@ class RouteAnalysisView: UIView {
     // Tracks the VelocityDistributionView object.
     var velocityDistributionView: VelocityDistributionView?
     
+    var altitudeVelocityView: AltitudeVelocityView?
+    
     // Tracks the MileSummaryView object.
     var mileSummaryView: MileSummaryView?
     
@@ -81,6 +83,13 @@ class RouteAnalysisView: UIView {
         
         // @todo make a factory method for this.
         ypos += dv.bounds.height + 10
+        let avv = AltitudeVelocityView(frame: CGRectMake(0, ypos, rav.bounds.width, 50))
+        avv.routeSummary = routeSummary
+        rav.addSubview(avv)
+        rav.altitudeVelocityView = avv
+        
+        // @todo make a factory method for this.
+        ypos += avv.bounds.height + 10
         let mv = MileSummaryView(frame: CGRectMake(0, ypos, rav.bounds.width, rav.bounds.height))
         mv.routeSummary = routeSummary
         mv.sizeToFit()
@@ -147,6 +156,7 @@ class RouteAnalysisView: UIView {
      * Sets the label text with current values.
      */
     func updateLabels() {
+        // @todo use delegation to have each visualization redraw.
         var height = CGFloat(0)
         if let al = self.labelAverage? {
             height += al.frame.height
@@ -166,6 +176,11 @@ class RouteAnalysisView: UIView {
         if let vdv = self.velocityDistributionView? {
             height += vdv.frame.height
             vdv.setNeedsDisplay()
+        }
+        
+        if let avv = self.altitudeVelocityView? {
+            height += avv.frame.height
+            avv.setNeedsDisplay()
         }
         
         if let mv = self.mileSummaryView? {

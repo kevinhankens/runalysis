@@ -178,18 +178,22 @@ class RouteSummary: NSObject {
                         continue
                     }
                     
-                    if point.velocity > Double(0.0) {
-                        if point.velocity < self.velocity_low || self.velocity_low == Double(0) {
-                            // @todo low is always 0.
-                            self.velocity_low = point.velocity
+                    let testv: AnyObject? = point.valueForKey("velocity")
+                    
+                    if let v = testv as? NSNumber {
+                        if point.velocity > Double(0.0) {
+                            if point.velocity < self.velocity_low || self.velocity_low == Double(0) {
+                                // @todo low is always 0.
+                                self.velocity_low = point.velocity
+                            }
+                            else if point.velocity > self.velocity_high {
+                                self.velocity_high = point.velocity
+                            }
+                            self.distance_total += Double(point.distance)
+                            total += Double(point.velocity)
+                            duration += Double(point.interval)
+                            count++
                         }
-                        else if point.velocity > self.velocity_high {
-                            self.velocity_high = point.velocity
-                        }
-                        self.distance_total += Double(point.distance)
-                        total += Double(point.velocity)
-                        duration += Double(point.interval)
-                        count++
                     }
                     
                     // Track the miles.

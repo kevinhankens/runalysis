@@ -49,6 +49,7 @@
 		17AF16C5198FEC6F00565322 /* SummaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393B1989371D0047F859 /* SummaryCell.swift */; };
 		17AF16C6198FEC6F00565322 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393C1989371D0047F859 /* ViewController.swift */; };
 		17AF16C7198FEC6F00565322 /* WeekHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393D1989371D0047F859 /* WeekHeader.swift */; };
+		17B01BBF19CCF33100031121 /* AltitudeVelocityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */; };
 		17CE2E0719A2490A00303598 /* RouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CE2E0619A2490A00303598 /* RouteView.swift */; };
 		17CE2E0919A6A04800303598 /* RunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CE2E0819A6A04800303598 /* RunViewController.swift */; };
 		17CE2E0B19A6D12300303598 /* RoutePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CE2E0A19A6D12300303598 /* RoutePoint.swift */; };
@@ -101,6 +102,7 @@
 		17AF16B3198FCD9F00565322 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17AF16B4198FCD9F00565322 /* JogLogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JogLogTests.swift; sourceTree = "<group>"; };
 		17AF16B7198FD80B00565322 /* RockerCellTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerCellTests.swift; sourceTree = "<group>"; };
+		17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AltitudeVelocityView.swift; sourceTree = "<group>"; };
 		17CE2E0619A2490A00303598 /* RouteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteView.swift; sourceTree = "<group>"; };
 		17CE2E0819A6A04800303598 /* RunViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunViewController.swift; sourceTree = "<group>"; };
 		17CE2E0A19A6D12300303598 /* RoutePoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutePoint.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				1773453A19910FA70038F304 /* JLDate.swift */,
 				17983952198C2CE30047F859 /* HelpView.swift */,
 				1798392D1989371D0047F859 /* AppDelegate.swift */,
+				17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */,
 				1798392E1989371D0047F859 /* Main.storyboard */,
 				179839301989371D0047F859 /* GlobalTheme.swift */,
 				179839311989371D0047F859 /* Images.xcassets */,
@@ -302,6 +305,7 @@
 				17983953198C2CE30047F859 /* HelpView.swift in Sources */,
 				17A49DCA19B7B9C1002DAC82 /* RouteSummary.swift in Sources */,
 				1743593B19A239E1000472AF /* RouteViewController.swift in Sources */,
+				17B01BBF19CCF33100031121 /* AltitudeVelocityView.swift in Sources */,
 				179839461989371D0047F859 /* MileageStore.swift in Sources */,
 				17435937199E783D000472AF /* Route.swift in Sources */,
 				1798483219C7DB5A00571D35 /* VelocityDistributionView.swift in Sources */,
