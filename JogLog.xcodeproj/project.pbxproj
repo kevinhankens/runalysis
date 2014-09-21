@@ -50,6 +50,7 @@
 		17AF16C6198FEC6F00565322 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393C1989371D0047F859 /* ViewController.swift */; };
 		17AF16C7198FEC6F00565322 /* WeekHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393D1989371D0047F859 /* WeekHeader.swift */; };
 		17B01BBF19CCF33100031121 /* AltitudeVelocityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */; };
+		17B01BC119CE5F9800031121 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B01BC019CE5F9800031121 /* NoteViewController.swift */; };
 		17CE2E0719A2490A00303598 /* RouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CE2E0619A2490A00303598 /* RouteView.swift */; };
 		17CE2E0919A6A04800303598 /* RunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CE2E0819A6A04800303598 /* RunViewController.swift */; };
 		17CE2E0B19A6D12300303598 /* RoutePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CE2E0A19A6D12300303598 /* RoutePoint.swift */; };
@@ -103,6 +104,7 @@
 		17AF16B4198FCD9F00565322 /* JogLogTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JogLogTests.swift; sourceTree = "<group>"; };
 		17AF16B7198FD80B00565322 /* RockerCellTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerCellTests.swift; sourceTree = "<group>"; };
 		17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AltitudeVelocityView.swift; sourceTree = "<group>"; };
+		17B01BC019CE5F9800031121 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		17CE2E0619A2490A00303598 /* RouteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteView.swift; sourceTree = "<group>"; };
 		17CE2E0819A6A04800303598 /* RunViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunViewController.swift; sourceTree = "<group>"; };
 		17CE2E0A19A6D12300303598 /* RoutePoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutePoint.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 		1798392C1989371D0047F859 /* JogLog */ = {
 			isa = PBXGroup;
 			children = (
+				17B01BC019CE5F9800031121 /* NoteViewController.swift */,
 				1798483319C8D9B600571D35 /* MileSummaryView.swift */,
 				1798483119C7DB5A00571D35 /* VelocityDistributionView.swift */,
 				1798482F19BF36D100571D35 /* RouteAnalysisView.swift */,
@@ -317,6 +320,7 @@
 				17435939199E799F000472AF /* RouteStore.swift in Sources */,
 				179839431989371D0047F859 /* JogLog.xcdatamodeld in Sources */,
 				1773453C19910FB80038F304 /* JLDate.swift in Sources */,
+				17B01BC119CE5F9800031121 /* NoteViewController.swift in Sources */,
 				179839401989371D0047F859 /* GlobalTheme.swift in Sources */,
 				1798483419C8D9B600571D35 /* MileSummaryView.swift in Sources */,
 				1798393E1989371D0047F859 /* AppDelegate.swift in Sources */,

@@ -22,7 +22,8 @@ class GlobalTheme {
      * @return UIColor
      */
     class func getBackgroundColor()->UIColor {
-        return UIColor.blackColor()
+        return UIColor(red: 28/255, green: 28/255, blue: 28/255, alpha: 1.0)
+        //return UIColor.blackColor()
     }
     
     class func getOverlayBackgroundColor()->UIColor {

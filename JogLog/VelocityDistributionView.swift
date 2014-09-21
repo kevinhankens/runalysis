@@ -33,6 +33,7 @@ class VelocityDistributionView: UIView {
     
         if let summary = self.routeSummary? {
             let context = UIGraphicsGetCurrentContext()
+            CGContextSetFillColorWithColor(context, GlobalTheme.getBackgroundColor().CGColor);
             CGContextFillRect(context, self.bounds)
         
             let barWidth = (Int(self.frame.width - self.barPadding)/summary.distribution.count) - Int(self.barPadding)

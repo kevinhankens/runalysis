@@ -86,10 +86,10 @@ class AltitudeVelocityView: UIView {
                             else if aHigh == Double(0) || p.altitude > aHigh {
                                 aHigh = p.altitude.doubleValue
                             }
-                            if vLow == Double(0) || p.velocity < vLow {
+                            if !isnan(p.velocity.doubleValue) && (vLow == Double(0) || p.velocity < vLow) {
                                 vLow = p.velocity.doubleValue
                             }
-                            else if vHigh == Double(0) || p.velocity > vHigh {
+                            else if !isnan(p.velocity.doubleValue) && (vHigh == Double(0) || p.velocity > vHigh) {
                                 vHigh = p.velocity.doubleValue
                             }
                         }
@@ -130,6 +130,7 @@ class AltitudeVelocityView: UIView {
         
         if let summary = self.routeSummary? {
             let context = UIGraphicsGetCurrentContext()
+            CGContextSetFillColorWithColor(context, GlobalTheme.getBackgroundColor().CGColor);
             CGContextFillRect(context, self.bounds)
             
             if let points = summary.points? {
@@ -172,7 +173,9 @@ class AltitudeVelocityView: UIView {
                         let testv: AnyObject? = point.valueForKey("velocity")
                         if let v = testv as? NSNumber {
                             // Velocity.
-                            cvy = self.frame.height - (CGFloat(p.velocity.doubleValue - self.vLow) * self.vScale)
+                            // @todo why does velocity eval to nan?
+                            let cv = isnan(p.velocity.doubleValue) ? Double(0) : p.velocity.doubleValue
+                            cvy = self.frame.height - (CGFloat(cv - self.vLow) * self.vScale)
                             if !start {
                                 CGContextSetLineWidth(context, 1.0)
                                 CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedFour().CGColor)

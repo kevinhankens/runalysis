@@ -190,8 +190,12 @@ class ViewController: UIViewController {
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if let v = segue.destinationViewController as? RouteViewController {
+            v.routeStore = self.routeStore
+            v.routeId = self.modalRouteId
+        }
+        else if let v = segue.destinationViewController as? NoteViewController {
             v.routeStore = self.routeStore
             v.routeId = self.modalRouteId
         }
@@ -204,6 +208,10 @@ class ViewController: UIViewController {
     
     func launchRouteView() {
         self.performSegueWithIdentifier("routeViewSegue", sender: self)
+    }
+    
+    func launchNoteView() {
+        self.performSegueWithIdentifier("noteViewSegue", sender: self)
     }
     
     /*!

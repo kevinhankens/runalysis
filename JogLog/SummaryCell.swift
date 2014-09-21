@@ -112,6 +112,8 @@ class SummaryCell: UIView {
      */
     override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
+        CGContextSetFillColorWithColor(context, GlobalTheme.getBackgroundColor().CGColor);
+        CGContextFillRect(context, self.bounds)
     
         // The max mileage.
         var vmax = 0.0

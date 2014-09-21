@@ -49,15 +49,16 @@ class RouteStore: NSObject {
         
         var route = NSEntityDescription.insertNewObjectForEntityForName("Route", inManagedObjectContext: self.context) as Route
         
-        route.routeid = routeid
-        route.date = date
-        route.latitude = latitude
-        route.longitude = longitude
-        route.altitude = altitude
-        route.velocity = velocity
-        route.distance = distance_traveled
-        route.interval = interval
-        route.steps = steps
+        // Bad things happen if we end up with nan values in the db.
+        route.routeid = isnan(routeid.doubleValue) ? 0 : routeid
+        route.date = isnan(date.doubleValue) ? 0 : date
+        route.latitude = isnan(latitude.doubleValue) ? 0 : latitude
+        route.longitude = isnan(longitude.doubleValue) ? 0 : longitude
+        route.altitude = isnan(altitude.doubleValue) ? 0 : altitude
+        route.velocity = isnan(velocity.doubleValue) ? 0 : velocity
+        route.distance = isnan(distance_traveled.doubleValue) ? 0 : distance_traveled
+        route.interval = isnan(interval.doubleValue) ? 0 : interval
+        route.steps = isnan(steps.doubleValue) ? 0 : steps
  
         self.saveContext()
         

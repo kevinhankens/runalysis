@@ -148,6 +148,7 @@ class RouteView: UIView {
         var total = Double(0)
         
         let context = UIGraphicsGetCurrentContext()
+        CGContextSetFillColorWithColor(context, GlobalTheme.getBackgroundColor().CGColor);
         CGContextFillRect(context, self.bounds)
         
         var px: CGFloat = 0.0
@@ -166,6 +167,10 @@ class RouteView: UIView {
                     if start || p.velocity.doubleValue > 0.0 {
                         
                         if start {
+                            //var center = CGPointMake(cx, cy)
+                            //CGContextAddArc(context, center.x, center.y, CGFloat(6.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
+                            //CGContextSetFillColorWithColor(context, GlobalTheme.getSpeedOne().CGColor);
+                            //CGContextFillPath(context);
                             start = false
                         }
                         else {

@@ -199,13 +199,15 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
      */
     func respondToTapGesture(tap: UITapGestureRecognizer) {
         if let c = self.controller as? ViewController {
-            if let a = c.actionView? {
+            c.modalRouteId = self.dayNum!.number
+            c.launchNoteView()
+            //if let a = c.actionView? {
                 // @todo too much control here, needs delegate.
-                let n = NoteView.createNoteView(0, y: 0, width: a.bounds.width, height: a.bounds.height, parent: c, cell: self, dayNum: self.dayNum!, mileageStore: self.store!, routeStore: self.routeStore!)
-                a.addSubview(n)
-                c.closeAllRockersExcept(except: nil)
-                c.rollCellsUp()
-            }
+                //let n = NoteView.createNoteView(0, y: 0, width: a.bounds.width, height: a.bounds.height, parent: c, cell: self, dayNum: self.dayNum!, mileageStore: self.store!, routeStore: self.routeStore!)
+                //a.addSubview(n)
+                //c.closeAllRockersExcept(except: nil)
+                //c.rollCellsUp()
+            //}
         }
     }
  
