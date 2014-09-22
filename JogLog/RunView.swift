@@ -50,6 +50,8 @@ class RunView: UIView, CLLocationManagerDelegate {
     /*!
      * Factory method to create a RunView.
      *
+     * @param CGFloat x
+     * @param CGFloat y
      * @param CGFloat cellHeight
      * @param CGFloat cellWidth
      * @param RouteStore routeStore
@@ -58,10 +60,10 @@ class RunView: UIView, CLLocationManagerDelegate {
      *
      * @return RunView
      */
-    class func createRunView(cellHeight: CGFloat, cellWidth:
+    class func createRunView(x: CGFloat, y: CGFloat, cellHeight: CGFloat, cellWidth:
         CGFloat, routeStore: RouteStore, locationManager: CLLocationManager, routeSummary: RouteSummary)->RunView {
             
-        let runView = RunView(frame: CGRect(x: 0, y: 50, width: cellWidth, height: cellHeight))
+        let runView = RunView(frame: CGRect(x: x, y: y, width: cellWidth, height: cellHeight))
             
         runView.routeStore = routeStore
             
@@ -79,7 +81,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         record.frame = CGRectMake(0, ypos, runView.bounds.width, 45.00)
         record.setTitle("Start", forState: UIControlState.Normal)
         record.setTitleColor(GlobalTheme.getStartTextColor(), forState: UIControlState.Normal)
-        record.titleLabel?.font = UIFont.systemFontOfSize(40.0)
+        record.titleLabel?.font = UIFont.systemFontOfSize(45.0)
         //record.backgroundColor = GlobalTheme.getBackgroundColor()
         //record.sizeToFit()
         record.addTarget(runView, action: "toggleRecordPause:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -95,15 +97,21 @@ class RunView: UIView, CLLocationManagerDelegate {
         ypos = ypos + routeView.frame.height + 10
             
         // @todo what is the height of this view?
-        let rav = RouteAnalysisView.createRouteAnalysisView(40.0, cellWidth: runView.bounds.width, x: 0, y: ypos, routeSummary: routeSummary)
+        let rav = RouteAnalysisView.createRouteAnalysisView(80.0, cellWidth: runView.bounds.width, x: 0, y: ypos, routeSummary: routeSummary)
         runView.addSubview(rav)
         runView.routeAnalysisView = rav
         rav.userInteractionEnabled = false
+            
+        ypos = ypos + rav.frame.height + 10
             
         record.frame.origin.y = routeView.frame.minY + (routeView.frame.height/2)
         runView.bringSubviewToFront(record)
             
         runView.stopwatch = NSTimer.scheduledTimerWithTimeInterval(0.1, target: runView, selector: Selector("updateStopwatch"), userInfo: nil, repeats: true)
+        println("\(runView.frame)")
+            
+        let f = CGRectMake(x, y, runView.frame.width, ypos)
+        runView.frame = f
           
         return runView
     }

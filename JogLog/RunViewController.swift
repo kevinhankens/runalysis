@@ -21,22 +21,30 @@ class RunViewController: UIViewController {
     var runView: RunView?
     
     var routeAnalysisView: RouteAnalysisView?
+    
+    // Tracks the container for scrolling/zooming.
+    var scrollContainer: UIScrollView?
+    
+    // The height of the content to scroll.
+    var scrollContentHeight = CGFloat(0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.frame.width, self.view.frame.height - 20))
+        
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
-        var ypos = CGFloat(30)
+        var ypos = CGFloat(0)
         
         // Add a back button to return to the "root" view.
         let backButton = UIButton()
-        backButton.frame = CGRectMake(0, ypos, self.view.bounds.width/2, 20.00)
+        backButton.frame = CGRectMake(0, ypos, container.bounds.width/2, 20.00)
         backButton.setTitle("< Back", forState: UIControlState.Normal)
         backButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
         backButton.backgroundColor = GlobalTheme.getBackgroundColor()
         backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
-        self.view.addSubview(backButton)
+        container.addSubview(backButton)
         
         ypos = ypos + backButton.frame.height + 10
         
@@ -44,9 +52,25 @@ class RunViewController: UIViewController {
         
         let routeSummary = RouteSummary.createRouteSummary(routeId, routeStore: self.routeStore!)
         
-        let r = RunView.createRunView(self.view.bounds.width, cellWidth: self.view.bounds.width, routeStore: self.routeStore!, locationManager: self.locationManager!, routeSummary: routeSummary)
+        let r = RunView.createRunView(0, y: ypos, cellHeight: container.bounds.width, cellWidth: container.bounds.width, routeStore: self.routeStore!, locationManager: self.locationManager!, routeSummary: routeSummary)
         self.runView = r
-        self.view.addSubview(r)
+        container.addSubview(r)
+        
+        ypos = ypos + r.frame.height + 10
+        
+        self.scrollContentHeight = ypos //+ CGFloat(rav.frame.height)
+        self.scrollContainer = container
+        self.view.addSubview(container)
+    }
+    
+    /*!
+    * Implements UIViewController::viewWillAppear:animated
+    */
+    override func viewWillAppear(animated: Bool) {
+        if let container = self.scrollContainer? {
+            println("\(self.scrollContentHeight)")
+            container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
+        }
     }
     
     /*!
@@ -71,7 +95,7 @@ class RunViewController: UIViewController {
     *
     */
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientation.Portrait.toRaw())
+        return Int(UIInterfaceOrientationMask.Portrait.toRaw())
     }
     
     /*!

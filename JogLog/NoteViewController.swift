@@ -34,11 +34,11 @@ class NoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let container = UIScrollView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
+        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.frame.width, self.view.frame.height - 20))
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
-        var ypos = CGFloat(30)
+        var ypos = CGFloat(0)
         
         // Add a back button to return to the "root" view.
         let backButton = UIButton()
@@ -54,7 +54,7 @@ class NoteViewController: UIViewController {
         if let routeStore = self.routeStore? {
             if let mileageStore = self.store? {
                 if let dayNum = self.dayNum? {
-                    let n = NoteView.createNoteView(0, y: ypos, width: self.view.bounds.width, height: self.view.bounds.height, dayNum: self.dayNum!, mileageStore: mileageStore, routeStore: self.routeStore!)
+                    let n = NoteView.createNoteView(0, y: ypos, width: self.view.bounds.width - 20, height: self.view.bounds.height, dayNum: self.dayNum!, mileageStore: mileageStore, routeStore: self.routeStore!)
                     container.addSubview(n)
                     self.noteView = n
                 }

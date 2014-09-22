@@ -51,11 +51,11 @@ class RouteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let container = UIScrollView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
+        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.frame.width, self.view.frame.height - 20))
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
-        var ypos = CGFloat(30)
+        var ypos = CGFloat(0)
         
         // Add a back button to return to the "root" view.
         let backButton = UIButton()
@@ -202,7 +202,7 @@ class RouteViewController: UIViewController {
      *
      */
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientation.Portrait.toRaw())
+        return Int(UIInterfaceOrientationMask.Portrait.toRaw())
     }
     
     /*!

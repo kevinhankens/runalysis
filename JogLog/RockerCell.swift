@@ -184,7 +184,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
      *
      * @return void
      */
-    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer!) -> Bool {
+    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
         if let pan = gestureRecognizer as? UIPanGestureRecognizer {
             let v = pan.velocityInView(pan.view)
             return fabs(v.x) > fabs(v.y)

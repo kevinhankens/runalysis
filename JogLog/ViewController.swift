@@ -71,7 +71,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let container = UIScrollView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
+        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.frame.width, self.view.frame.height - 20))
         
         // @todo move the setup to init?
         
@@ -85,7 +85,7 @@ class ViewController: UIViewController {
         let beginDate = self.sunday
         let endDate = sunday.nextDay(increment: 6)
         
-        let summary = SummaryCell.createCell(height * 1.75, cellWidth: self.view.bounds.width, cellY: 40, beginDate: beginDate.date, endDate: endDate.date)
+        let summary = SummaryCell.createCell(height * 1.75, cellWidth: self.view.bounds.width, cellY: 0, beginDate: beginDate.date, endDate: endDate.date)
         self.summaryCell = summary
         
         // Add a right swipe gesture to the header.
@@ -300,7 +300,7 @@ class ViewController: UIViewController {
         if recentVersion < self.version {
             NSUserDefaults.standardUserDefaults().setDouble(self.version, forKey: self.versionKey)
             NSUserDefaults.standardUserDefaults().synchronize()
-            self.displayHelpView()
+            //self.displayHelpView()
         }
     }
     
@@ -333,7 +333,7 @@ class ViewController: UIViewController {
     }
     
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientation.Portrait.toRaw())
+        return Int(UIInterfaceOrientationMask.Portrait.toRaw())
     }
     
     /*!
