@@ -77,11 +77,11 @@ class RouteViewController: UIViewController {
         // Add swipe gestures to change the route.
         let routeSwipeLeft = UISwipeGestureRecognizer(target: self, action: "routeSwipeGesture:")
         routeSwipeLeft.direction = UISwipeGestureRecognizerDirection.Left
-        routeView.addGestureRecognizer(routeSwipeLeft)
+        container.addGestureRecognizer(routeSwipeLeft)
         
         let routeSwipeRight = UISwipeGestureRecognizer(target: self, action: "routeSwipeGesture:")
         routeSwipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        routeView.addGestureRecognizer(routeSwipeRight)
+        container.addGestureRecognizer(routeSwipeRight)
         
         // Scrolling
         //container.minimumZoomScale = 1.0

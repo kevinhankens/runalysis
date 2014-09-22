@@ -60,6 +60,8 @@ class ViewController: UIViewController {
     
     var modalRouteId: NSNumber = 0
     
+    var modalDayNum: JLDate?
+    
     var presented = false
     
     let routeStore = RouteStore()
@@ -196,7 +198,9 @@ class ViewController: UIViewController {
             v.routeId = self.modalRouteId
         }
         else if let v = segue.destinationViewController as? NoteViewController {
+            v.dayNum = self.modalDayNum
             v.routeStore = self.routeStore
+            v.store = self.mileageStore
             v.routeId = self.modalRouteId
         }
         else if let v = segue.destinationViewController as? RunViewController {
@@ -389,28 +393,6 @@ class ViewController: UIViewController {
             
             self.closeAllRockersExcept(except: nil)
             self.updateHeader()
-            
-            // Attempt to update the note view if we are editing it.
-            if let a = self.actionView? {
-                for v in a.subviews {
-                    if let n = v as? NoteView {
-                        var day = n.dayNum!
-                        switch swipeGesture.direction {
-                        case UISwipeGestureRecognizerDirection.Left:
-                            day = n.dayNum!.nextDay(increment: 7)
-                            break;
-                        case UISwipeGestureRecognizerDirection.Right:
-                            day = n.dayNum!.prevDay(increment: 7)
-                            break;
-                        default:
-                            break;
-                        }
- 
-                        n.saveNote()
-                        n.updateDay(day)
-                    }
-                }
-            }
         }
     }
 

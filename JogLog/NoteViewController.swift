@@ -20,13 +20,19 @@ class NoteViewController: UIViewController {
     // The id of this route, which is a timestamp.
     var routeId: NSNumber = 0
     
+    // The core data storage for mileage.
+    var dayNum: JLDate?
+    
+    // The core data storage for mileage.
+    var store: MileageStore?
+    
     // Tracks the RouteStore object.
     var routeStore: RouteStore?
+    
+    var noteView: NoteView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        println("\(self.routeId)")
         
         let container = UIScrollView(frame: CGRectMake(0, 0, self.view.frame.width, self.view.frame.height))
         
@@ -45,6 +51,16 @@ class NoteViewController: UIViewController {
         
         ypos = ypos + backButton.frame.height + 10
         
+        if let routeStore = self.routeStore? {
+            if let mileageStore = self.store? {
+                if let dayNum = self.dayNum? {
+                    let n = NoteView.createNoteView(0, y: ypos, width: self.view.bounds.width, height: self.view.bounds.height, dayNum: self.dayNum!, mileageStore: mileageStore, routeStore: self.routeStore!)
+                    container.addSubview(n)
+                    self.noteView = n
+                }
+            }
+        }
+        
         self.scrollContentHeight = ypos
         self.scrollContainer = container
         self.view.addSubview(container)
@@ -54,25 +70,43 @@ class NoteViewController: UIViewController {
     * Implements UIViewController::viewWillAppear:animated
     */
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         if let container = self.scrollContainer? {
             container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
         }
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if let n = self.noteView? {
+            if let textview = n.note? {
+                textview.becomeFirstResponder()
+            }
+        }
+    }
     
     /*!
      * Handles the button press to return to the root view.
      */
     func returnToRootView(sender: UIButton) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        if let n = self.noteView? {
+            if let textview = n.note? {
+                textview.endEditing(true)
+                n.saveNote()
+                textview.resignFirstResponder()
+            }
+        }
+        //self.dismissViewControllerAnimated(true, completion: nil)
+        self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
-   
+    
     override func shouldAutorotate()->Bool {
         return false
     }
     
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientation.Portrait.toRaw())
+        return Int(UIInterfaceOrientationMask.Portrait.toRaw())
+        //return Int(UIInterfaceOrientation.Portrait.toRaw())
     }
     
 }

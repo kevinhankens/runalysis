@@ -199,6 +199,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
      */
     func respondToTapGesture(tap: UITapGestureRecognizer) {
         if let c = self.controller as? ViewController {
+            c.modalDayNum = self.dayNum
             c.modalRouteId = self.dayNum!.number
             c.launchNoteView()
             //if let a = c.actionView? {
