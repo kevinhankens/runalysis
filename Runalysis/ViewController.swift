@@ -152,7 +152,7 @@ class ViewController: UIViewController {
         viewButton.titleLabel?.textAlignment = NSTextAlignment.Center
         viewButton.backgroundColor = GlobalTheme.getBackgroundColor()
         viewButton.addTarget(self, action: "displayRouteViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
-        viewButton.titleLabel?.font = UIFont.systemFontOfSize(20.0)
+        viewButton.titleLabel?.font = UIFont.systemFontOfSize(25.0)
         self.viewButton = viewButton
         container.addSubview(viewButton)
         

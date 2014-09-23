@@ -10,6 +10,7 @@
 		17435937199E783D000472AF /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17435936199E783D000472AF /* Route.swift */; };
 		17435939199E799F000472AF /* RouteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17435938199E799F000472AF /* RouteStore.swift */; };
 		1743593B19A239E1000472AF /* RouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1743593A19A239E1000472AF /* RouteViewController.swift */; };
+		174B7F2C19D23A4000C87345 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 174B7F2B19D23A4000C87345 /* LaunchScreen.storyboard */; };
 		1773453B19910FA70038F304 /* JLDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453A19910FA70038F304 /* JLDate.swift */; };
 		1773453C19910FB80038F304 /* JLDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453A19910FA70038F304 /* JLDate.swift */; };
 		1773453E199112900038F304 /* JLDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453D199112900038F304 /* JLDateTests.swift */; };
@@ -51,6 +52,7 @@
 		17AF16C7198FEC6F00565322 /* WeekHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393D1989371D0047F859 /* WeekHeader.swift */; };
 		17B01BBF19CCF33100031121 /* AltitudeVelocityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */; };
 		17B01BC119CE5F9800031121 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B01BC019CE5F9800031121 /* NoteViewController.swift */; };
+		17C42C3219D23B2F007DBFCA /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C42C3119D23B2F007DBFCA /* LaunchViewController.swift */; };
 		17CE2E0719A2490A00303598 /* RouteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CE2E0619A2490A00303598 /* RouteView.swift */; };
 		17CE2E0919A6A04800303598 /* RunViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CE2E0819A6A04800303598 /* RunViewController.swift */; };
 		17CE2E0B19A6D12300303598 /* RoutePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17CE2E0A19A6D12300303598 /* RoutePoint.swift */; };
@@ -71,6 +73,7 @@
 		17435936199E783D000472AF /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		17435938199E799F000472AF /* RouteStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteStore.swift; sourceTree = "<group>"; };
 		1743593A19A239E1000472AF /* RouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteViewController.swift; sourceTree = "<group>"; };
+		174B7F2B19D23A4000C87345 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1773453A19910FA70038F304 /* JLDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLDate.swift; sourceTree = "<group>"; };
 		1773453D199112900038F304 /* JLDateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JLDateTests.swift; path = RunalysisTests/JLDateTests.swift; sourceTree = SOURCE_ROOT; };
 		1773453F199122CA0038F304 /* MileageStoreMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MileageStoreMock.swift; sourceTree = "<group>"; };
@@ -105,6 +108,7 @@
 		17AF16B7198FD80B00565322 /* RockerCellTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RockerCellTests.swift; sourceTree = "<group>"; };
 		17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AltitudeVelocityView.swift; sourceTree = "<group>"; };
 		17B01BC019CE5F9800031121 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
+		17C42C3119D23B2F007DBFCA /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		17CE2E0619A2490A00303598 /* RouteView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteView.swift; sourceTree = "<group>"; };
 		17CE2E0819A6A04800303598 /* RunViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunViewController.swift; sourceTree = "<group>"; };
 		17CE2E0A19A6D12300303598 /* RoutePoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutePoint.swift; sourceTree = "<group>"; };
@@ -171,6 +175,8 @@
 				1798392D1989371D0047F859 /* AppDelegate.swift */,
 				17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */,
 				1798392E1989371D0047F859 /* Main.storyboard */,
+				174B7F2B19D23A4000C87345 /* LaunchScreen.storyboard */,
+				17C42C3119D23B2F007DBFCA /* LaunchViewController.swift */,
 				179839301989371D0047F859 /* GlobalTheme.swift */,
 				179839311989371D0047F859 /* Images.xcassets */,
 				179839321989371D0047F859 /* Info.plist */,
@@ -285,6 +291,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				174B7F2C19D23A4000C87345 /* LaunchScreen.storyboard in Resources */,
 				179839411989371D0047F859 /* Images.xcassets in Resources */,
 				17983951198A86320047F859 /* Main.storyboard in Resources */,
 			);
@@ -329,6 +336,7 @@
 				17CE2E0B19A6D12300303598 /* RoutePoint.swift in Sources */,
 				178F085C199BFE83000448F9 /* RunView.swift in Sources */,
 				17CE2E0719A2490A00303598 /* RouteView.swift in Sources */,
+				17C42C3219D23B2F007DBFCA /* LaunchViewController.swift in Sources */,
 				17D5F2CF199A4B7E00D9AF80 /* NoteView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

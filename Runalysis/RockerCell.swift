@@ -21,6 +21,9 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
    
     // If the cover is currently closing.
     var coverIsClosing: Bool = false
+    
+    // If the cover is currently opening.
+    var coverIsOpening: Bool = false
    
     // The boundaries of the left pan.
     var coverBoundsLeft = CGFloat(0)
@@ -194,20 +197,13 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
         return true
     }
     
-    //func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
-        //println("\(self.noteTriggered)")
-        //if self.noteTriggered {
-            //return false
-        //}
-        //return true
-    //}
-    
     /*!
      * Handle taps on the rocker cover.
      *
      * @param UITapGestureRecognizer tap
      */
     func respondToTapGesture(tap: UILongPressGestureRecognizer) {
+        // Long presses can trigger multiple calls.
         if (tap.state == UIGestureRecognizerState.Ended) {
             self.noteTriggered = false
         }
@@ -322,7 +318,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
             }
         }
     }
-   
+    
     /*!
      * Update the date of a cell.
      *
