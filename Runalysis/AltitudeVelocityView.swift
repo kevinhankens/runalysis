@@ -138,6 +138,8 @@ class AltitudeVelocityView: UIView {
                 // Track previous and current x,y values.
                 var cx = CGFloat(10)
                 var px = CGFloat(10)
+                var ox = CGFloat(10)
+                var by = self.frame.height
                 var cay = CGFloat(0)
                 var pay = CGFloat(0)
                 var cvy = CGFloat(0)
@@ -148,6 +150,33 @@ class AltitudeVelocityView: UIView {
                 var start = true
                 var zeroSkipped = false
                 
+                // Draw the altitude graph. This is a CGPath that follows the
+                // altitude graph then fills in the bottom to appear like a
+                // land mass for better visual.
+                CGContextBeginPath(context)
+                CGContextMoveToPoint(context, cx, by);
+                for point in points {
+                    
+                    if let p = point as? Route {
+                        // Altitude.
+                        cay = self.frame.height - (CGFloat(p.altitude.doubleValue - self.aLow) * self.aScale)
+                        CGContextAddLineToPoint(context, cx, cay);
+                        pay = cay
+                    
+                    }
+                    px = cx
+                    cx += self.xIncrement
+                }
+                CGContextMoveToPoint(context, cx, by);
+                CGContextMoveToPoint(context, ox, by);
+                CGContextClosePath(context)
+                CGContextSetFillColorWithColor(context, GlobalTheme.getAltitudeGraphColor().CGColor);
+                CGContextFillPath(context)
+                
+                px = CGFloat(10)
+                cx = CGFloat(10)
+                
+                // Draw the velocity graph.
                 for point in points {
                     
                     // Velocity is always zero on the first point.
@@ -158,17 +187,6 @@ class AltitudeVelocityView: UIView {
                     
                     if let p = point as? Route {
                         
-                        // Altitude.
-                        cay = self.frame.height - (CGFloat(p.altitude.doubleValue - self.aLow) * self.aScale)
-                        if !start {
-                            CGContextSetLineWidth(context, 1.0)
-                            CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().CGColor)
-                            CGContextMoveToPoint(context, px, pay);
-                            CGContextAddLineToPoint(context, cx, cay);
-                            CGContextStrokePath(context);
-                        }
-                        pay = cay
-                        
                         // Ensure that the velocity is not null.
                         let testv: AnyObject? = point.valueForKey("velocity")
                         if let v = testv as? NSNumber {
@@ -178,7 +196,7 @@ class AltitudeVelocityView: UIView {
                             cvy = self.frame.height - (CGFloat(cv - self.vLow) * self.vScale)
                             if !start {
                                 CGContextSetLineWidth(context, 1.0)
-                                CGContextSetStrokeColorWithColor(context, GlobalTheme.getSpeedFour().CGColor)
+                                CGContextSetStrokeColorWithColor(context, GlobalTheme.getVelocityGraphColor().CGColor)
                                 CGContextMoveToPoint(context, px, pvy);
                                 CGContextAddLineToPoint(context, cx, cvy);
                                 CGContextStrokePath(context);

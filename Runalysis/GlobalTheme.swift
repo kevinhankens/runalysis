@@ -43,6 +43,14 @@ class GlobalTheme {
         return self.getSpeedThree()
     }
     
+    class func getAltitudeGraphColor()->UIColor {
+        return UIColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1.0)
+    }
+    
+    class func getVelocityGraphColor()->UIColor {
+        return self.getSpeedFour()
+    }
+    
     /*!
      * Retrieves the color for the "start" controls.
      *
