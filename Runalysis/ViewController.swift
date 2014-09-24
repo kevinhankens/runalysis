@@ -57,16 +57,22 @@ class ViewController: UIViewController {
     // Tracks the run button.
     var runButton: UIButton?
     
-    var viewButton: UIButton?
+    // Tracks the "view latest" button.
+    var latestButton: UIButton?
     
+    // Tracks a route id that can be used when triggering a modal segue.
     var modalRouteId: NSNumber = 0
     
+    // Tracks a JLDate that can be used when triggering a modal segue.
     var modalDayNum: JLDate?
     
+    // If the view has been presented yet.
     var presented = false
     
+    // Creates a shared RouteStore object to inject in others.
     let routeStore = RouteStore()
     
+    // Creates a shared MileageStore object to inject in others.
     let mileageStore = MileageStore()
     
     override func viewDidLoad() {
@@ -145,16 +151,16 @@ class ViewController: UIViewController {
         container.addSubview(runButton)
         
         // Add a Run button
-        let viewButton = UIButton()
-        viewButton.frame = CGRectMake(self.view.bounds.width/2, ypos, self.view.bounds.width/2, 35.00)
-        viewButton.setTitle("Latest", forState: UIControlState.Normal)
-        viewButton.setTitleColor(GlobalTheme.getRecentTextColor(), forState: UIControlState.Normal)
-        viewButton.titleLabel?.textAlignment = NSTextAlignment.Center
-        viewButton.backgroundColor = GlobalTheme.getBackgroundColor()
-        viewButton.addTarget(self, action: "displayRouteViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
-        viewButton.titleLabel?.font = UIFont.systemFontOfSize(25.0)
-        self.viewButton = viewButton
-        container.addSubview(viewButton)
+        let latestButton = UIButton()
+        latestButton.frame = CGRectMake(self.view.bounds.width/2, ypos, self.view.bounds.width/2, 35.00)
+        latestButton.setTitle("Latest", forState: UIControlState.Normal)
+        latestButton.setTitleColor(GlobalTheme.getRecentTextColor(), forState: UIControlState.Normal)
+        latestButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        latestButton.backgroundColor = GlobalTheme.getBackgroundColor()
+        latestButton.addTarget(self, action: "displayRouteViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        latestButton.titleLabel?.font = UIFont.systemFontOfSize(25.0)
+        self.latestButton = latestButton
+        container.addSubview(latestButton)
         
         self.scrollContentHeight = ypos + CGFloat(runButton.frame.height)
         self.scrollView = container
