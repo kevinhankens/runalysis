@@ -204,7 +204,7 @@ class RockerCell: UIView, UIGestureRecognizerDelegate {
      */
     func respondToTapGesture(tap: UILongPressGestureRecognizer) {
         // Long presses can trigger multiple calls.
-        if (tap.state == UIGestureRecognizerState.Ended) {
+        if (tap.state == UIGestureRecognizerState.Began) {
             self.noteTriggered = false
         }
         if !self.noteTriggered {

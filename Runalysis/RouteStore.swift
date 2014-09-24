@@ -66,6 +66,25 @@ class RouteStore: NSObject {
     }
     
     /*!
+     * Deletes a specified route's points.
+     *
+     * @param NSNumber routeId
+     */
+    func deleteRoute(routeId: NSNumber) {
+        let points = self.getPointsForId(routeId)
+        
+        if !points.isEmpty {
+            for point in points {
+                if let p = point as? Route {
+                    self.context.deleteObject(p)
+                }
+            }
+        }
+    
+        self.saveContext()
+    }
+    
+    /*!
      * Gets the id of the latest added route.
      *
      * @return NSNumber

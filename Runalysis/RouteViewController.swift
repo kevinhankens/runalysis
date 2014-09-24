@@ -14,7 +14,7 @@ import UIKit
  * an event. We can use this to scroll through routes and view details via
  * RootView objects. In retrospect, "route view" is a terrible name.
  */
-class RouteViewController: UIViewController {
+class RouteViewController: UIViewController, UIAlertViewDelegate {
     
     // The id of this route, which is a timestamp.
     var routeId: NSNumber = 0
@@ -45,6 +45,8 @@ class RouteViewController: UIViewController {
     
     var ravHeight = CGFloat(0)
     
+    var deleteTriggered = false
+    
     /*!
      * Overrides UIViewController::viewDidLoad()
      */
@@ -65,7 +67,7 @@ class RouteViewController: UIViewController {
         backButton.titleLabel?.textAlignment = NSTextAlignment.Left
         backButton.setTitleColor(GlobalTheme.getBackButtonTextColor(), forState: UIControlState.Normal)
         backButton.backgroundColor = GlobalTheme.getBackgroundColor()
-        backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
+        backButton.addTarget(self, action: "returnToRootViewButton:", forControlEvents: UIControlEvents.TouchDown)
         container.addSubview(backButton)
         
         ypos = ypos + backButton.frame.height + 10
@@ -84,6 +86,9 @@ class RouteViewController: UIViewController {
         let routeSwipeRight = UISwipeGestureRecognizer(target: self, action: "routeSwipeGesture:")
         routeSwipeRight.direction = UISwipeGestureRecognizerDirection.Right
         container.addGestureRecognizer(routeSwipeRight)
+        
+        let press = UILongPressGestureRecognizer(target: self, action: "routeDeleteGesture:")
+        container.addGestureRecognizer(press)
         
         // Scrolling
         //container.minimumZoomScale = 1.0
@@ -143,6 +148,40 @@ class RouteViewController: UIViewController {
         //self.routeView!.setNeedsDisplay()
     }
     
+    /**
+     * Catch a gesture to delete the current route.
+     *
+     * @param UILongPressGestureRecognizer gesture
+     *
+     * @return void
+     */
+    func routeDeleteGesture(gesture: UILongPressGestureRecognizer) {
+        if self.routeId == 0 {
+            return
+        }
+        // Long presses can trigger multiple calls.
+        if (gesture.state == UIGestureRecognizerState.Began) {
+            self.deleteTriggered = false
+        }
+        if !self.deleteTriggered {
+            self.deleteTriggered = true
+            let alert = UIAlertView(title: "Delete Route?", message: "You are about to permanently delete this route.", delegate: nil, cancelButtonTitle: "Cancel")
+            alert.addButtonWithTitle("Delete")
+            alert.delegate = self
+            alert.show()
+        }
+    }
+    
+    /**
+     * UIAlertViewDelegate::alertView(clickedButtonAtIndex: buttonIndex)
+     */
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex == 1 {
+            self.routeStore?.deleteRoute(self.routeId)
+            self.displayNextRoute(false, force: true)
+        }
+    }
+    
     /*!
      * Handles the swipe gestures on a RouteView.
      *
@@ -166,22 +205,47 @@ class RouteViewController: UIViewController {
                 break;
             }
             
-            // Update the ID of the route
-            let next = self.routeStore!.getNextRouteId(self.routeId, prev: previous)
-            
-            if let r = next? {
-                if let rv = self.routeView? {
-                    if let rav = self.routeAnalysisView? {
-                        self.routeId = r
-                        self.routeSummary?.updateRoute(self.routeId)
-                        // @todo set the route id in the summary here.
-                        rv.updateRoute()
-                        rav.updateLabels()
-                        self.ravHeight = rav.frame.height
-                        rav.updateDuration(self.routeSummary!.duration)
-                        self.resetContentHeight()
-                    }
+            self.displayNextRoute(previous)
+        }
+    }
+    
+    /*!
+     * Displays the next or previous route.
+     *
+     * @param Bool previous
+     * @param Bool force
+     */
+    func displayNextRoute(previous: Bool, force: Bool = false) {
+        
+        // Update the ID of the route
+        let next = self.routeStore!.getNextRouteId(self.routeId, prev: previous)
+        
+        if let r = next? {
+            if let rv = self.routeView? {
+                if let rav = self.routeAnalysisView? {
+                    self.routeId = r
+                    self.routeSummary?.updateRoute(self.routeId)
+                    // @todo set the route id in the summary here.
+                    rv.updateRoute()
+                    rav.updateLabels()
+                    self.ravHeight = rav.frame.height
+                    rav.updateDuration(self.routeSummary!.duration)
+                    self.resetContentHeight()
                 }
+            }
+        }
+        else {
+            // If there is no "next" try the other direction. If there is
+            // nothing, return to the root view.
+            // @todo make this circular, only return if there are no routes.
+            let next = self.routeStore!.getNextRouteId(self.routeId, prev: !previous)
+            if let r = next? {
+                if force {
+                    self.displayNextRoute(!previous, force: force)
+                }
+            }
+            else if force {
+                self.returnToRootView()
             }
         }
     }
@@ -189,7 +253,11 @@ class RouteViewController: UIViewController {
     /*!
      * Handles the button press to return to the root view.
      */
-    func returnToRootView(sender: UIButton) {
+    func returnToRootViewButton(sender: UIButton) {
+        self.returnToRootView()
+    }
+    
+    func returnToRootView() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
