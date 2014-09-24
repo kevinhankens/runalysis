@@ -29,6 +29,10 @@ class RunView: UIView, CLLocationManagerDelegate {
     // How often to update during a run.
     let updateInterval: NSTimeInterval = 4.0
     
+    var lastDrawTime: NSDate = NSDate.date()
+    
+    let redrawInterval: NSTimeInterval = 8.0
+    
     // Whether or not we are currently recording.
     var recording: Bool = false
     
@@ -247,13 +251,22 @@ class RunView: UIView, CLLocationManagerDelegate {
     
             // Write to db.
             var route = self.routeStore!.storeRoutePoint(self.routeId, date: location.timestamp.timeIntervalSince1970, latitude: coord.latitude, longitude: coord.longitude, altitude: location.altitude, velocity: velocity, distance_traveled: distance, interval: interval, steps: steps)
+            
             // Redraw the map
             if let rv = self.routeView? {
-                // @todo this is horrible for performance.
-                rv.summary!.updateRoute(self.routeId)
-                rv.displayLatest()
-                if let rav = self.routeAnalysisView? {
-                    rav.updateLabels()
+                var tc = self.lastDrawTime.dateByAddingTimeInterval(self.redrawInterval)
+                if tc.timeIntervalSinceNow < 0.0 {
+                    if let summary = rv.summary {
+                        summary.points?.append(route)
+                        summary.calculateSummary()
+                    // @todo this is horrible for performance.
+                    //rv.summary!.updateRoute(self.routeId)
+                    rv.displayLatest()
+                    if let rav = self.routeAnalysisView? {
+                        rav.updateLabels()
+                    }
+                    self.lastDrawTime = tc
+                    }
                 }
             }
             

@@ -167,8 +167,8 @@ class AltitudeVelocityView: UIView {
                     px = cx
                     cx += self.xIncrement
                 }
-                CGContextMoveToPoint(context, cx, by);
-                CGContextMoveToPoint(context, ox, by);
+                CGContextAddLineToPoint(context, cx, by);
+                CGContextAddLineToPoint(context, ox, by);
                 CGContextClosePath(context)
                 CGContextSetFillColorWithColor(context, GlobalTheme.getAltitudeGraphColor().CGColor);
                 CGContextFillPath(context)

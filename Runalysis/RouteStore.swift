@@ -199,7 +199,7 @@ class RouteStore: NSObject {
         
         var result = self.context.executeFetchRequest(fetch, error: &error)
         
-        // @todo this could return nil, should be an optional, or better yet, a mutable copy of the array.
+        // @todo this could return nil, should be an optional.
         return result!
         /*
         for resultItem: AnyObject in result {
