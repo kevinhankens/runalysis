@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class NoteViewController: UIViewController {
+class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     // The scroll view container for this controller.
     var scrollContainer: UIScrollView?
@@ -30,6 +30,18 @@ class NoteViewController: UIViewController {
     var routeStore: RouteStore?
     
     var noteView: NoteView?
+    
+    var mileage: Mileage?
+    
+    var picker: UIPickerView?
+    
+    var pickerWidthLeft = CGFloat(0)
+    
+    var pickerWidthRight = CGFloat(0)
+    
+    var pickerPlanned: UIPickerView?
+    
+    var pickerActual: UIPickerView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +65,20 @@ class NoteViewController: UIViewController {
         
         ypos = ypos + backButton.frame.height + 10
         
+        if let d = self.dayNum? {
+            self.mileage = self.store?.getMileageForDate(self.dayNum!)
+        }
+        
+        // Mileage picker
+        let pp = UIPickerView(frame: CGRect(x: 0, y: ypos, width: self.view.frame.width/2, height: 30))
+        pp.delegate = self
+        pp.tintColor = GlobalTheme.getNormalTextColor()
+        self.picker = pp
+        self.updatePickerValues()
+        container.addSubview(pp)
+        
+        ypos = ypos + pp.frame.height + 10
+        
         if let routeStore = self.routeStore? {
             if let mileageStore = self.store? {
                 if let dayNum = self.dayNum? {
@@ -66,6 +92,48 @@ class NoteViewController: UIViewController {
         self.scrollContentHeight = ypos
         self.scrollContainer = container
         self.view.addSubview(container)
+    }
+    
+    func updatePickerValues() {
+        if let p = self.picker? {
+            if let m = self.mileage? {
+                let pm = Int(m.mileagePlanned)
+                let pdec = Int((m.mileagePlanned - Double(pm)) * 100)
+                var pd = Int(0)
+                if pdec > 0 {
+                    pd = Int(Double(pdec)/Double(5))
+                }
+                let am = Int(m.mileageActual)
+                let adec = Int((m.mileageActual - Double(am)) * 100)
+                var ad = Int(0)
+                if adec > 0 {
+                    ad = Int(Double(adec)/Double(5))
+                }
+                p.selectRow(pm, inComponent: 0, animated: true)
+                p.selectRow(pd, inComponent: 1, animated: true)
+                p.selectRow(am, inComponent: 2, animated: true)
+                p.selectRow(ad, inComponent: 3, animated: true)
+            }
+        }
+    }
+    
+    func savePickerValues() {
+        if let p = self.picker? {
+            if let s = self.store? {
+                if let d = self.dayNum? {
+                    let pm = p.selectedRowInComponent(0)
+                    let pd = p.selectedRowInComponent(1)
+                    let pdec = Double(pd)/Double(20)
+                    let planned = Double(pm) + pdec
+                    let am = p.selectedRowInComponent(2)
+                    let ad = p.selectedRowInComponent(3)
+                    let adec = Double(ad)/Double(20)
+                    let actual = Double(am) + adec
+                    s.setMileageForDay(self.dayNum!, planned: planned, actual: actual, note: "")
+                    s.saveContext()
+                }
+            }
+        }
     }
     
     /*!
@@ -94,10 +162,21 @@ class NoteViewController: UIViewController {
         if let n = self.noteView? {
             if let textview = n.note? {
                 textview.endEditing(true)
+                self.savePickerValues()
                 n.saveNote()
                 textview.resignFirstResponder()
             }
         }
+        
+        // @todo too much control, should be able to tell the cell to refresh
+        if let vc = self.presentingViewController as? ViewController {
+            for cell in vc.mileageCells {
+                if let dn = cell.dayNum? {
+                    cell.updateDate(dn)
+                }
+            }
+        }
+        
         //self.dismissViewControllerAnimated(true, completion: nil)
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -110,5 +189,75 @@ class NoteViewController: UIViewController {
         return Int(UIInterfaceOrientationMask.Portrait.toRaw())
         //return Int(UIInterfaceOrientation.Portrait.toRaw())
     }
+    
+    // UIPickerView
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 4
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        switch component {
+        case 0, 2:
+            return 100
+        case 1, 3:
+            return 20
+        default:
+            return 0
+        }
+    }
+    
+    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        switch component {
+        case 0, 2:
+            self.pickerWidthLeft = (pickerView.frame.width/4)
+            return self.pickerWidthLeft
+        case 1, 3:
+            self.pickerWidthRight = (pickerView.frame.width/4)
+            return self.pickerWidthRight
+        default:
+            return 0
+        }
+    }
+    
+    func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return CGFloat(20)
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+        return "\(row)"
+    }
+    
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+        
+        let label = UILabel()
+        var rect = CGRect(x: 0, y: 0, width: 40, height: 20)
+        switch component {
+        case 0, 2:
+            rect = CGRect(x: 0, y: 0, width: self.pickerWidthLeft, height: 20)
+            label.textAlignment = NSTextAlignment.Right
+            label.text = "\(row)."
+        case 1, 3:
+            rect = CGRect(x: 0, y: 0, width: self.pickerWidthRight, height: 20)
+            label.textAlignment = NSTextAlignment.Left
+            let rowval = Double(row)/Double(20)
+            let rowint = Int(round(rowval * 100))
+            var rowtext = "\(rowint)"
+            if rowint < 10 {
+                rowtext = "0\(rowint)"
+            }
+            label.text = rowtext
+        default:
+            rect = CGRect(x: 0, y: 0, width: 40, height: 20)
+        }
+        
+        label.textColor = GlobalTheme.getNormalTextColor()
+        
+        return label
+    }
+    
+    //func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    //}
+    
     
 }

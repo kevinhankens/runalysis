@@ -43,22 +43,26 @@ class RockerStepper: UIStepper {
      * @return String
      */
     class func getLabel(miles:Double)->String {
-        var ival = floor(miles)
-        var rval = miles - ival
-        var numerator = Int(4.0 * rval)
-        
-        var fraction = ""
-        switch numerator {
-        case 1.0:
-            fraction = "¼"
-        case 2.0:
-            fraction = "½"
-        case 3.0:
-            fraction = "¾"
-        default:
-            fraction = ""
+        var mval = Int(miles)
+        var dval = Int(round((miles - Double(mval)) * 100))
+        var dtext = "\(dval)"
+        if dval < 10 {
+            dtext = "0\(dval)"
         }
+        //var numerator = Int(4.0 * rval)
+        //
+        //var fraction = ""
+        //switch numerator {
+        //case 1.0:
+        //    fraction = "¼"
+        //case 2.0:
+        //    fraction = "½"
+        //case 3.0:
+        //    fraction = "¾"
+        //default:
+        //    fraction = ""
+        //}
         
-        return "\(Int(miles)) \(fraction)"
+        return "\(Int(miles)).\(dtext)"
     }
 }
