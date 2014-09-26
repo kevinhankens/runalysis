@@ -29,20 +29,21 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     // Tracks the RouteStore object.
     var routeStore: RouteStore?
     
+    // Tracks the NoteView object.
     var noteView: NoteView?
     
+    // Tracks the Mileage entity object.
     var mileage: Mileage?
     
+    // Tracks the UIPickerView object.
     var picker: UIPickerView?
     
+    // The width of the left picker.
     var pickerWidthLeft = CGFloat(0)
     
+    // The width of the right picker.
     var pickerWidthRight = CGFloat(0)
     
-    var pickerPlanned: UIPickerView?
-    
-    var pickerActual: UIPickerView?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -64,13 +65,11 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         container.addSubview(backButton)
         
         ypos = ypos + backButton.frame.height + 10
-        
-        if let d = self.dayNum? {
-            self.mileage = self.store?.getMileageForDate(self.dayNum!)
-        }
+
+        self.updateMileage()
         
         // Mileage picker
-        let pp = UIPickerView(frame: CGRect(x: 0, y: ypos, width: self.view.frame.width/2, height: 30))
+        let pp = UIPickerView(frame: CGRect(x: 0, y: ypos, width: self.view.frame.width, height: 30))
         pp.delegate = self
         pp.tintColor = GlobalTheme.getNormalTextColor()
         self.picker = pp
@@ -85,26 +84,78 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
                     let n = NoteView.createNoteView(0, y: ypos, width: self.view.bounds.width - 20, height: self.view.bounds.height, dayNum: self.dayNum!, mileageStore: mileageStore, routeStore: self.routeStore!)
                     container.addSubview(n)
                     self.noteView = n
+                    ypos = ypos + n.frame.height
                 }
             }
         }
         
+        // Add some padding to accomodate scrolling for the keyboard.
+        ypos = ypos + container.frame.height/2
+        
         self.scrollContentHeight = ypos
         self.scrollContainer = container
         self.view.addSubview(container)
+        
+        let daySwipeLeft = UISwipeGestureRecognizer(target: self, action: "daySwipeGesture:")
+        daySwipeLeft.direction = UISwipeGestureRecognizerDirection.Left
+        container.addGestureRecognizer(daySwipeLeft)
+        
+        let daySwipeRight = UISwipeGestureRecognizer(target: self, action: "daySwipeGesture:")
+        daySwipeRight.direction = UISwipeGestureRecognizerDirection.Right
+        container.addGestureRecognizer(daySwipeRight)
+    }
+    
+    func updateMileage() {
+        if let d = self.dayNum? {
+            self.mileage = self.store?.getMileageForDate(self.dayNum!)
+            self.updatePickerValues()
+        }
+    }
+    
+    /*!
+     * Handle a swipe gesture on the view.
+     * 
+     * @param UIGestureRecognizer gesture
+     *
+     * @return void
+     */
+    func daySwipeGesture(gesture: UIGestureRecognizer) {
+        if let g = gesture as? UISwipeGestureRecognizer {
+            if let n = self.noteView? {
+                if let d = self.dayNum? {
+                    // Update the day of the note.
+                    var day = self.dayNum!
+                    switch g.direction {
+                    case UISwipeGestureRecognizerDirection.Left:
+                        day = self.dayNum!.nextDay(increment: 1)
+                        break;
+                    case UISwipeGestureRecognizerDirection.Right:
+                        day = self.dayNum!.prevDay(increment: 1)
+                        break;
+                    default:
+                    break;
+                    }
+                    self.savePickerValues()
+                    self.dayNum = day
+                    self.updateMileage()
+                    n.saveNote()
+                    n.updateDay(day)
+                }
+            }
+        }
     }
     
     func updatePickerValues() {
         if let p = self.picker? {
             if let m = self.mileage? {
                 let pm = Int(m.mileagePlanned)
-                let pdec = Int((m.mileagePlanned - Double(pm)) * 100)
+                let pdec = Int(round((m.mileagePlanned - Double(pm)) * 100))
                 var pd = Int(0)
                 if pdec > 0 {
                     pd = Int(Double(pdec)/Double(5))
                 }
                 let am = Int(m.mileageActual)
-                let adec = Int((m.mileageActual - Double(am)) * 100)
+                let adec = Int(round((m.mileageActual - Double(am)) * 100))
                 var ad = Int(0)
                 if adec > 0 {
                     ad = Int(Double(adec)/Double(5))
@@ -170,11 +221,7 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         
         // @todo too much control, should be able to tell the cell to refresh
         if let vc = self.presentingViewController as? ViewController {
-            for cell in vc.mileageCells {
-                if let dn = cell.dayNum? {
-                    cell.updateDate(dn)
-                }
-            }
+            vc.updateDay()
         }
         
         //self.dismissViewControllerAnimated(true, completion: nil)
@@ -190,7 +237,8 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         //return Int(UIInterfaceOrientation.Portrait.toRaw())
     }
     
-    // UIPickerView
+    // UIPickerView Delegate Methods
+    // @todo move the picker to a custom view.
     
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 4
@@ -251,7 +299,14 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
             rect = CGRect(x: 0, y: 0, width: 40, height: 20)
         }
         
-        label.textColor = GlobalTheme.getNormalTextColor()
+        switch component {
+        case 0, 1:
+            label.textColor = GlobalTheme.getPlannedColor()
+        case 2, 3:
+            label.textColor = GlobalTheme.getActualColor()
+        default:
+            label.textColor = GlobalTheme.getNormalTextColor()
+        }
         
         return label
     }

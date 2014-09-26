@@ -94,6 +94,15 @@ class JLDate: NSObject {
     }
     
     /*!
+     * Specifies the "day" date format.
+     *
+     * @return String
+     */
+    class func getDateFormatMonthDay()->String {
+        return "MMM d"
+    }
+    
+    /*!
      * Specifies the numeric day format, e.g. sunday = 1
      *
      * @return String

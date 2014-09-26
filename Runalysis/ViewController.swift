@@ -16,6 +16,8 @@ class ViewController: UIViewController {
     
     // Tracks the Core Location Manager.
     var locationManager: CLLocationManager?
+    
+    var summaryView: WeekSummaryView?
    
     // The day to start on, defaults to localized Sunday.
     // @todo make the start configurable.
@@ -26,12 +28,6 @@ class ViewController: UIViewController {
     
     // The array of days of the week.
     var daysOfWeek: [NSNumber] = [1,2,3,4,5,6,7]
-    
-    // A list of the daily cells created.
-    var mileageCells: [RockerCell] = []
-    
-    // The summary cell.
-    var summaryCell: SummaryCell?
     
     // Track the Sunday of the week we're currently viewing.
     var sunday: JLDate = JLDate.createFromDate(NSDate())
@@ -87,55 +83,75 @@ class ViewController: UIViewController {
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
-        let height:CGFloat = 50.0
+        var ypos = CGFloat(20)
+// BEGIN TEST SUMMARY
         
-        let beginDate = self.sunday
-        let endDate = sunday.nextDay(increment: 6)
+        let weekSummary = WeekSummaryView.createWeekSummaryView(CGRectMake(0, ypos, self.view.frame.width, self.view.frame.height/2), mileageStore: self.mileageStore, routeStore: self.routeStore, sunday: self.sunday, controller: self)
+        self.summaryView = weekSummary
+        container.addSubview(weekSummary)
+        ypos += weekSummary.frame.height
         
-        let summary = SummaryCell.createCell(height * 1.75, cellWidth: self.view.bounds.width, cellY: 20, beginDate: beginDate.date, endDate: endDate.date)
-        self.summaryCell = summary
-        
-        // Add a right swipe gesture to the header.
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
+        // Add a right swipe gesture.
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: "changeDaySwipe:")
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        summary.addGestureRecognizer(swipeRight)
+        container.addGestureRecognizer(swipeRight)
         
-        // Add a left swipe gesture to the header.
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
+        // Add a left swipe gesture.
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: "changeDaySwipe:")
         swipeRight.direction = UISwipeGestureRecognizerDirection.Left
-        summary.addGestureRecognizer(swipeLeft)
+        container.addGestureRecognizer(swipeLeft)
         
-        // Start the rocker cells at the bottom of the summary.
-        var ypos:CGFloat = summary.frame.height + summary.frame.minY
+// END TEST SUMMARY
         
-        // Add a view behind the cells for hidden features.
-        let actions = UIView(frame: CGRect(x: 0, y: ypos, width: container.frame.width, height: container.frame.height - summary.frame.height))
-        self.actionView = actions
-        container.addSubview(actions)
-
-        // Add rocker cells for each day of the week.
-        var dayNum = self.sunday
-        var cell = RockerCell()
-        let format = NSDateFormatter()
-        format.dateFormat = "EEEE"
-        for day in self.daysOfWeek {
-            cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: self.cellPosOffScreen, day: dayNum, summary: summary, controller: self, store: self.mileageStore, routeStore: self.routeStore)
-            cell.finalY = ypos
-            //self.view.addSubview(cell)
-            self.mileageCells.append(cell)
-            ypos = ypos + height
-            dayNum = dayNum.nextDay()
-        }
-       
-        var i: Int
-        for (i = self.mileageCells.count - 1; i >= 0; i--) {
-            container.addSubview(self.mileageCells[i])
-        }
-        
-        // Track the mileage cells in the summary.
-        summary.cells = self.mileageCells
-        container.addSubview(summary)
-        self.updateSummary()
+//        let height:CGFloat = 50.0
+//        
+//        let beginDate = self.sunday
+//        let endDate = sunday.nextDay(increment: 6)
+//        
+//        let summary = SummaryCell.createCell(height * 1.75, cellWidth: self.view.bounds.width, cellY: ypos, beginDate: beginDate.date, endDate: endDate.date)
+//        self.summaryCell = summary
+//        
+//        // Add a right swipe gesture to the header.
+//        let swipeRight = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
+//        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
+//        summary.addGestureRecognizer(swipeRight)
+//        
+//        // Add a left swipe gesture to the header.
+//        let swipeLeft = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
+//        swipeRight.direction = UISwipeGestureRecognizerDirection.Left
+//        summary.addGestureRecognizer(swipeLeft)
+//        
+//        // Start the rocker cells at the bottom of the summary.
+//        ypos += summary.frame.height
+//        
+//        // Add a view behind the cells for hidden features.
+//        let actions = UIView(frame: CGRect(x: 0, y: ypos, width: container.frame.width, height: container.frame.height - summary.frame.height))
+//        self.actionView = actions
+//        container.addSubview(actions)
+//
+//        // Add rocker cells for each day of the week.
+//        var dayNum = self.sunday
+//        var cell = RockerCell()
+//        let format = NSDateFormatter()
+//        format.dateFormat = "EEEE"
+//        for day in self.daysOfWeek {
+//            cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: self.cellPosOffScreen, day: dayNum, summary: summary, controller: self, store: self.mileageStore, routeStore: self.routeStore)
+//            cell.finalY = ypos
+//            //self.view.addSubview(cell)
+//            self.mileageCells.append(cell)
+//            ypos = ypos + height
+//            dayNum = dayNum.nextDay()
+//        }
+//       
+//        var i: Int
+//        for (i = self.mileageCells.count - 1; i >= 0; i--) {
+//            container.addSubview(self.mileageCells[i])
+//        }
+//        
+//        // Track the mileage cells in the summary.
+//        summary.cells = self.mileageCells
+//        container.addSubview(summary)
+//        self.updateSummary()
         
          // Add a Run button
         ypos += 10
@@ -193,7 +209,6 @@ class ViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         // Display the cells and possibly the help page.
         if !self.presented {
-            self.rollCellsDown()
             self.checkVersionChange()
             self.presented = true
         }
@@ -237,29 +252,6 @@ class ViewController: UIViewController {
             self.modalRouteId = id
         }
         self.launchRouteView()
-    }
-    
-    /*!
-     * Rolls all of the cells down into view.
-     */
-    func rollCellsDown() {
-        let s = Double(0.3)
-        var i = 1;
-        let t = self.mileageCells.count
-        for cell in self.mileageCells {
-            var speed = Double(i)/Double(t)
-            UIView.animateWithDuration(s * speed, animations: {cell.center.y = cell.finalY + (cell.frame.height/2)})
-            i++
-        }
-    }
-    
-    /*!
-     * Rolls all of the cells up behind the summary.
-     */
-    func rollCellsUp() {
-        for cell in self.mileageCells {
-            UIView.animateWithDuration(0.5, animations: {cell.center.y = self.cellPosOffScreen + (cell.frame.height/2) + 5})
-        }
     }
     
     /*!
@@ -311,30 +303,6 @@ class ViewController: UIViewController {
         }
     }
     
-    /*!
-     * Close all RockerCell covers except for the specified one.
-     *
-     * @param RockerCell except.
-     *   The cell to skip as it's probably the one being opened.
-     * @param Double duration.
-     *   The duration of the animation to close the cells.
-     */
-    func closeAllRockersExcept(except: RockerCell? = nil, duration: Double = 0.1) {
-        for cell in self.mileageCells {
-            if var e = except? {
-                if cell.dayNum!.number == e.dayNum!.number {
-                    // @todo ambigious use of !=
-                }
-                else {
-                    cell.closeCover(duration: duration)
-                }
-            }
-            else {
-                cell.closeCover(duration: duration)
-            }
-        }
-    }
-    
     override func shouldAutorotate()->Bool {
       return false
     }
@@ -343,17 +311,6 @@ class ViewController: UIViewController {
         return Int(UIInterfaceOrientationMask.Portrait.toRaw())
     }
     
-    /*!
-     * Updates the associated summary cell to use the most recent values.
-     *
-     * @return void
-     */
-    func updateSummary() {
-        let summary = self.summaryCell! as SummaryCell
-        summary.updateValues()
-        summary.setNeedsDisplay()
-    }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -364,28 +321,21 @@ class ViewController: UIViewController {
      *
      * @return void
      */
-    func updateHeader() {
-        let header = self.summaryCell! as SummaryCell
+    func updateDay() {
         var date = self.sunday
-        let endDate = date.nextDay(increment: 6)
-        // @todo update summary to use JLDate
-        header.updateDate(date.date, endDate: endDate.date)
-        for cell in self.mileageCells {
-            cell.updateDate(date)
-            date = date.nextDay()
+        if let s = self.summaryView? {
+            s.updateView(date)
         }
-            
-        self.updateSummary()
     }
     
     /*!
-     * Handle the horizontal swiping of the date header.
+     * Handle the horizontal swiping to change date.
      *
      * @param gesture
      *
      * @return void
      */
-    func headerSwipe(gesture: UIGestureRecognizer) {
+    func changeDaySwipe(gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.Left:
@@ -398,8 +348,7 @@ class ViewController: UIViewController {
                 break;
             }
             
-            self.closeAllRockersExcept(except: nil)
-            self.updateHeader()
+            self.updateDay()
         }
     }
 

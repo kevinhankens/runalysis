@@ -54,15 +54,6 @@ class NoteView : UIView, UITextViewDelegate {
         noteLabel.textColor = GlobalTheme.getNormalTextColor()
         noteLabel.text = ""
         container.label = noteLabel
-        
-        let daySwipeLeft = UISwipeGestureRecognizer(target: container, action: "daySwipeGesture:")
-        daySwipeLeft.direction = UISwipeGestureRecognizerDirection.Left
-        container.addGestureRecognizer(daySwipeLeft)
-        
-        let daySwipeRight = UISwipeGestureRecognizer(target: container, action: "daySwipeGesture:")
-        daySwipeRight.direction = UISwipeGestureRecognizerDirection.Right
-        container.addGestureRecognizer(daySwipeRight)
-        
         container.addSubview(noteLabel)
         
         ypos += noteLabel.frame.height + 10
@@ -89,32 +80,7 @@ class NoteView : UIView, UITextViewDelegate {
             n.resignFirstResponder()
         }
     }
-    
-    /*!
-     * Handle a swipe gesture on the view.
-     * 
-     * @param UIGestureRecognizer gesture
-     *
-     * @return void
-     */
-    func daySwipeGesture(gesture: UIGestureRecognizer) {
-        if let g = gesture as? UISwipeGestureRecognizer {
-            // Update the day of the note.
-            var day = self.dayNum!
-            switch g.direction {
-            case UISwipeGestureRecognizerDirection.Left:
-                day = self.dayNum!.nextDay(increment: 1)
-                break;
-            case UISwipeGestureRecognizerDirection.Right:
-                day = self.dayNum!.prevDay(increment: 1)
-                break;
-            default:
-                break;
-            }
-            self.saveNote()
-            self.updateDay(day)
-        }
-    }
+
   
     /*!
      * Updates the currently viewed day.
