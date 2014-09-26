@@ -26,6 +26,8 @@ class NoteView : UIView, UITextViewDelegate {
     // Tracks the label on the page.
     var label: UILabel?
     
+    var labelHi: UILabel?
+    
     // The note that should be saved to the db.
     var note: UITextView?
     
@@ -49,12 +51,18 @@ class NoteView : UIView, UITextViewDelegate {
         
         var ypos = CGFloat(10.0)
         
-        // @todo add a swipe gesture to move the daynum and possibly the week.
         let noteLabel = UILabel(frame: CGRect(x: 10, y: ypos, width: container.bounds.width - 10, height: 20.00))
         noteLabel.textColor = GlobalTheme.getNormalTextColor()
         noteLabel.text = ""
         container.label = noteLabel
         container.addSubview(noteLabel)
+        
+        let noteLabelHi = UILabel(frame: CGRect(x: 10, y: ypos, width: container.bounds.width - 10, height: 20.00))
+        noteLabelHi.textColor = GlobalTheme.getNormalTextAlertColor()
+        noteLabelHi.alpha = 0.0
+        noteLabelHi.text = ""
+        container.labelHi = noteLabelHi
+        container.addSubview(noteLabelHi)
         
         ypos += noteLabel.frame.height + 10
         
@@ -94,7 +102,13 @@ class NoteView : UIView, UITextViewDelegate {
         let mileageData = self.store!.getMileageForDate(self.dayNum!)
         
         if let l = self.label? {
-            l.text = day.toStringMedium()
+            if let lh = self.labelHi? {
+                let text = day.toStringMedium()
+                l.text = text
+                lh.text = text
+                lh.alpha = 1.0
+                UIView.animateWithDuration(1.0, animations: {lh.alpha = 0.0})
+            }
         }
         
         if let n = self.note? {

@@ -51,6 +51,10 @@ class GlobalTheme {
         return self.getSpeedFour()
     }
     
+    class func getNormalTextAlertColor()->UIColor {
+        return self.getSpeedFive()
+    }
+    
     /*!
      * Retrieves the color for the "start" controls.
      *

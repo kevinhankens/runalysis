@@ -17,6 +17,8 @@ class WeekSummaryView: UIView {
     
     var dateLabel: UILabel?
     
+    var dateLabelAlert: UILabel?
+    
     var mileageStore: MileageStore?
     
     var routeStore: RouteStore?
@@ -41,12 +43,20 @@ class WeekSummaryView: UIView {
         
         var ypos = CGFloat(0)
         
-        let dateView = UILabel(frame: CGRect(x: 10, y: ypos, width: container.bounds.width - 20, height: 30))
+        let dateView = UILabel(frame: CGRect(x: 0, y: ypos, width: container.bounds.width, height: 30))
         dateView.textColor = GlobalTheme.getNormalTextColor()
         dateView.textAlignment = NSTextAlignment.Center
         container.dateLabel = dateView
         container.setDateLabel()
         container.addSubview(dateView)
+        
+        let dateViewHi = UILabel(frame: CGRect(x: 0, y: ypos, width: container.bounds.width, height: 30))
+        dateViewHi.textColor = GlobalTheme.getNormalTextAlertColor()
+        dateViewHi.textAlignment = NSTextAlignment.Center
+        dateViewHi.alpha = 0.0
+        container.dateLabelAlert = dateViewHi
+        container.setDateLabel()
+        container.addSubview(dateViewHi)
         
         // Space for the graphic.
         container.headerMinY = ypos + dateView.frame.height
@@ -71,10 +81,17 @@ class WeekSummaryView: UIView {
     
     func setDateLabel() {
         let endDate = self.sunday.nextDay(increment: 6)
-        let v = self.dateLabel!
-        let format = NSDateFormatter()
-        format.dateFormat = JLDate.getDateFormatMonthDay()
-        v.text = "< \(format.stringFromDate(self.sunday.date)) - \(format.stringFromDate(endDate.date)) >"
+        if let v = self.dateLabel? {
+            if let vh = self.dateLabelAlert? {
+                let format = NSDateFormatter()
+                format.dateFormat = JLDate.getDateFormatMonthDay()
+                let text = "< \(format.stringFromDate(self.sunday.date)) - \(format.stringFromDate(endDate.date)) >"
+                v.text = text
+                vh.text = text
+                vh.alpha = 1.0
+                UIView.animateWithDuration(1.0, animations: {vh.alpha = 0.0})
+            }
+        }
     }
     
     override func drawRect(rect: CGRect) {

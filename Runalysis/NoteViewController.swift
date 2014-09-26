@@ -201,7 +201,7 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         super.viewDidAppear(animated)
         if let n = self.noteView? {
             if let textview = n.note? {
-                textview.becomeFirstResponder()
+                //textview.becomeFirstResponder()
             }
         }
     }
