@@ -282,12 +282,14 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         var rect = CGRect(x: 0, y: 0, width: 40, height: 20)
         switch component {
         case 0, 2:
-            rect = CGRect(x: 0, y: 0, width: self.pickerWidthLeft, height: 20)
+            rect = CGRect(x: 0, y: 0, width: self.pickerWidthLeft, height: 25)
             label.textAlignment = NSTextAlignment.Right
+            label.font = UIFont.systemFontOfSize(25.0)
             label.text = "\(row)."
         case 1, 3:
-            rect = CGRect(x: 0, y: 0, width: self.pickerWidthRight, height: 20)
+            rect = CGRect(x: 0, y: 0, width: self.pickerWidthRight, height: 25)
             label.textAlignment = NSTextAlignment.Left
+            label.font = UIFont.systemFontOfSize(25.0)
             let rowval = Double(row)/Double(20)
             let rowint = Int(round(rowval * 100))
             var rowtext = "\(rowint)"

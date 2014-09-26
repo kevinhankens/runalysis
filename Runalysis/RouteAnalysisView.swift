@@ -53,6 +53,7 @@ class RouteAnalysisView: UIView {
         let dl = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 20))
         dl.text = "-"
         dl.textColor = GlobalTheme.getNormalTextColor()
+        dl.font = GlobalTheme.getNormalFont()
         rav.labelDate = dl
         rav.addSubview(dl)
         
@@ -70,6 +71,7 @@ class RouteAnalysisView: UIView {
         let tl = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 20))
         tl.text = "-"
         tl.textColor = GlobalTheme.getNormalTextColor()
+        tl.font = GlobalTheme.getNormalFont()
         rav.labelTimer = tl
         rav.addSubview(tl)
         

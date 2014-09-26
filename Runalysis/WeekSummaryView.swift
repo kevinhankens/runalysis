@@ -42,16 +42,19 @@ class WeekSummaryView: UIView {
         container.controller = controller
         
         var ypos = CGFloat(0)
+        let height = GlobalTheme.getNormalFontHeight()
         
-        let dateView = UILabel(frame: CGRect(x: 0, y: ypos, width: container.bounds.width, height: 30))
+        let dateView = UILabel(frame: CGRect(x: 45, y: ypos, width: container.bounds.width - 90, height: height))
         dateView.textColor = GlobalTheme.getNormalTextColor()
+        dateView.font = GlobalTheme.getNormalFont()
         dateView.textAlignment = NSTextAlignment.Center
         container.dateLabel = dateView
         container.setDateLabel()
         container.addSubview(dateView)
         
-        let dateViewHi = UILabel(frame: CGRect(x: 0, y: ypos, width: container.bounds.width, height: 30))
+        let dateViewHi = UILabel(frame: CGRect(x: 0, y: ypos, width: container.bounds.width, height: height))
         dateViewHi.textColor = GlobalTheme.getNormalTextAlertColor()
+        dateViewHi.font = GlobalTheme.getNormalFont()
         dateViewHi.textAlignment = NSTextAlignment.Center
         dateViewHi.alpha = 0.0
         container.dateLabelAlert = dateViewHi
@@ -59,7 +62,7 @@ class WeekSummaryView: UIView {
         container.addSubview(dateViewHi)
         
         // Space for the graphic.
-        container.headerMinY = ypos + dateView.frame.height
+        container.headerMinY = ypos + dateView.frame.height + 10
         ypos = container.headerMinY + container.headerHeight + 10
         
         var dayNum = container.sunday
@@ -89,7 +92,7 @@ class WeekSummaryView: UIView {
                 v.text = text
                 vh.text = text
                 vh.alpha = 1.0
-                UIView.animateWithDuration(1.0, animations: {vh.alpha = 0.0})
+                UIView.animateWithDuration(0.75, animations: {vh.alpha = 0.0})
             }
         }
     }

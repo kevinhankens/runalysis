@@ -32,6 +32,7 @@ class MileSummaryView: UIView {
                 var l = UILabel(frame: CGRectMake(10, ypos, self.bounds.width, self.labelHeight))
                 l.text = "\(self.formatLabel(count, duration: time))"
                 l.textColor = GlobalTheme.getNormalTextColor()
+                l.font = GlobalTheme.getNormalFont()
                 self.mileLabels.append(l)
                 self.addSubview(l)
                 ypos += l.frame.height + 5

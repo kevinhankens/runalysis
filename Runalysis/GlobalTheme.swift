@@ -149,4 +149,11 @@ class GlobalTheme {
         return UIColor(red: 66/255, green: 255/255, blue: 66/255, alpha: 1.0)
     }
     
+    class func getNormalFont()->UIFont {
+        return UIFont.systemFontOfSize(18)
+    }
+    
+    class func getNormalFontHeight()->CGFloat {
+        return CGFloat(25.0)
+    }
 }

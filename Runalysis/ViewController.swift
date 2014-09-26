@@ -178,7 +178,19 @@ class ViewController: UIViewController {
         self.latestButton = latestButton
         container.addSubview(latestButton)
         
-        self.scrollContentHeight = ypos + CGFloat(runButton.frame.height)
+        ypos += CGFloat(runButton.frame.height) + 40
+        
+        // Add the help/config button
+        let runalysisButton = UIButton()
+        runalysisButton.frame = CGRectMake(container.bounds.width - container.bounds.width/4 - 17.5, ypos, 35, 35.00)
+        let runalysisImage = UIImage(named: "RunalysisButton")
+        runalysisButton.setImage(runalysisImage, forState: UIControlState.Normal)
+        runalysisButton.sizeToFit()
+        var rf = CGRectMake(runalysisButton.frame.minX, runalysisButton.frame.minY, runalysisButton.frame.width, runalysisButton.frame.height)
+        runalysisButton.frame = rf
+        container.addSubview(runalysisButton)
+        
+        self.scrollContentHeight = ypos + runalysisButton.frame.height + 10
         self.scrollView = container
         self.view.addSubview(container)
         

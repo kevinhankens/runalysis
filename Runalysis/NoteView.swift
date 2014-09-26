@@ -53,12 +53,14 @@ class NoteView : UIView, UITextViewDelegate {
         
         let noteLabel = UILabel(frame: CGRect(x: 10, y: ypos, width: container.bounds.width - 10, height: 20.00))
         noteLabel.textColor = GlobalTheme.getNormalTextColor()
+        noteLabel.font = GlobalTheme.getNormalFont()
         noteLabel.text = ""
         container.label = noteLabel
         container.addSubview(noteLabel)
         
         let noteLabelHi = UILabel(frame: CGRect(x: 10, y: ypos, width: container.bounds.width - 10, height: 20.00))
         noteLabelHi.textColor = GlobalTheme.getNormalTextAlertColor()
+        noteLabelHi.font = GlobalTheme.getNormalFont()
         noteLabelHi.alpha = 0.0
         noteLabelHi.text = ""
         container.labelHi = noteLabelHi
@@ -107,7 +109,7 @@ class NoteView : UIView, UITextViewDelegate {
                 l.text = text
                 lh.text = text
                 lh.alpha = 1.0
-                UIView.animateWithDuration(1.0, animations: {lh.alpha = 0.0})
+                UIView.animateWithDuration(0.75, animations: {lh.alpha = 0.0})
             }
         }
         
