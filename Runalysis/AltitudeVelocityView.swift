@@ -159,8 +159,8 @@ class AltitudeVelocityView: UIView {
                     
                     if let p = point as? Route {
                         // Altitude.
-                        cay = self.frame.height - (CGFloat(p.altitude.doubleValue - self.aLow) * self.aScale)
-                        CGContextAddLineToPoint(context, cx, cay);
+                        cay = self.frame.height - (CGFloat(p.altitude.doubleValue - self.aLow)/2 * self.aScale)
+                        CGContextAddLineToPoint(context, cx, cay)
                         pay = cay
                     
                     }

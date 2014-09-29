@@ -169,7 +169,7 @@ class ViewController: UIViewController {
         // Add a Run button
         let latestButton = UIButton()
         latestButton.frame = CGRectMake(self.view.bounds.width/2, ypos, self.view.bounds.width/2, 35.00)
-        latestButton.setTitle("Latest", forState: UIControlState.Normal)
+        latestButton.setTitle("Review", forState: UIControlState.Normal)
         latestButton.setTitleColor(GlobalTheme.getRecentTextColor(), forState: UIControlState.Normal)
         latestButton.titleLabel?.textAlignment = NSTextAlignment.Center
         latestButton.backgroundColor = GlobalTheme.getBackgroundColor()

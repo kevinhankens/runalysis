@@ -82,9 +82,10 @@ class RunView: UIView, CLLocationManagerDelegate {
             
         // Control button for recording the run.
         let record = UIButton()
-        record.frame = CGRectMake(0, ypos, runView.bounds.width, 45.00)
+        record.frame = CGRectMake(10, ypos, runView.bounds.width - 20, 45.00)
         record.setTitle("Start", forState: UIControlState.Normal)
         record.setTitleColor(GlobalTheme.getStartTextColor(), forState: UIControlState.Normal)
+        record.backgroundColor = GlobalTheme.getStartBgColor()
         record.titleLabel?.font = UIFont.systemFontOfSize(45.0)
         //record.backgroundColor = GlobalTheme.getBackgroundColor()
         //record.sizeToFit()
@@ -158,6 +159,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             self.recording = false
             sender.setTitle("Resume", forState: UIControlState.Normal)
             sender.setTitleColor(GlobalTheme.getStartTextColor(), forState: UIControlState.Normal)
+            sender.backgroundColor = GlobalTheme.getStartBgColor()
             if (self.locationManager != nil) {
                 if let loc = self.locationManager? {
                     // @todo protect unwrapping nil.
@@ -174,6 +176,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             self.recording = true
             sender.setTitle("Pause", forState: UIControlState.Normal)
             sender.setTitleColor(GlobalTheme.getStopTextColor(), forState: UIControlState.Normal)
+            sender.backgroundColor = GlobalTheme.getStopBgColor()
             self.lastUpdateTime = NSDate.date()
             if (self.locationManager != nil) {
                 if let loc = self.locationManager? {

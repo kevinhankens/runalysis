@@ -65,6 +65,10 @@ class GlobalTheme {
      * @return UIColor
      */
     class func getStartTextColor()->UIColor {
+        return UIColor.blackColor()
+    }
+    
+    class func getStartBgColor()->UIColor {
         return self.getSpeedFive()
     }
     
@@ -74,6 +78,10 @@ class GlobalTheme {
      * @return UIColor
      */
     class func getStopTextColor()->UIColor {
+        return UIColor.blackColor()
+    }
+    
+    class func getStopBgColor()->UIColor {
         return self.getSpeedOne()
     }
     
@@ -101,7 +109,7 @@ class GlobalTheme {
      * @return UIColor
      */
     class func getRecentTextColor()->UIColor {
-        return self.getSpeedThree()
+        return self.getSpeedOne()
     }
     
     /*!
