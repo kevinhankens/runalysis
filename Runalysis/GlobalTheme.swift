@@ -39,6 +39,10 @@ class GlobalTheme {
         return UIColor.whiteColor()
     }
     
+    class func getInvertedTextColor()->UIColor {
+        return UIColor.blackColor()
+    }
+    
     class func getBackButtonTextColor()->UIColor {
         return self.getSpeedThree()
     }

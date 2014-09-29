@@ -181,9 +181,11 @@ class ViewController: UIViewController {
         ypos += CGFloat(runButton.frame.height) + 40
         
         // Add the help/config button
+        let iconSize = CGFloat(36)
         let runalysisButton = UIButton()
-        runalysisButton.frame = CGRectMake(container.bounds.width - container.bounds.width/4 - 17.5, ypos, 35, 35.00)
+        runalysisButton.frame = CGRectMake(container.bounds.width - container.bounds.width/4 - (iconSize/2), ypos, iconSize, iconSize)
         let runalysisImage = UIImage(named: "RunalysisButton")
+        runalysisButton.addTarget(self, action: "displayConfigViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
         runalysisButton.setImage(runalysisImage, forState: UIControlState.Normal)
         runalysisButton.sizeToFit()
         var rf = CGRectMake(runalysisButton.frame.minX, runalysisButton.frame.minY, runalysisButton.frame.width, runalysisButton.frame.height)
@@ -250,6 +252,10 @@ class ViewController: UIViewController {
     
     func launchNoteView() {
         self.performSegueWithIdentifier("noteViewSegue", sender: self)
+    }
+    
+    func displayConfigViewFromButton(button: UIButton) {
+        displayHelpView()
     }
     
     /*!

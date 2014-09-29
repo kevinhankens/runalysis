@@ -29,36 +29,49 @@ class HelpView: UIView {
         
         container.backgroundColor = GlobalTheme.getOverlayBackgroundColor()
         
-        // Content view.
+        var ypos = CGFloat(10)
+        
+         // Content view.
         let content = UIView()
         
-        let rockerHowto = UITextView(frame: CGRect(x: 0, y: 0, width: container.bounds.width - 15, height: 50.00))
+        let iconSize = CGFloat(36)
+        let runalysisImage = UIImage(named: "RunalysisButton")
+        let icon = UIImageView(image: runalysisImage)
+        icon.frame = CGRectMake(10, ypos, iconSize, iconSize)
+        content.addSubview(icon)
+        
+        ypos += icon.frame.height + 10
+       
+        let rockerHowto = UITextView(frame: CGRect(x: 20, y: ypos, width: container.bounds.width - 50, height: container.bounds.width))
         // @todo localize.
-        rockerHowto.text = "Welcome to Jog Log! Swipe the date at the top of the screen to change the week then swipe each day to set your planned and actual mileage."
+        rockerHowto.font = GlobalTheme.getNormalFont()
+        rockerHowto.text = "Swipe side to side to change the week. Tap the day to set the goal/actual mileage. Tap Run to track your workout. Tap Latest to view your most recent workouts."
+        rockerHowto.editable = false
         rockerHowto.textColor = GlobalTheme.getNormalTextColor()
         rockerHowto.backgroundColor = GlobalTheme.getBackgroundColor()
         rockerHowto.sizeToFit()
         content.addSubview(rockerHowto)
         
+        ypos += rockerHowto.frame.height + 10
+        
         // Confirmation buttons.
-        let bpos = rockerHowto.center.y + rockerHowto.frame.height/2 + 15
         let backButton = UIButton()
-        backButton.frame = CGRectMake(5, bpos, container.bounds.width/2, 20.00)
+        backButton.frame = CGRectMake(20, ypos, container.bounds.width/2, 20.00)
         backButton.setTitle("Ok, got it!", forState: UIControlState.Normal)
-        backButton.setTitleColor(GlobalTheme.getNormalTextColor(), forState: UIControlState.Normal)
-        backButton.backgroundColor = GlobalTheme.getPlannedColor()
+        backButton.setTitleColor(GlobalTheme.getRunTextColor(), forState: UIControlState.Normal)
+        backButton.titleLabel!.font = UIFont.systemFontOfSize(25.0)
         backButton.addTarget(container, action: "closeHelpView:", forControlEvents: UIControlEvents.TouchUpInside)
-        backButton.layer.cornerRadius = 2;
-        backButton.layer.borderWidth = 1;
         //backButton.layer.borderColor = GlobalTheme.getPlannedColor().CGColor
         content.addSubview(backButton)
         
+        ypos += backButton.frame.height + 30
+        
         // Add some style and a frame to the content.
-        content.layer.cornerRadius = 2
-        content.layer.borderWidth = 1
-        content.layer.borderColor = GlobalTheme.getActualColor().CGColor
+        //content.layer.cornerRadius = 2
+        //content.layer.borderWidth = 1
+        //content.layer.borderColor = GlobalTheme.getActualColor().CGColor
         content.backgroundColor = GlobalTheme.getBackgroundColor()
-        content.frame = CGRectMake(10, 150, container.bounds.width - 15, rockerHowto.frame.height + backButton.frame.height + 20)
+        content.frame = CGRectMake(10, 150, container.bounds.width - 20, ypos)
         container.addSubview(content)
         
         return container

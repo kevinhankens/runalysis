@@ -12,6 +12,8 @@ import UIKit
 class WeekSummaryView: UIView {
     
     var summaryCells: [WeekSummaryCell] = []
+    
+    var totalCell: WeekSummaryCell?
 
     var mileage: [Mileage] = []
     
@@ -67,19 +69,39 @@ class WeekSummaryView: UIView {
         
         var dayNum = container.sunday
         for day in container.daysOfWeek {
-            let dayView = WeekSummaryCell.createWeekSummaryCell(CGRectMake(0, ypos, container.frame.width, 30), mileageStore: mileageStore, routeStore: routeStore, dayNum: dayNum, controller: controller)
+            let dayView = WeekSummaryCell.createWeekSummaryCell(CGRectMake(0, ypos, container.frame.width, 30), dayNum: dayNum, title: dayNum.toStringDay())
             container.summaryCells.append(dayView)
             container.addSubview(dayView)
+            
+            let tap = UITapGestureRecognizer(target: container, action: "respondToTapGesture:")
+            dayView.addGestureRecognizer(tap)
 
             ypos += dayView.frame.height + CGFloat(10)
             dayNum = dayNum.nextDay()
         }
+        
+        let total = WeekSummaryCell.createWeekSummaryCell(CGRectMake(0, ypos, container.frame.width, 30), dayNum: dayNum, title: "")
+        ypos += total.frame.height
+        container.totalCell = total
+        container.addSubview(total)
+        
+        container.updateView(sunday)
         
         var f = CGRectMake(container.frame.minX, container.frame.minY, container.frame.width, ypos)
         container.frame = f
         container.sizeToFit()
     
         return container
+    }
+    
+    func respondToTapGesture(tap: UITapGestureRecognizer) {
+        if let c = self.controller as? ViewController {
+            if let v = tap.view as? WeekSummaryCell {
+                c.modalDayNum = v.dayNum
+                c.modalRouteId = v.dayNum.number
+                c.launchNoteView()
+            }
+        }
     }
     
     func setDateLabel() {
@@ -168,12 +190,32 @@ class WeekSummaryView: UIView {
     func updateView(sunday: JLDate) {
         self.sunday = sunday
         self.setDateLabel()
-        var day = sunday
-        for cell in self.summaryCells {
-            cell.dayNum = day
-            cell.updateValues()
-            day = day.nextDay(increment: 1)
+        
+        var dayNum = self.sunday
+        var plannedTotal = Double(0)
+        var actualTotal = Double(0)
+        
+        if let store = self.mileageStore? {
+            var i = 0
+            for i = 0; i < 7; i++ {
+                var cell = self.summaryCells[i]
+                var mileage = store.getMileageForDate(dayNum)
+                dayNum = dayNum.nextDay(increment: 1)
+                cell.actualValue = mileage.mileageActual.doubleValue
+                cell.plannedValue = mileage.mileagePlanned.doubleValue
+                plannedTotal += mileage.mileagePlanned.doubleValue
+                actualTotal += mileage.mileageActual.doubleValue
+                cell.updateValues()
+            }
         }
+        
+        // @todo update values of total cell
+        if let total = self.totalCell? {
+            total.plannedValue = plannedTotal
+            total.actualValue = actualTotal
+            total.updateValues()
+        }
+        
         self.setNeedsDisplay()
     }
     

@@ -297,7 +297,7 @@ class RunView: UIView, CLLocationManagerDelegate {
     func stopRecordingAndDisplayLocationAlert() {
         self.recording = false
         self.failed = true
-        let alert = UIAlertView(title: "Location Error", message: "The GPS signal appears to have been lost. Tracking has been aborted.", delegate: nil, cancelButtonTitle: "OK")
+        let alert = UIAlertView(title: "Location Error", message: "Your location is unavailable, possibly due to your privacy settings. Please check your system settings under Privacy > Location Services.", delegate: nil, cancelButtonTitle: "OK")
         alert.show()
     }
     

@@ -10,13 +10,9 @@ import Foundation
 import UIKit
 
 class WeekSummaryCell: UIView {
-
+    
     var dayNum: JLDate = JLDate.createFromDate(NSDate())
-    
-    var mileageStore: MileageStore?
-    
-    var routeStore: RouteStore?
-    
+
     var plannedLabel: UILabel?
     
     var plannedLabelHi: UILabel?
@@ -29,25 +25,21 @@ class WeekSummaryCell: UIView {
     
     var actualValue: Double = 0
     
-    var controller: UIViewController?
+    var title: String = ""
     
-    class func createWeekSummaryCell(frame: CGRect, mileageStore: MileageStore, routeStore: RouteStore, dayNum: JLDate, controller: UIViewController)->WeekSummaryCell {
+    class func createWeekSummaryCell(frame: CGRect, dayNum: JLDate, title: String)->WeekSummaryCell {
         
         let container = WeekSummaryCell(frame: frame)
         container.dayNum = dayNum
-        container.mileageStore = mileageStore
-        container.routeStore = routeStore
-        container.controller = controller
+        container.title = title
         
         var xpos = CGFloat(0)
         var height = GlobalTheme.getNormalFontHeight()
         
-        let mileage = container.mileageStore!.getMileageForDate(dayNum)
-        
         let dayView = UILabel(frame: CGRect(x: xpos, y: 0, width: container.bounds.width/2, height: height))
+        dayView.text = title
         dayView.font = GlobalTheme.getNormalFont()
         dayView.textColor = GlobalTheme.getNormalTextColor()
-        dayView.text = dayNum.toStringDay()
         dayView.textAlignment = NSTextAlignment.Center
         container.addSubview(dayView)
         
@@ -95,37 +87,25 @@ class WeekSummaryCell: UIView {
         
         container.updateValues()
         
-        let tap = UITapGestureRecognizer(target: container, action: "respondToTapGesture:")
-        container.addGestureRecognizer(tap)
+
     
         return container
     }
     
-    func respondToTapGesture(tap: UITapGestureRecognizer) {
-        if let c = self.controller as? ViewController {
-            c.modalDayNum = self.dayNum
-            c.modalRouteId = self.dayNum.number
-            c.launchNoteView()
-        }
-    }
-    
     func updateValues() {
-        let mileage = self.mileageStore!.getMileageForDate(dayNum)
-        
-        self.plannedValue = mileage.mileagePlanned.doubleValue
         if let p = self.plannedLabel? {
             if let ph = self.plannedLabelHi? {
-                let text = self.getMileageLabel(mileage.mileagePlanned.doubleValue)
+                let text = self.getMileageLabel(self.plannedValue)
                 p.text = text
                 ph.text = text
                 ph.alpha = 1.0
                 UIView.animateWithDuration(0.75, animations: {ph.alpha = 0.0})
             }
         }
-        self.actualValue = mileage.mileageActual.doubleValue
+        
         if let a = self.actualLabel? {
             if let ah = self.actualLabelHi? {
-                let text = self.getMileageLabel(mileage.mileageActual.doubleValue)
+                let text = self.getMileageLabel(self.actualValue)
                 a.text = text
                 ah.text = text
                 ah.alpha = 1.0
