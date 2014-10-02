@@ -178,7 +178,7 @@ class ViewController: UIViewController {
         self.latestButton = latestButton
         container.addSubview(latestButton)
         
-        ypos += CGFloat(runButton.frame.height) + 40
+        ypos += CGFloat(runButton.frame.height) + 30
         
         // Add the help/config button
         let iconSize = CGFloat(36)

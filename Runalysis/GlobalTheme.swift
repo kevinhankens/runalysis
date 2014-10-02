@@ -59,6 +59,18 @@ class GlobalTheme {
         return self.getSpeedFive()
     }
     
+    class func getAccuracyPoorColor()->UIColor {
+        return self.getSpeedOne()
+    }
+    
+    class func getAccuracyOkColor()->UIColor {
+        return self.getSpeedThree()
+    }
+    
+    class func getAccuracyGoodColor()->UIColor {
+        return self.getSpeedFive()
+    }
+    
     /*!
      * Retrieves the color for the "start" controls.
      *

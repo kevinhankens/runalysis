@@ -51,6 +51,8 @@ class RunView: UIView, CLLocationManagerDelegate {
     // Tracks the duration of the entire run.
     var duration: NSTimeInterval = NSDate().timeIntervalSinceNow
     
+    var accuracy: UILabel?
+    
     /*!
      * Factory method to create a RunView.
      *
@@ -110,6 +112,16 @@ class RunView: UIView, CLLocationManagerDelegate {
         ypos = ypos + rav.frame.height + 10
             
         record.frame.origin.y = routeView.frame.minY + (routeView.frame.height/2)
+            
+        let signal = UILabel(frame: CGRectMake(10, record.frame.minY - 25, runView.frame.width - 20, 25))
+        signal.text = "Retrieving Accuracy"
+        signal.textColor = GlobalTheme.getInvertedTextColor()
+        signal.backgroundColor = GlobalTheme.getAccuracyOkColor()
+        signal.font = GlobalTheme.getNormalFont()
+        signal.textAlignment = NSTextAlignment.Center
+        runView.accuracy = signal
+        runView.addSubview(signal)
+            
         runView.bringSubviewToFront(record)
             
         runView.stopwatch = NSTimer.scheduledTimerWithTimeInterval(0.1, target: runView, selector: Selector("updateStopwatch"), userInfo: nil, repeats: true)
@@ -203,6 +215,23 @@ class RunView: UIView, CLLocationManagerDelegate {
         return "lat: \(coord.latitude) x long: \(coord.longitude)"
     }
     
+    func setAccuracyLabel(accuracy: CLLocationAccuracy) {
+        if let a = self.accuracy? {
+            if accuracy < Double(20) {
+                a.backgroundColor = GlobalTheme.getAccuracyGoodColor()
+                a.text = "Accuracy: Good"
+            }
+            else if accuracy < Double(50) {
+                a.backgroundColor = GlobalTheme.getAccuracyGoodColor()
+                a.text = "Accuracy: Fair"
+            }
+            else {
+                a.backgroundColor = GlobalTheme.getAccuracyGoodColor()
+                a.text = "Accuracy: Poor"
+            }
+        }
+    }
+    
     /*!
      * CLLocationManager delegate.
      *
@@ -215,10 +244,13 @@ class RunView: UIView, CLLocationManagerDelegate {
         var locationObj = locationArray.lastObject as CLLocation
         var coord = locationObj.coordinate
         var interval: NSTimeInterval = 0.0
-       
-        if self.recording {
-            interval = fabs(self.lastUpdateTime.timeIntervalSinceDate(locationObj.timestamp))
-            if (interval > self.updateInterval) {
+        
+        interval = fabs(self.lastUpdateTime.timeIntervalSinceDate(locationObj.timestamp))
+        if (interval > self.updateInterval) {
+            
+            setAccuracyLabel(locationObj.horizontalAccuracy)
+            
+            if self.recording {
                 if (self.prev.coordinate.latitude != coord.latitude || self.prev.coordinate.longitude != coord.longitude) {
                     self.storePoint(locationObj, interval: interval)
                 }

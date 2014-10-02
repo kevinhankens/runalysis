@@ -117,12 +117,26 @@ class WeekSummaryCell: UIView {
     func getMileageLabel(miles: Double)->String {
         var mval = Int(miles)
         var dval = Int(round((miles - Double(mval)) * 100))
-        var dtext = "\(dval)"
-        if dval < 10 {
-            dtext = "0\(dval)"
+        
+        var mtext = "\(mval)"
+        var dtext = " "
+        
+        if dval > 50 {
+            mtext = "\((mval + 1))"
+            dtext = "-"
+        }
+        else if dval > 0 {
+            dtext = "+"
         }
         
-        return "\(Int(miles)).\(dtext)"
+        return "\(mtext)\(dtext)"
+        
+        //var dtext = "\(dval)"
+        //if dval < 10 {
+            //dtext = "0\(dval)"
+        //}
+        
+        //return "\(Int(miles)).\(dtext)"
     }
 
 }
