@@ -47,7 +47,8 @@ class RouteStore: NSObject {
      */
     func storeRoutePoint(routeid: NSNumber, date: NSNumber, latitude: NSNumber, longitude: NSNumber, altitude: NSNumber, velocity: NSNumber, distance_traveled: NSNumber, interval: NSNumber, steps: NSNumber)->Route {
         
-        var route = NSEntityDescription.insertNewObjectForEntityForName("Route", inManagedObjectContext: self.context) as Route
+        let routeEntity: NSString = "Route"
+        var route = NSEntityDescription.insertNewObjectForEntityForName(routeEntity, inManagedObjectContext: self.context) as Route
         
         // Bad things happen if we end up with nan values in the db.
         route.routeid = isnan(routeid.doubleValue) ? 0 : routeid
@@ -91,7 +92,8 @@ class RouteStore: NSObject {
      */
     func getLatestRouteId()->NSNumber? {
         var error: NSError? = nil
-        var fetch = NSFetchRequest(entityName: "Route")
+        let routeEntity: NSString = "Route"
+        var fetch = NSFetchRequest(entityName: routeEntity)
         fetch.returnsDistinctResults = true
         let sorter = NSSortDescriptor(key: "routeid", ascending: false)
         fetch.sortDescriptors = [sorter]
@@ -119,7 +121,8 @@ class RouteStore: NSObject {
     func getFirstRoutIdForDate(date: NSNumber = 0)->NSNumber? {
         let endDate: NSNumber = (60 * 60 * 24) + date
         var error: NSError? = nil
-        var fetch = NSFetchRequest(entityName: "Route")
+        let routeEntity: NSString = "Route"
+        var fetch = NSFetchRequest(entityName: routeEntity)
         fetch.returnsDistinctResults = true
         fetch.predicate = NSPredicate(format: "routeid > \(date) AND routeid < \(endDate)")
         let sorter = NSSortDescriptor(key: "routeid", ascending: true)
@@ -148,7 +151,8 @@ class RouteStore: NSObject {
      */
     func getNextRouteId(day: NSNumber, prev: Bool = false)->NSNumber? {
         var error: NSError? = nil
-        var fetch = NSFetchRequest(entityName: "Route")
+        let routeEntity: NSString = "Route"
+        var fetch = NSFetchRequest(entityName: routeEntity)
         fetch.returnsDistinctResults = true
         let comp = prev ? "<" : ">"
         let sort = prev ? false : true
@@ -190,7 +194,8 @@ class RouteStore: NSObject {
             last = routeId
         }
         
-        var fetch = NSFetchRequest(entityName: "Route")
+        let routeEntity: NSString = "Route"
+        var fetch = NSFetchRequest(entityName: routeEntity)
         
         let sorter = NSSortDescriptor(key: "date", ascending: true)
         fetch.sortDescriptors = [sorter]

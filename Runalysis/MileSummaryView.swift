@@ -11,12 +11,15 @@ import UIKit
 
 class MileSummaryView: UIView {
 
+    // Tracks the RouteSummary object.
     var routeSummary: RouteSummary?
     
+    // Tracks the labels to display each mile's stats.
     var mileLabels: [UILabel] = []
     
-    var labelHeight = CGFloat(20)
-    
+    /*!
+     * Updates the values of all the mile labels.
+     */
     func updateLabels() {
     
         if let summary = self.routeSummary? {
@@ -29,7 +32,7 @@ class MileSummaryView: UIView {
             
             var count = 1
             for time in summary.mileTimes {
-                var l = UILabel(frame: CGRectMake(10, ypos, self.bounds.width, self.labelHeight))
+                var l = UILabel(frame: CGRectMake(10, ypos, self.bounds.width, GlobalTheme.getNormalFontHeight()))
                 l.text = "\(self.formatLabel(count, duration: time))"
                 l.textColor = GlobalTheme.getNormalTextColor()
                 l.font = GlobalTheme.getNormalFont()
@@ -38,29 +41,43 @@ class MileSummaryView: UIView {
                 ypos += l.frame.height + 5
                 count++
             }
-            let f = CGRectMake(self.frame.minX, self.frame.minY, self.frame.width, ypos + self.labelHeight)
+            let f = CGRectMake(self.frame.minX, self.frame.minY, self.frame.width, ypos + GlobalTheme.getNormalFontHeight())
             self.frame = f
             self.sizeToFit()
         }
     
     }
     
+    /*!
+     * Formats the label for each cell.
+     *
+     * @param Int count
+     * @param Double duration
+     *
+     * @return String
+     */
     func formatLabel(count: Int, duration: Double)->NSString {
     
         // @todo, this formatter probably belongs elsewhere.
-        let minutes = Int(duration/60.0)
-        let seconds = round((duration - (Double(minutes) * 60)) * 10)/10
+        var minutes = Int(duration/60.0)
+        var seconds = round((duration - (Double(minutes) * 60)) * 10)/10
+        
+        var seconds_string = "\(seconds)"
+        if seconds == Double(60) {
+            seconds = Double(0)
+            seconds_string = "00.0"
+            minutes++
+        }
+        else if seconds < 10 {
+            seconds_string = "0\(seconds)"
+        }
         
         var minutes_string = "\(minutes)"
         if minutes < 10 {
             minutes_string = "0\(minutes)"
         }
     
-        var seconds_string = "\(seconds)"
-        if seconds < 10 {
-            seconds_string = "0\(seconds)"
-        }
-        
+       
         return "Mile \(count) @\(minutes_string):\(seconds_string)"
     }
 

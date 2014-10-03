@@ -145,6 +145,9 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         }
     }
     
+    /*!
+     * Updates the picker values with the saved values.
+     */
     func updatePickerValues() {
         if let p = self.picker? {
             if let m = self.mileage? {
@@ -168,6 +171,9 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         }
     }
     
+    /*!
+     * Saves the current picker values to the database.
+     */
     func savePickerValues() {
         if let p = self.picker? {
             if let s = self.store? {
@@ -188,8 +194,8 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     }
     
     /*!
-    * Implements UIViewController::viewWillAppear:animated
-    */
+     * Implements UIViewController::viewWillAppear:animated
+     */
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         if let container = self.scrollContainer? {
@@ -197,6 +203,9 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         }
     }
     
+    /*!
+     * Implements UIViewController::viewDidAppear:animated
+     */
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         if let n = self.noteView? {
@@ -228,22 +237,33 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    /*!
+     * Implements UIViewController::shouldAutorotate.
+     */
     override func shouldAutorotate()->Bool {
         return false
     }
     
+    /*!
+     * Implements UIViewController::supportedInterfaceOrientations.
+     */
     override func supportedInterfaceOrientations()->Int {
         return Int(UIInterfaceOrientationMask.Portrait.toRaw())
-        //return Int(UIInterfaceOrientation.Portrait.toRaw())
     }
     
     // UIPickerView Delegate Methods
     // @todo move the picker to a custom view.
     
+    /*!
+     * Implements UIPickerViewDataSource:numberOfComponentsInPickerView:
+     */
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 4
     }
     
+    /*!
+     * Implements UIPickerViewataSource:numberOfRowsInComponent:
+     */
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch component {
         case 0, 2:
@@ -255,6 +275,9 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         }
     }
     
+    /*!
+     * Implements UIPickerViewDelegate:widthForComponent:
+     */
     func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         switch component {
         case 0, 2:
@@ -268,14 +291,23 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         }
     }
     
+    /*!
+     * Implements UIPickerViewDelegate:rowHeightForComponent:
+     */
     func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
         return CGFloat(20)
     }
     
+    /*!
+     * Implements UIPickerViewDelegate:titleForRow:forComponent:
+     */
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         return "\(row)"
     }
     
+    /*!
+     * Implements UIPickerViewDelegate:viewForRow:forComponent:reusingView:
+     */
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
         
         let label = UILabel()

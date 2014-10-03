@@ -61,17 +61,17 @@ class RouteAnalysisView: UIView {
         
         let al = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 45))
         al.text = "-"
-        al.textColor = GlobalTheme.getAverageSpeedTextColor()
+        al.textColor = GlobalTheme.getDistanceVelocityTextColor()
         al.font = UIFont.systemFontOfSize(40.0)
         rav.labelAverage = al
         rav.addSubview(al)
         
         ypos += al.bounds.height
         
-        let tl = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 20))
+        let tl = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 45))
         tl.text = "-"
-        tl.textColor = GlobalTheme.getNormalTextColor()
-        tl.font = GlobalTheme.getNormalFont()
+        tl.textColor = GlobalTheme.getTimerTextColor()
+        tl.font = UIFont.systemFontOfSize(40.0)
         rav.labelTimer = tl
         rav.addSubview(tl)
         

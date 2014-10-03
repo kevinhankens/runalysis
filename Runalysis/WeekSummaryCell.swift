@@ -11,22 +11,39 @@ import UIKit
 
 class WeekSummaryCell: UIView {
     
+    // Tracks the day of the cell.
     var dayNum: JLDate = JLDate.createFromDate(NSDate())
 
+    // Tracks the planned mileage label.
     var plannedLabel: UILabel?
     
+    // Tracks the planned mileage highlight label.
     var plannedLabelHi: UILabel?
     
+    // Tracks the planned mileage value.
     var plannedValue: Double = 0
     
+    // Tracks the actual mileage label.
     var actualLabel: UILabel?
     
+    // Tracks the actual mileage highlight label.
     var actualLabelHi: UILabel?
     
+    // Tracks the actual mileage value.
     var actualValue: Double = 0
     
+    // Tracks the title of the cell.
     var title: String = ""
     
+    /*!
+     * Factory method to create a WeekSummaryCell.
+     *
+     * @param CGRect frame
+     * @param JLDate dayNum
+     * @param String title
+     *
+     * @return WeekSummaryCell
+     */
     class func createWeekSummaryCell(frame: CGRect, dayNum: JLDate, title: String)->WeekSummaryCell {
         
         let container = WeekSummaryCell(frame: frame)
@@ -92,6 +109,9 @@ class WeekSummaryCell: UIView {
         return container
     }
     
+    /*!
+     * Updates the cells with their current values.
+     */
     func updateValues() {
         if let p = self.plannedLabel? {
             if let ph = self.plannedLabelHi? {
@@ -114,6 +134,13 @@ class WeekSummaryCell: UIView {
         }
     }
     
+    /*!
+     * Formats the label of the cell.
+     *
+     * @param Double Miles
+     *
+     * @return String
+     */
     func getMileageLabel(miles: Double)->String {
         var mval = Int(miles)
         var dval = Int(round((miles - Double(mval)) * 100))

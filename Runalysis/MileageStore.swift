@@ -60,7 +60,8 @@ class MileageStore: NSObject {
     func getMileageForDate(day: JLDate)->Mileage {
         // @todo error handling?
         var error: NSError? = nil
-        var fReq: NSFetchRequest = NSFetchRequest(entityName: "Mileage")
+        let mileageEntity: NSString = "Mileage"
+        var fReq: NSFetchRequest = NSFetchRequest(entityName: mileageEntity)
         
         let format_complete = "date == \(day.number.stringValue)"
         let format_string: NSString = NSString(string: format_complete)
@@ -94,7 +95,8 @@ class MileageStore: NSObject {
      * @return Mileage
      */
     func getMileageObject(day: JLDate)->Mileage {
-        var obj = NSEntityDescription.insertNewObjectForEntityForName("Mileage", inManagedObjectContext: self.context) as Mileage
+        let mileageEntity: NSString = "Mileage"
+        var obj = NSEntityDescription.insertNewObjectForEntityForName(mileageEntity, inManagedObjectContext: self.context) as Mileage
         obj.date = day.number
         obj.mileagePlanned = 0
         obj.mileageActual = 0

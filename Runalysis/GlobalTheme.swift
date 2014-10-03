@@ -23,9 +23,13 @@ class GlobalTheme {
      */
     class func getBackgroundColor()->UIColor {
         return UIColor(red: 28/255, green: 28/255, blue: 28/255, alpha: 1.0)
-        //return UIColor.blackColor()
     }
     
+    /*!
+     * Retrieves the overlay background color.
+     *
+     * @return UIColor
+     */
     class func getOverlayBackgroundColor()->UIColor {
         return UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
     }
@@ -39,34 +43,92 @@ class GlobalTheme {
         return UIColor.whiteColor()
     }
     
+    /*!
+     * Retrieves the text color opposite of "normal".
+     *
+     * @return UIColor
+     */
     class func getInvertedTextColor()->UIColor {
         return UIColor.blackColor()
     }
     
+    /*!
+     * Retrieves the color of the back button.
+     *
+     * @return UIColor
+     */
     class func getBackButtonTextColor()->UIColor {
         return self.getSpeedThree()
     }
     
+    /*!
+     * Retrieves the color of the distance/avg velocity.
+     *
+     * @return UIColor
+     */
+    class func getDistanceVelocityTextColor()->UIColor {
+        return self.getSpeedFour()
+    }
+    
+    /*!
+     * Retrieves the color of the timer.
+     *
+     * @return UIColor
+     */
+    class func getTimerTextColor()->UIColor {
+        return self.getSpeedThree()
+    }
+    
+    /*!
+     * Retrieves the color of the altitude graph.
+     *
+     * @return UIColor
+     */
     class func getAltitudeGraphColor()->UIColor {
         return UIColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1.0)
     }
     
+    /*!
+     * Retrieves the color of the velocity graph.
+     *
+     * @return UIColor
+     */
     class func getVelocityGraphColor()->UIColor {
         return self.getSpeedFour()
     }
     
+    /*!
+     * Retrieves the color of a text that alerts.
+     *
+     * @return UIColor
+     */
     class func getNormalTextAlertColor()->UIColor {
         return self.getSpeedFive()
     }
     
+    /*!
+     * Retrieves the color of a substandard accuracy reding.
+     *
+     * @return UIColor
+     */
     class func getAccuracyPoorColor()->UIColor {
         return self.getSpeedOne()
     }
     
+    /*!
+     * Retrieves the color of a fair accuracy reading
+     *
+     * @return UIColor
+     */
     class func getAccuracyFairColor()->UIColor {
         return self.getSpeedThree()
     }
     
+    /*!
+     * Retrieves the color of a good accuracy reading
+     *
+     * @return UIColor
+     */
     class func getAccuracyGoodColor()->UIColor {
         return self.getSpeedFive()
     }
@@ -80,6 +142,11 @@ class GlobalTheme {
         return UIColor.blackColor()
     }
     
+    /*!
+     * Retrieves the color of the background of the start button.
+     *
+     * @return UIColor
+     */
     class func getStartBgColor()->UIColor {
         return self.getSpeedFive()
     }
@@ -93,6 +160,11 @@ class GlobalTheme {
         return UIColor.blackColor()
     }
     
+    /*!
+     * Retrieves the color of the "stop" backgrond.
+     *
+     * @return UIColor
+     */
     class func getStopBgColor()->UIColor {
         return self.getSpeedOne()
     }
@@ -153,30 +225,65 @@ class GlobalTheme {
         //return UIColor(red: 69/255, green: 173/255, blue: 125/255, alpha: 1.0)
     }
     
+    /*!
+     * Retrieves the color of the lowest speed.
+     *
+     * @return UIColor
+     */
     class func getSpeedOne()->UIColor {
         return UIColor(red: 255/255, green: 66/255, blue: 66/255, alpha: 1.0)
     }
     
+    /*!
+     * Retrieves the color of the second speed.
+     *
+     * @return UIColor
+     */
     class func getSpeedTwo()->UIColor {
         return UIColor(red: 255/255, green: 135/255, blue: 66/255, alpha: 1.0)
     }
     
+    /*!
+     * Retrieves the color of the middle speed.
+     *
+     * @return UIColor
+     */
     class func getSpeedThree()->UIColor {
         return UIColor(red: 255/255, green: 255/255, blue: 66/255, alpha: 1.0)
     }
     
+    /*!
+     * Retrieves the color of the fourth speed.
+     *
+     * @return UIColor
+     */
     class func getSpeedFour()->UIColor {
         return UIColor(red: 135/255, green: 255/255, blue: 66/255, alpha: 1.0)
     }
     
+    /*!
+     * Retrieves the color of the highest speed.
+     *
+     * @return UIColor
+     */
     class func getSpeedFive()->UIColor {
         return UIColor(red: 66/255, green: 255/255, blue: 66/255, alpha: 1.0)
     }
     
+    /*!
+     * Retrieves the normal font.
+     *
+     * @return UIColor
+     */
     class func getNormalFont()->UIFont {
         return UIFont.systemFontOfSize(18)
     }
     
+    /*!
+     * Retrieves the height of a container using the normal font.
+     *
+     * @return UIColor
+     */
     class func getNormalFontHeight()->CGFloat {
         return CGFloat(25.0)
     }

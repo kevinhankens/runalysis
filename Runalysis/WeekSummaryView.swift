@@ -11,30 +11,53 @@ import UIKit
 
 class WeekSummaryView: UIView {
     
+    // Tracks the summary cells which list the mileage.
     var summaryCells: [WeekSummaryCell] = []
     
+    // Tracks the summary cell with the weekly totals.
     var totalCell: WeekSummaryCell?
 
+    // Tracks the Mileage objects.
     var mileage: [Mileage] = []
     
+    // Tracks the date label.
     var dateLabel: UILabel?
     
+    // Copy of the date label for alerts.
     var dateLabelAlert: UILabel?
     
+    // Tracks the MileageStore object.
     var mileageStore: MileageStore?
     
+    // Tracks the RouteStore object.
     var routeStore: RouteStore?
     
+    // Tracks the current week start day.
     var sunday: JLDate = JLDate.createFromDate(NSDate())
     
+    // The days of the week in NSDateFormat.
     var daysOfWeek: [NSNumber] = [1,2,3,4,5,6,7]
     
+    // Tracks the top of the header for drawing.
     var headerMinY = CGFloat(0)
     
+    // Tracks the height of the header for drawing.
     var headerHeight = CGFloat(50)
     
+    // The view controller containing this view.
     var controller: UIViewController?
     
+    /*!
+     * Factory method to create a WeekSummaryView.
+     *
+     * @param CGRect frame
+     * @param MileageStore mileageStore
+     * @param RouteStore routeStore
+     * @param JLDate sunday
+     * @param UIViewController controller
+     *
+     * @return WeekSummaryView
+     */
     class func createWeekSummaryView(frame: CGRect, mileageStore: MileageStore, routeStore: RouteStore, sunday: JLDate, controller: UIViewController)->WeekSummaryView {
         
         let container = WeekSummaryView(frame: frame)
@@ -94,6 +117,11 @@ class WeekSummaryView: UIView {
         return container
     }
     
+    /*!
+     * Responds to a tap on a day.
+     *
+     * @param UITapGestureRecognizer tap
+     */
     func respondToTapGesture(tap: UITapGestureRecognizer) {
         if let c = self.controller as? ViewController {
             if let v = tap.view as? WeekSummaryCell {
@@ -104,6 +132,9 @@ class WeekSummaryView: UIView {
         }
     }
     
+    /*!
+     * Sets the label text according to the currently viewed date.
+     */
     func setDateLabel() {
         let endDate = self.sunday.nextDay(increment: 6)
         if let v = self.dateLabel? {
@@ -119,6 +150,9 @@ class WeekSummaryView: UIView {
         }
     }
     
+    /*!
+     * Draws the weekly graph showing a time series view of daily mileage.
+     */
     override func drawRect(rect: CGRect) {
         let context = UIGraphicsGetCurrentContext()
         CGContextSetFillColorWithColor(context, GlobalTheme.getBackgroundColor().CGColor);
@@ -187,6 +221,11 @@ class WeekSummaryView: UIView {
         }
     }
     
+    /*!
+     * Updates the view with a new start date.
+     *
+     * @param JLDate sunday
+     */
     func updateView(sunday: JLDate) {
         self.sunday = sunday
         self.setDateLabel()
@@ -209,7 +248,6 @@ class WeekSummaryView: UIView {
             }
         }
         
-        // @todo update values of total cell
         if let total = self.totalCell? {
             total.plannedValue = plannedTotal
             total.actualValue = actualTotal
@@ -219,8 +257,4 @@ class WeekSummaryView: UIView {
         self.setNeedsDisplay()
     }
     
-    func getMileage() {
-    
-    }
-
 }

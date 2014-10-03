@@ -113,7 +113,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             
         record.frame.origin.y = routeView.frame.minY + (routeView.frame.height/2)
             
-        let signal = UILabel(frame: CGRectMake(10, record.frame.minY - 25, runView.frame.width - 20, 25))
+        let signal = UILabel(frame: CGRectMake(10, record.frame.minY - GlobalTheme.getNormalFontHeight(), runView.frame.width - 20, GlobalTheme.getNormalFontHeight()))
         signal.text = "Retrieving Accuracy"
         signal.textColor = GlobalTheme.getInvertedTextColor()
         signal.backgroundColor = GlobalTheme.getAccuracyFairColor()
@@ -194,6 +194,9 @@ class RunView: UIView, CLLocationManagerDelegate {
                 if let loc = self.locationManager? {
                     // In the simulator the location object occasionally fails.
                     // @todo disable button.
+                    let ri: NSTimeInterval = -8.0
+                    var tc = self.lastDrawTime.dateByAddingTimeInterval(ri)
+                    self.lastDrawTime = tc
                     self.prev = RunView.createLocationCopy(loc.location)
                     self.storePoint(self.prev, interval: 0.0)
                 }
@@ -289,18 +292,19 @@ class RunView: UIView, CLLocationManagerDelegate {
             
             // Redraw the map
             if let rv = self.routeView? {
-                var tc = self.lastDrawTime.dateByAddingTimeInterval(self.redrawInterval)
-                if tc.timeIntervalSinceNow < 0.0 {
-                    if let summary = rv.summary {
-                        summary.points?.append(route)
-                        summary.calculateSummary()
+                if let summary = rv.summary {
                     // @todo this is horrible for performance.
-                    //rv.summary!.updateRoute(self.routeId)
-                    rv.displayLatest()
-                    if let rav = self.routeAnalysisView? {
-                        rav.updateLabels()
-                    }
-                    self.lastDrawTime = tc
+                    //summary.updateRoute(self.routeId)
+                    summary.points?.append(route)
+                    
+                    var tc = self.lastDrawTime.dateByAddingTimeInterval(self.redrawInterval)
+                    if tc.timeIntervalSinceNow < 0.0 {
+                        summary.calculateSummary()
+                        rv.displayLatest()
+                        if let rav = self.routeAnalysisView? {
+                            rav.updateLabels()
+                        }
+                        self.lastDrawTime = tc
                     }
                 }
             }
