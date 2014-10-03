@@ -63,7 +63,7 @@ class GlobalTheme {
         return self.getSpeedOne()
     }
     
-    class func getAccuracyOkColor()->UIColor {
+    class func getAccuracyFairColor()->UIColor {
         return self.getSpeedThree()
     }
     

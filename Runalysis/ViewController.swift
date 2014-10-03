@@ -200,8 +200,8 @@ class ViewController: UIViewController {
         var lm = CLLocationManager()
         lm.desiredAccuracy = kCLLocationAccuracyBest
         // IOS7 does not respond.
-        if lm.respondsToSelector(Selector("requestAlwaysAuthorization")) {
-            lm.requestAlwaysAuthorization()
+        if lm.respondsToSelector(Selector("requestWhenInUseAuthorization")) {
+            lm.requestWhenInUseAuthorization()
         }
         self.locationManager = lm
  

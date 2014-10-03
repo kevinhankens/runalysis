@@ -116,7 +116,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         let signal = UILabel(frame: CGRectMake(10, record.frame.minY - 25, runView.frame.width - 20, 25))
         signal.text = "Retrieving Accuracy"
         signal.textColor = GlobalTheme.getInvertedTextColor()
-        signal.backgroundColor = GlobalTheme.getAccuracyOkColor()
+        signal.backgroundColor = GlobalTheme.getAccuracyFairColor()
         signal.font = GlobalTheme.getNormalFont()
         signal.textAlignment = NSTextAlignment.Center
         runView.accuracy = signal
@@ -219,15 +219,15 @@ class RunView: UIView, CLLocationManagerDelegate {
         if let a = self.accuracy? {
             if accuracy < Double(20) {
                 a.backgroundColor = GlobalTheme.getAccuracyGoodColor()
-                a.text = "Accuracy: Good"
+                a.text = "Accuracy: Good (\(accuracy))"
             }
             else if accuracy < Double(50) {
-                a.backgroundColor = GlobalTheme.getAccuracyGoodColor()
-                a.text = "Accuracy: Fair"
+                a.backgroundColor = GlobalTheme.getAccuracyFairColor()
+                a.text = "Accuracy: Fair (\(accuracy))"
             }
             else {
-                a.backgroundColor = GlobalTheme.getAccuracyGoodColor()
-                a.text = "Accuracy: Poor"
+                a.backgroundColor = GlobalTheme.getAccuracyPoorColor()
+                a.text = "Accuracy: Poor (\(accuracy))"
             }
         }
     }
