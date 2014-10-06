@@ -238,6 +238,7 @@ class WeekSummaryView: UIView {
             var i = 0
             for i = 0; i < 7; i++ {
                 var cell = self.summaryCells[i]
+                cell.dayNum = dayNum
                 var mileage = store.getMileageForDate(dayNum)
                 dayNum = dayNum.nextDay(increment: 1)
                 cell.actualValue = mileage.mileageActual.doubleValue
