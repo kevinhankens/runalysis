@@ -201,8 +201,8 @@ class JLDate: NSObject {
      */
     class func numberToDate(mileage: NSNumber)->NSDate {
         let format = NSDateFormatter()
-        format.dateFormat = JLDate.getDateFormatFull()
-        let date = format.dateFromString(mileage.stringValue + "000")
+        format.dateFormat = JLDate.getDateFormat()
+        let date = format.dateFromString(mileage.stringValue)
         return date!
     }
     

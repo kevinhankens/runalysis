@@ -13,11 +13,11 @@ import CoreData
 class MileageStoreMock: MileageStore {
     
     override var context: NSManagedObjectContext {
-        if !self._context {
+        if !(self._context != nil) {
             self._context = NSManagedObjectContext()
             let bundle = NSBundle(forClass: Mileage.self)
             let modelURL = bundle.URLForResource("Runalysis", withExtension: "momd")
-            let mom = NSManagedObjectModel(contentsOfURL: modelURL)
+            let mom = NSManagedObjectModel(contentsOfURL: modelURL!)
             let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
             psc.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil, error: nil)
             self._context!.persistentStoreCoordinator = psc
