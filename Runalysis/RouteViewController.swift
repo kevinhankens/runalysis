@@ -57,21 +57,9 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
-        var ypos = CGFloat(20)
+        var ypos = CGFloat(50)
         
-        // Add a back button to return to the "root" view.
-        let backButton = UIButton()
-        backButton.frame = CGRectMake(0, ypos, self.view.bounds.width/2, 20.00)
-        backButton.setTitle("< Back", forState: UIControlState.Normal)
-        backButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
-        backButton.titleLabel?.textAlignment = NSTextAlignment.Left
-        backButton.setTitleColor(GlobalTheme.getBackButtonTextColor(), forState: UIControlState.Normal)
-        backButton.backgroundColor = GlobalTheme.getBackgroundColor()
-        backButton.addTarget(self, action: "returnToRootViewButton:", forControlEvents: UIControlEvents.TouchDown)
-        container.addSubview(backButton)
-        
-        ypos = ypos + backButton.frame.height + 10
-        
+
         // Create a RouteView to display the results.
         //let container = UIScrollView(frame: CGRectMake(0, ypos, self.view.bounds.width + 5, self.view.bounds.width))
         
@@ -113,6 +101,17 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         self.scrollContentHeight = ypos //+ CGFloat(rav.frame.height)
         self.scrollContainer = container
         self.view.addSubview(container)
+        
+        // Add a back button to return to the "root" view.
+        let backButton = UIButton()
+        backButton.frame = CGRectMake(0, 30, self.view.bounds.width/2, 20.00)
+        backButton.setTitle("< Back", forState: UIControlState.Normal)
+        backButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
+        backButton.titleLabel?.textAlignment = NSTextAlignment.Left
+        backButton.setTitleColor(GlobalTheme.getBackButtonTextColor(), forState: UIControlState.Normal)
+        backButton.backgroundColor = GlobalTheme.getBackButtonBgColor()
+        backButton.addTarget(self, action: "returnToRootViewButton:", forControlEvents: UIControlEvents.TouchDown)
+        self.view.addSubview(backButton)
     }
     
     /*!

@@ -62,6 +62,15 @@ class GlobalTheme {
     }
     
     /*!
+     * Retrieves the background color of the back button.
+     *
+     * @return UIColor
+     */
+    class func getBackButtonBgColor()->UIColor {
+        return UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.0)
+    }
+    
+    /*!
      * Retrieves the color of the distance/avg velocity.
      *
      * @return UIColor

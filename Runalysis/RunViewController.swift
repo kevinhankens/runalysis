@@ -35,20 +35,7 @@ class RunViewController: UIViewController {
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
-        var ypos = CGFloat(20)
-        
-        // Add a back button to return to the "root" view.
-        let backButton = UIButton()
-        backButton.frame = CGRectMake(0, ypos, container.bounds.width/2, 35.00)
-        backButton.setTitle("< Back", forState: UIControlState.Normal)
-        backButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
-        backButton.titleLabel?.textAlignment = NSTextAlignment.Left
-        backButton.setTitleColor(GlobalTheme.getBackButtonTextColor(), forState: UIControlState.Normal)
-        backButton.backgroundColor = GlobalTheme.getBackgroundColor()
-        backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
-        container.addSubview(backButton)
-        
-        ypos = ypos + backButton.frame.height + 10
+        var ypos = CGFloat(50)
         
         let routeId = Int(NSDate().timeIntervalSince1970)
         
@@ -63,6 +50,17 @@ class RunViewController: UIViewController {
         self.scrollContentHeight = ypos //+ CGFloat(rav.frame.height)
         self.scrollContainer = container
         self.view.addSubview(container)
+        
+        // Add a back button to return to the "root" view.
+        let backButton = UIButton()
+        backButton.frame = CGRectMake(0, 30, container.bounds.width/2, 35.00)
+        backButton.setTitle("< Back", forState: UIControlState.Normal)
+        backButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
+        backButton.titleLabel?.textAlignment = NSTextAlignment.Left
+        backButton.setTitleColor(GlobalTheme.getBackButtonTextColor(), forState: UIControlState.Normal)
+        backButton.backgroundColor = GlobalTheme.getBackButtonBgColor()
+        backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
+        self.view.addSubview(backButton)
     }
     
     /*!
