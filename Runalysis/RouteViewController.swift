@@ -125,7 +125,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     // Sets the height of the scrollview container based on the contents.
     func resetContentHeight() {
         if let container = self.scrollContainer? {
-            container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight + self.ravHeight)
+            container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight + self.ravHeight + 30)
         }
     }
     

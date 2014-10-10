@@ -76,12 +76,11 @@ class NoteView : UIView, UITextViewDelegate {
         
         
         let reviewButton = UIButton()
-        reviewButton.frame = CGRectMake(container.bounds.width/2, ypos, container.bounds.width/2 - 10, GlobalTheme.getNormalFontHeight())
+        reviewButton.frame = CGRectMake(container.bounds.width - (container.bounds.width/4) - 10, ypos, container.bounds.width/4, GlobalTheme.getNormalFontHeight())
         reviewButton.setTitle("Review", forState: UIControlState.Normal)
         reviewButton.titleLabel?.font = GlobalTheme.getNormalFont()
         reviewButton.setTitleColor(GlobalTheme.getBackgroundColor(), forState: UIControlState.Normal)
         reviewButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Right
-        reviewButton.backgroundColor = GlobalTheme.getBackgroundColor()
         reviewButton.addTarget(container, action: "viewRoute:", forControlEvents: UIControlEvents.TouchDown)
         container.reviewButton = reviewButton
         container.addSubview(reviewButton)
@@ -90,6 +89,7 @@ class NoteView : UIView, UITextViewDelegate {
         
         // @todo the note view should really be its own controller w/segue.
         let noteView = UITextView(frame: CGRect(x: 10, y: ypos, width: container.bounds.width - 5, height: 200.00))
+        noteView.font = UIFont.systemFontOfSize(16.0)
         noteView.editable = true
         noteView.text = ""
         noteView.delegate = container

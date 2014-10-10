@@ -39,7 +39,7 @@ class ViewController: UIViewController {
     var scrollContentHeight = CGFloat(0)
     
     // The current version, used to track intro/update modals.
-    let version = 0.034
+    let version = 0.035
     
     // The position of cells that are off screen.
     let cellPosOffScreen = CGFloat(20)
@@ -84,7 +84,6 @@ class ViewController: UIViewController {
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
         var ypos = CGFloat(20)
-// BEGIN TEST SUMMARY
         
         let weekSummary = WeekSummaryView.createWeekSummaryView(CGRectMake(0, ypos, self.view.frame.width, self.view.frame.height/2), mileageStore: self.mileageStore, routeStore: self.routeStore, sunday: self.sunday, controller: self)
         self.summaryView = weekSummary
@@ -101,59 +100,7 @@ class ViewController: UIViewController {
         swipeRight.direction = UISwipeGestureRecognizerDirection.Left
         container.addGestureRecognizer(swipeLeft)
         
-// END TEST SUMMARY
-        
-//        let height:CGFloat = 50.0
-//        
-//        let beginDate = self.sunday
-//        let endDate = sunday.nextDay(increment: 6)
-//        
-//        let summary = SummaryCell.createCell(height * 1.75, cellWidth: self.view.bounds.width, cellY: ypos, beginDate: beginDate.date, endDate: endDate.date)
-//        self.summaryCell = summary
-//        
-//        // Add a right swipe gesture to the header.
-//        let swipeRight = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
-//        swipeRight.direction = UISwipeGestureRecognizerDirection.Right
-//        summary.addGestureRecognizer(swipeRight)
-//        
-//        // Add a left swipe gesture to the header.
-//        let swipeLeft = UISwipeGestureRecognizer(target: self, action: "headerSwipe:")
-//        swipeRight.direction = UISwipeGestureRecognizerDirection.Left
-//        summary.addGestureRecognizer(swipeLeft)
-//        
-//        // Start the rocker cells at the bottom of the summary.
-//        ypos += summary.frame.height
-//        
-//        // Add a view behind the cells for hidden features.
-//        let actions = UIView(frame: CGRect(x: 0, y: ypos, width: container.frame.width, height: container.frame.height - summary.frame.height))
-//        self.actionView = actions
-//        container.addSubview(actions)
-//
-//        // Add rocker cells for each day of the week.
-//        var dayNum = self.sunday
-//        var cell = RockerCell()
-//        let format = NSDateFormatter()
-//        format.dateFormat = "EEEE"
-//        for day in self.daysOfWeek {
-//            cell = RockerCell.createCell(dayNum.toStringDay(), cellHeight: height, cellWidth: self.view.bounds.width, cellY: self.cellPosOffScreen, day: dayNum, summary: summary, controller: self, store: self.mileageStore, routeStore: self.routeStore)
-//            cell.finalY = ypos
-//            //self.view.addSubview(cell)
-//            self.mileageCells.append(cell)
-//            ypos = ypos + height
-//            dayNum = dayNum.nextDay()
-//        }
-//       
-//        var i: Int
-//        for (i = self.mileageCells.count - 1; i >= 0; i--) {
-//            container.addSubview(self.mileageCells[i])
-//        }
-//        
-//        // Track the mileage cells in the summary.
-//        summary.cells = self.mileageCells
-//        container.addSubview(summary)
-//        self.updateSummary()
-        
-         // Add a Run button
+        // Add a Run button
         ypos += 10
         let runButton = UIButton()
         runButton.frame = CGRectMake(0, ypos, self.view.bounds.width/2, 35.00)
@@ -317,7 +264,7 @@ class ViewController: UIViewController {
         if recentVersion < self.version {
             NSUserDefaults.standardUserDefaults().setDouble(self.version, forKey: self.versionKey)
             NSUserDefaults.standardUserDefaults().synchronize()
-            //self.displayHelpView()
+            self.displayHelpView()
         }
     }
     
