@@ -104,11 +104,12 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         
         // Add a back button to return to the "root" view.
         let backButton = UIButton()
-        backButton.frame = CGRectMake(0, 30, self.view.bounds.width/2, 20.00)
+        backButton.frame = CGRectMake(10, 30, self.view.bounds.width/2, 20.00)
         backButton.setTitle("< Back", forState: UIControlState.Normal)
         backButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
         backButton.titleLabel?.textAlignment = NSTextAlignment.Left
         backButton.setTitleColor(GlobalTheme.getBackButtonTextColor(), forState: UIControlState.Normal)
+        backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
         backButton.backgroundColor = GlobalTheme.getBackButtonBgColor()
         backButton.addTarget(self, action: "returnToRootViewButton:", forControlEvents: UIControlEvents.TouchDown)
         self.view.addSubview(backButton)
@@ -121,6 +122,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         self.resetContentHeight()
     }
     
+    // Sets the height of the scrollview container based on the contents.
     func resetContentHeight() {
         if let container = self.scrollContainer? {
             container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight + self.ravHeight)

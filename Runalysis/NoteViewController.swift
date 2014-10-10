@@ -44,6 +44,8 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     // The width of the right picker.
     var pickerWidthRight = CGFloat(0)
     
+    var modalRouteId: NSNumber = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -68,7 +70,7 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         if let routeStore = self.routeStore? {
             if let mileageStore = self.store? {
                 if let dayNum = self.dayNum? {
-                    let n = NoteView.createNoteView(0, y: ypos, width: self.view.bounds.width - 20, height: self.view.bounds.height, dayNum: self.dayNum!, mileageStore: mileageStore, routeStore: self.routeStore!)
+                    let n = NoteView.createNoteView(0, y: ypos, width: self.view.bounds.width - 20, height: self.view.bounds.height, dayNum: self.dayNum!, mileageStore: mileageStore, routeStore: self.routeStore!, controller: self)
                     container.addSubview(n)
                     self.noteView = n
                     ypos = ypos + n.frame.height
@@ -85,12 +87,13 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         
         // Add a back button to return to the "root" view.
         let backButton = UIButton()
-        backButton.frame = CGRectMake(0, 30, self.view.bounds.width/2, 20.00)
+        backButton.frame = CGRectMake(10, 30, self.view.bounds.width/2, 20.00)
         backButton.setTitle("< Back", forState: UIControlState.Normal)
         backButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
         backButton.titleLabel?.textAlignment = NSTextAlignment.Left
         backButton.setTitleColor(GlobalTheme.getBackButtonTextColor(), forState: UIControlState.Normal)
         backButton.backgroundColor = GlobalTheme.getBackButtonBgColor()
+        backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
         backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
         self.view.addSubview(backButton)
         
@@ -103,6 +106,26 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         container.addGestureRecognizer(daySwipeRight)
     }
     
+    /*!
+     * Triggers a segue to the Route view.
+     *
+     * @param NSNumber day
+     */
+    func viewRoute(day: NSNumber) {
+        self.modalRouteId = day
+        self.performSegueWithIdentifier("noteRouteViewSegue", sender: self)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if let v = segue.destinationViewController as? RouteViewController {
+            v.routeStore = self.routeStore
+            v.routeId = self.modalRouteId
+        }
+    }
+    
+    /*!
+     * Updates the mileage in the pickers according to the current day.
+     */
     func updateMileage() {
         if let d = self.dayNum? {
             self.mileage = self.store?.getMileageForDate(self.dayNum!)
