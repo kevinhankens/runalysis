@@ -45,19 +45,20 @@ class HelpView: UIView {
         let rockerHowto = UITextView(frame: CGRect(x: 20, y: ypos, width: container.bounds.width - 50, height: container.bounds.width))
         // @todo localize.
         rockerHowto.font = GlobalTheme.getNormalFont()
-        rockerHowto.text = "Swipe side to side to change the week. Tap the day to set the goal/actual mileage. Tap Run to track your workout. Tap Latest to view your most recent workouts."
+        rockerHowto.text = "Tap a day to set your goal/actual running mileage.\n\nTap Run to track your workout.\n\nTap Latest to view your most recent runs.\n\nSwipe sideways on any page to change the date."
         rockerHowto.editable = false
         rockerHowto.textColor = GlobalTheme.getNormalTextColor()
         rockerHowto.backgroundColor = GlobalTheme.getBackgroundColor()
         rockerHowto.sizeToFit()
         content.addSubview(rockerHowto)
         
-        ypos += rockerHowto.frame.height + 10
+        ypos += rockerHowto.frame.height + 20
         
         // Confirmation buttons.
         let backButton = UIButton()
         backButton.frame = CGRectMake(20, ypos, container.bounds.width/2, 20.00)
         backButton.setTitle("Ok, got it!", forState: UIControlState.Normal)
+        backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
         backButton.setTitleColor(GlobalTheme.getRunTextColor(), forState: UIControlState.Normal)
         backButton.titleLabel!.font = UIFont.systemFontOfSize(25.0)
         backButton.addTarget(container, action: "closeHelpView:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -71,7 +72,7 @@ class HelpView: UIView {
         //content.layer.borderWidth = 1
         //content.layer.borderColor = GlobalTheme.getActualColor().CGColor
         content.backgroundColor = GlobalTheme.getBackgroundColor()
-        content.frame = CGRectMake(10, 150, container.bounds.width - 20, ypos)
+        content.frame = CGRectMake(10, (container.bounds.height - ypos)/2, container.bounds.width - 20, ypos)
         container.addSubview(content)
         
         return container

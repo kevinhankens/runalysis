@@ -222,15 +222,15 @@ class RunView: UIView, CLLocationManagerDelegate {
         if let a = self.accuracy? {
             if accuracy < Double(20) {
                 a.backgroundColor = GlobalTheme.getAccuracyGoodColor()
-                a.text = "Accuracy: Good (\(accuracy))"
+                a.text = "Accuracy: Good"
             }
             else if accuracy < Double(50) {
                 a.backgroundColor = GlobalTheme.getAccuracyFairColor()
-                a.text = "Accuracy: Fair (\(accuracy))"
+                a.text = "Accuracy: Fair"
             }
             else {
                 a.backgroundColor = GlobalTheme.getAccuracyPoorColor()
-                a.text = "Accuracy: Poor (\(accuracy))"
+                a.text = "Accuracy: Poor"
             }
         }
     }

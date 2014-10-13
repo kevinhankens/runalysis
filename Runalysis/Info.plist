@@ -25,11 +25,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>I would like to access your location to map your course.</string>
+	<string>Access your location to map your workouts.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>I would like to access your location to map your course.</string>
+	<string>Access your location to map your workouts.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>I would like to access your location to map your course.</string>
+	<string>Access your location to map your workouts.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
