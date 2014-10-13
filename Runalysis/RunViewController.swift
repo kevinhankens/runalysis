@@ -54,13 +54,15 @@ class RunViewController: UIViewController {
         // Add a back button to return to the "root" view.
         let backButton = UIButton()
         backButton.frame = CGRectMake(10, 30, container.bounds.width/2, 35.00)
-        backButton.setTitle("< Back", forState: UIControlState.Normal)
+        backButton.setTitle("< Back/Save", forState: UIControlState.Normal)
+        backButton.titleLabel?.sizeToFit()
         backButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
         backButton.titleLabel?.textAlignment = NSTextAlignment.Left
         backButton.setTitleColor(GlobalTheme.getBackButtonTextColor(), forState: UIControlState.Normal)
         backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
         backButton.backgroundColor = GlobalTheme.getBackButtonBgColor()
         backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
+        backButton.sizeToFit()
         self.view.addSubview(backButton)
     }
     

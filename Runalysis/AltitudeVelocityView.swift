@@ -176,6 +176,7 @@ class AltitudeVelocityView: UIView {
                 px = CGFloat(10)
                 cx = CGFloat(10)
                 
+                var speedColor = GlobalTheme.getSpeedOne().CGColor
                 // Draw the velocity graph.
                 for point in points {
                     
@@ -187,6 +188,21 @@ class AltitudeVelocityView: UIView {
                     
                     if let p = point as? Route {
                         
+                        switch p.relativeVelocity {
+                        case 0:
+                            speedColor = GlobalTheme.getSpeedOne().CGColor
+                        case 1:
+                            speedColor = GlobalTheme.getSpeedTwo().CGColor
+                        case 2:
+                            speedColor = GlobalTheme.getSpeedThree().CGColor
+                        case 3:
+                            speedColor = GlobalTheme.getSpeedFour().CGColor
+                        case 4:
+                            speedColor = GlobalTheme.getSpeedFive().CGColor
+                        default:
+                            speedColor = GlobalTheme.getSpeedOne().CGColor
+                        }
+                        
                         // Ensure that the velocity is not null.
                         let testv: AnyObject? = point.valueForKey("velocity")
                         if let v = testv as? NSNumber {
@@ -195,11 +211,11 @@ class AltitudeVelocityView: UIView {
                             let cv = isnan(p.velocity.doubleValue) ? Double(0) : p.velocity.doubleValue
                             cvy = self.frame.height - (CGFloat(cv - self.vLow) * self.vScale)
                             if !start {
-                                CGContextSetLineWidth(context, 1.0)
-                                CGContextSetStrokeColorWithColor(context, GlobalTheme.getVelocityGraphColor().CGColor)
-                                CGContextMoveToPoint(context, px, pvy);
-                                CGContextAddLineToPoint(context, cx, cvy);
-                                CGContextStrokePath(context);
+                                CGContextSetLineWidth(context, 2.0)
+                                var center = CGPointMake(cx, cvy)
+                                CGContextAddArc(context, center.x, center.y, CGFloat(1.5), CGFloat(0), CGFloat(2*M_PI), Int32(0))
+                                CGContextSetFillColorWithColor(context, speedColor);
+                                CGContextFillPath(context);
                             }
                             pvy = cvy
                         }

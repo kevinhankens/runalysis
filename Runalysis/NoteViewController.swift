@@ -91,10 +91,12 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         backButton.setTitle("< Back", forState: UIControlState.Normal)
         backButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
         backButton.titleLabel?.textAlignment = NSTextAlignment.Left
+        backButton.titleLabel?.sizeToFit()
         backButton.setTitleColor(GlobalTheme.getBackButtonTextColor(), forState: UIControlState.Normal)
         backButton.backgroundColor = GlobalTheme.getBackButtonBgColor()
         backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
         backButton.addTarget(self, action: "returnToRootView:", forControlEvents: UIControlEvents.TouchDown)
+        backButton.sizeToFit()
         self.view.addSubview(backButton)
         
         let daySwipeLeft = UISwipeGestureRecognizer(target: self, action: "daySwipeGesture:")

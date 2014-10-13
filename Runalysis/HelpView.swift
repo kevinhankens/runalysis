@@ -58,19 +58,17 @@ class HelpView: UIView {
         let backButton = UIButton()
         backButton.frame = CGRectMake(20, ypos, container.bounds.width/2, 20.00)
         backButton.setTitle("Ok, got it!", forState: UIControlState.Normal)
+        backButton.titleLabel?.sizeToFit()
         backButton.contentHorizontalAlignment = UIControlContentHorizontalAlignment.Left
         backButton.setTitleColor(GlobalTheme.getRunTextColor(), forState: UIControlState.Normal)
         backButton.titleLabel!.font = UIFont.systemFontOfSize(25.0)
         backButton.addTarget(container, action: "closeHelpView:", forControlEvents: UIControlEvents.TouchUpInside)
-        //backButton.layer.borderColor = GlobalTheme.getPlannedColor().CGColor
+        backButton.sizeToFit()
         content.addSubview(backButton)
         
         ypos += backButton.frame.height + 30
         
         // Add some style and a frame to the content.
-        //content.layer.cornerRadius = 2
-        //content.layer.borderWidth = 1
-        //content.layer.borderColor = GlobalTheme.getActualColor().CGColor
         content.backgroundColor = GlobalTheme.getBackgroundColor()
         content.frame = CGRectMake(10, (container.bounds.height - ypos)/2, container.bounds.width - 20, ypos)
         container.addSubview(content)
