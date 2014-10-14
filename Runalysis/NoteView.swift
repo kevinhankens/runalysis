@@ -26,13 +26,16 @@ class NoteView : UIView, UITextViewDelegate {
     // Tracks the label on the page.
     var label: UILabel?
     
+    // Tracks the highlight label on the page.
     var labelHi: UILabel?
     
     // The note that should be saved to the db.
     var note: UITextView?
     
+    // Tracks the review button.
     var reviewButton: UIButton?
     
+    // Tracks the parent controller.
     var controller: UIViewController?
     
     /*!
@@ -105,13 +108,22 @@ class NoteView : UIView, UITextViewDelegate {
         return container
     }
 
-    
+    /*!
+     * Dismisses the keyboard.
+     *
+     * @param UITapGestureRecognizer gesture
+     */
     func dismissKeyboard(gesture: UITapGestureRecognizer) {
         if let n = self.note? {
             n.resignFirstResponder()
         }
     }
     
+    /*!
+     * Tell the parent controller to segue to a route view.
+     *
+     * @param UIButton sender
+     */
     func viewRoute(sender: UIButton) {
         if let c = self.controller as? NoteViewController {
             if let d = self.dayNum? {

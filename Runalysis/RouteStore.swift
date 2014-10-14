@@ -42,8 +42,9 @@ class RouteStore: NSObject {
      * @param NSNumber velocity
      * @param NSNumber distance_traveled
      * @param NSNumber interval
+     * @param NSNumber steps
      *
-     * @return void
+     * @return Route
      */
     func storeRoutePoint(routeid: NSNumber, date: NSNumber, latitude: NSNumber, longitude: NSNumber, altitude: NSNumber, velocity: NSNumber, distance_traveled: NSNumber, interval: NSNumber, steps: NSNumber)->Route {
         

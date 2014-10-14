@@ -41,8 +41,10 @@ class RouteSummary: NSObject {
     // Tracks the duration of the run.
     var duration: Double = Double(0)
     
+    // Tracks the times for each mile run.
     var mileTimes: [Double] = []
     
+    // How many miles per meter for conversions.
     let milesPerMeter = Double(0.00062137)
 
     /*!

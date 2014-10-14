@@ -29,8 +29,10 @@ class RunView: UIView, CLLocationManagerDelegate {
     // How often to update during a run.
     let updateInterval: NSTimeInterval = 4.0
     
+    // The last time a draw occured.
     var lastDrawTime: NSDate = NSDate.date()
     
+    // How often to redraw while timing.
     let redrawInterval: NSTimeInterval = 8.0
     
     // Whether or not we are currently recording.
@@ -51,6 +53,7 @@ class RunView: UIView, CLLocationManagerDelegate {
     // Tracks the duration of the entire run.
     var duration: NSTimeInterval = NSDate().timeIntervalSinceNow
     
+    // The label for the location accuracy.
     var accuracy: UILabel?
     
     /*!
@@ -333,6 +336,9 @@ class RunView: UIView, CLLocationManagerDelegate {
         }
     }
     
+    /*!
+     * If a location error occurs, stop recording and alert.
+     */
     func stopRecordingAndDisplayLocationAlert() {
         self.recording = false
         self.failed = true

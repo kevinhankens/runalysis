@@ -43,8 +43,10 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     // The height of the content to scroll.
     var scrollContentHeight = CGFloat(0)
     
+    // Tracks the height of the RouteAnalysisView.
     var ravHeight = CGFloat(0)
     
+    // Tracks that a delete action was triggered.
     var deleteTriggered = false
     
     /*!
@@ -260,6 +262,9 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         self.returnToRootView()
     }
     
+    /*!
+     * Dismisses this view controller to return to the root view.
+     */
     func returnToRootView() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }

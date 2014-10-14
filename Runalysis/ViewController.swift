@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     // Tracks the Core Location Manager.
     var locationManager: CLLocationManager?
     
+    // Tracks the WeekSummaryView.
     var summaryView: WeekSummaryView?
    
     // The day to start on, defaults to localized Sunday.
@@ -193,25 +194,43 @@ class ViewController: UIViewController {
         }
     }
     
+    /*!
+     * Segues to a route view.
+     */
     func launchRouteView() {
         self.performSegueWithIdentifier("routeViewSegue", sender: self)
     }
     
+    /*!
+     * Segues to a note view.
+     */
     func launchNoteView() {
         self.performSegueWithIdentifier("noteViewSegue", sender: self)
     }
     
+    /*!
+     * Displays the help/config view.
+     *
+     * @param UIButton button
+     */
     func displayConfigViewFromButton(button: UIButton) {
         displayHelpView()
     }
     
     /*!
      * Handles the run button click.
+     *
+     * @param UIButton button
      */
     func displayRunViewFromButton(button: UIButton) {
         self.performSegueWithIdentifier("runViewSegue", sender: self)
     }
     
+    /*!
+     * Displays the route view.
+     *
+     * @param UIButton button
+     */
     func displayRouteViewFromButton(button: UIButton) {
         if let id = self.routeStore.getLatestRouteId()? {
             self.modalRouteId = id
@@ -296,7 +315,7 @@ class ViewController: UIViewController {
     /*!
      * Handle the horizontal swiping to change date.
      *
-     * @param gesture
+     * @param UIGestureRecognizer gesture
      *
      * @return void
      */

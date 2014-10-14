@@ -14,12 +14,16 @@ class RunViewController: UIViewController {
     // Tracks the Core Location Manager.
     var locationManager: CLLocationManager?
     
+    // Tracks the RouteStore object.
     var routeStore: RouteStore?
     
+    // Tracks the id of the viewed route.
     var routeId: NSNumber = 0
     
+    // Tracks the RunView object.
     var runView: RunView?
     
+    // Tracks the RouteAnalysisView.
     var routeAnalysisView: RouteAnalysisView?
     
     // Tracks the container for scrolling/zooming.

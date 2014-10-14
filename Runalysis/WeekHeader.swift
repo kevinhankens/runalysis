@@ -26,10 +26,10 @@ class WeekHeader: UIView {
     /*!
      * Factory method to create a WeekHeader.
      *
-     * @param cellHeight
-     * @param cellWidth
-     * @param beginDate
-     * @param endDate
+     * @param CGFloat cellHeight
+     * @param CGFloat cellWidth
+     * @param NSDate beginDate
+     * @param NSDate endDate
      *
      * @return WeekHeader
      */
@@ -54,8 +54,8 @@ class WeekHeader: UIView {
      *
      * This also updates the label accordingly.
      *
-     * @param beginDate
-     * @param endDate
+     * @param NSDate beginDate
+     * @param NSDate endDate
      *
      * @return void
      */
@@ -67,7 +67,6 @@ class WeekHeader: UIView {
 
     /*!
      * Updates the label containing the dates.
-     *
      *
      * @return void
      */

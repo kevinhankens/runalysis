@@ -240,6 +240,8 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     
     /*!
      * Handles the button press to return to the root view.
+     *
+     * @param UIButton sender
      */
     func returnToRootView(sender: UIButton) {
         if let n = self.noteView? {

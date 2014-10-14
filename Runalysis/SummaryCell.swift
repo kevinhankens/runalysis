@@ -41,6 +41,8 @@ class SummaryCell: UIView {
      * @param CGFloat cellHeight
      * @param CGFloat cellWidth
      * @param CGFloat cellY
+     * @param NSDate beginDate
+     * @param NSDate endDate
      *
      * @return SummaryCell
      */
@@ -184,15 +186,15 @@ class SummaryCell: UIView {
     }
     
     /*!
-    * Updates the header to contain a new begin and end date.
-    *
-    * This also updates the label accordingly.
-    *
-    * @param beginDate
-    * @param endDate
-    *
-    * @return void
-    */
+     * Updates the header to contain a new begin and end date.
+     *
+     * This also updates the label accordingly.
+     *
+     * @param NSDate beginDate
+     * @param NSDate endDate
+     *
+     * @return void
+     */
     func updateDate(beginDate: NSDate, endDate: NSDate) {
         self.beginDate = beginDate
         self.endDate = endDate
@@ -200,11 +202,10 @@ class SummaryCell: UIView {
     }
     
     /*!
-    * Updates the label containing the dates.
-    *
-    *
-    * @return void
-    */
+     * Updates the label containing the dates.
+     *
+     * @return void
+     */
     func updateLabel() {
         let v = self.dateLabel!
         let format = NSDateFormatter()
