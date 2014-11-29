@@ -120,7 +120,8 @@ class RouteStore: NSObject {
      * @return NSNumber?
      */
     func getFirstRoutIdForDate(date: NSNumber = 0)->NSNumber? {
-        let endDate: NSNumber = (60 * 60 * 24) + date
+        let day: NSNumber = 86400
+        let endDate: NSNumber = NSNumber(integer: day.integerValue + date.integerValue)
         var error: NSError? = nil
         let routeEntity: NSString = "Route"
         var fetch = NSFetchRequest(entityName: routeEntity)

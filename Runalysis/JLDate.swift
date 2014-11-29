@@ -27,7 +27,7 @@ extension NSDateComponents {
     // Locate a date after today.
     var fromNow: NSDate {
     let cal = NSCalendar.currentCalendar()
-        let date = cal.dateByAddingComponents(self, toDate: NSDate.date(), options: nil)
+        let date = cal.dateByAddingComponents(self, toDate: NSDate(), options: nil)
         return date!
     }
     
@@ -35,7 +35,7 @@ extension NSDateComponents {
     var beforeNow: NSDate {
     self.day *= -1
         let cal = NSCalendar.currentCalendar()
-        let date = cal.dateByAddingComponents(self, toDate: NSDate.date(), options: nil)
+        let date = cal.dateByAddingComponents(self, toDate: NSDate(), options: nil)
         return date!
     }
 }
@@ -218,7 +218,7 @@ class JLDate: NSObject {
         let format = NSDateFormatter()
         format.dateFormat = JLDate.getDateFormat()
         let num = format.stringFromDate(date).toInt()
-        let mileage = NSNumber.numberWithInteger(num!)
+        let mileage = NSNumber(integer:num!)
         return mileage
     }
     

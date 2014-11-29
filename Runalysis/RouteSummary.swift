@@ -25,9 +25,15 @@ class RouteSummary: NSObject {
     
     // The lowest velocity, currently 0.
     var velocity_low: CLLocationSpeed = Double(0)
+    var mov_avg_low: CLLocationSpeed = Double(0)
     
     // The highest velocity reached.
     var velocity_high: CLLocationSpeed = Double(0)
+    var mov_avg_high: CLLocationSpeed = Double(0)
+    
+    // The quantile for each bin.
+    var velocity_step: CLLocationSpeed = Double(0)
+    var mov_avg_step: CLLocationSpeed = Double(0)
     
     // The mean velocity over the course.
     var velocity_mean: CLLocationSpeed = Double(0)
@@ -37,6 +43,8 @@ class RouteSummary: NSObject {
     
     // Tracks a distribution of velocities relative to the mean.
     var distribution = [0, 0, 0, 0, 0]
+    
+    var mov_avg_dist = [0, 0, 0, 0, 0]
     
     // Tracks the duration of the run.
     var duration: Double = Double(0)
@@ -148,6 +156,8 @@ class RouteSummary: NSObject {
         self.velocity_high = Double(0)
         self.velocity_mean = Double(0)
         self.distance_total = Double(0)
+        self.mov_avg_low = Double(0)
+        self.mov_avg_high = Double(0)
         
         self.calculateVelocity()
         self.calculateDistribution()
@@ -171,6 +181,9 @@ class RouteSummary: NSObject {
         var mileTime = Double(0.0)
         var mileTimeTmp = Double(0.0)
         
+        var movingAverage: [Double] = [0, 0, 0, 0, 0]
+        var movingAverageTotal = Double(0.0)
+        
         if self.points?.count > 0 {
             for p in self.points! {
                 if let point = p as? Route {
@@ -183,13 +196,42 @@ class RouteSummary: NSObject {
                     let testv: AnyObject? = point.valueForKey("velocity")
                     
                     if let v = testv as? NSNumber {
-                        if point.velocity > Double(0.0) {
-                            if point.velocity < self.velocity_low || self.velocity_low == Double(0) {
-                                // @todo low is always 0.
-                                self.velocity_low = point.velocity
+                        
+                        // Determine the moving average by compiling a list
+                        // of trailing values.
+                        movingAverageTotal = 0.0
+                        for (i, a) in enumerate(movingAverage) {
+                            if i < movingAverage.count - 1 {
+                                movingAverage[i] = movingAverage[i + 1]
                             }
-                            else if point.velocity > self.velocity_high {
-                                self.velocity_high = point.velocity
+                            else {
+                                movingAverage[i] = point.velocity.doubleValue
+                            }
+                            movingAverageTotal += movingAverage[i]
+                        }
+                        
+                        // Set the new velocity if the moving average array
+                        // has enough values to be significant.
+                        if count > movingAverage.count - 1 {
+                            point.velocityMovingAvg = movingAverageTotal / Double(movingAverage.count)
+                        }
+                        else {
+                            point.velocityMovingAvg = point.velocity
+                        }
+                        
+                        if point.velocity.doubleValue > Double(0.0) {
+                            if point.velocity.doubleValue < self.velocity_low || self.velocity_low == Double(0) {
+                                // @todo low is always 0.
+                                self.velocity_low = point.velocity.doubleValue
+                            }
+                            else if point.velocity.doubleValue > self.velocity_high {
+                                self.velocity_high = point.velocity.doubleValue
+                            }
+                            if point.velocityMovingAvg.doubleValue < self.mov_avg_low || self.mov_avg_low == Double(0) {
+                                self.mov_avg_low = point.velocityMovingAvg.doubleValue
+                            }
+                            else if point.velocityMovingAvg.doubleValue > self.mov_avg_high {
+                                self.mov_avg_high = point.velocityMovingAvg.doubleValue
                             }
                             self.distance_total += Double(point.distance)
                             total += Double(point.velocity)
@@ -221,13 +263,31 @@ class RouteSummary: NSObject {
         var rel = 0
         // For some reason trying to adjust self.distribution is very expensive. So do it in a local var and update once at the end.
         var tmp = [0,0,0,0,0]
+        var tmp_mov = [0,0,0,0,0]
+        
+        let velocityDiff = self.velocity_high - self.velocity_low
+        self.velocity_step = velocityDiff/5
+        
+        let velocityDiffMov = self.mov_avg_high - self.mov_avg_low
+        self.mov_avg_step = velocityDiffMov/5
         
         if self.points?.count > 0 {
             for p: AnyObject in self.points! {
                 if let point = p as? Route {
-                    rel = self.getRelativeVelocity(point)
-                    point.relativeVelocity = rel
-                    tmp[rel]++
+                    // This is a little overkill, but the simulator occasionally
+                    // fails leaving an invalid point in the db due to a null value
+                    // for the velocity column. Strange because it's got a default
+                    // value of 0. This is the only way I've found to prevent crashing.
+                    let testv: AnyObject? = point.valueForKey("velocity")
+                    
+                    if let v = testv as? NSNumber {
+                        rel = self.getRelativeVelocity(point.velocity, low: self.velocity_low, step: self.velocity_step).integerValue
+                        point.relativeVelocity = rel
+                        tmp[rel]++
+                        rel = self.getRelativeVelocity(point.velocityMovingAvg, low: self.mov_avg_low, step: self.mov_avg_step).integerValue
+                        point.relVelMovingAvg = rel
+                        tmp_mov[rel]++
+                    }
                 }
             }
         }
@@ -235,50 +295,32 @@ class RouteSummary: NSObject {
         var i = 0
         for i = 0; i < 5; i++ {
             self.distribution[i] = tmp[i]
+            self.mov_avg_dist[i] = tmp_mov[i]
         }
     }
     
     /*!
      * Gets the relative velocity of a point compared to the high, low and average.
      *
-     * @param Route point
-     *
      * @return NSNumber
      */
-    func getRelativeVelocity(point: Route)->NSNumber {
-        let velocityDiff = self.velocity_high - self.velocity_low
-        let velocityStep = velocityDiff/5
-        
-        let velocityDiffBottom = self.velocity_mean - self.velocity_low
-        let velocityDiffTop = self.velocity_high - self.velocity_mean
+    func getRelativeVelocity(velocity: NSNumber, low: CLLocationSpeed, step: CLLocationSpeed)->NSNumber {
         var rel = 0
         
-        let testv: AnyObject? = point.valueForKey("velocity")
-        
-        // This is a little overkill, but the simulator occasionally
-        // fails leaving an invalid point in the db due to a null value
-        // for the velocity column. Strange because it's got a default
-        // value of 0. This is the only way I've found to prevent crashing.
-        if let v = testv as? NSNumber {
-            //if point.velocity < self.velocity_low + velocityDiffBottom/2.5 {
-            if point.velocity < self.velocity_low + velocityStep {
-                rel = 0
-            }
-            //else if point.velocity < self.velocity_low + ((velocityDiffBottom/2.5) * 2) {
-            else if point.velocity < self.velocity_low + (velocityStep * 2) {
-                rel = 1
-            }
-            //else if point.velocity < self.velocity_high - ((velocityDiffTop/2.5) * 2) {
-            else if point.velocity < self.velocity_low + (velocityStep * 3) {
-                rel = 2
-            }
-            //else if point.velocity < self.velocity_high - ((velocityDiffTop/2.5)) {
-            else if point.velocity < self.velocity_low + (velocityStep * 4) {
-                rel = 3
-            }
-            else {
-                rel = 4
-            }
+        if velocity.doubleValue < low + step {
+            rel = 0
+        }
+        else if velocity.doubleValue < low + (step * 2) {
+            rel = 1
+        }
+        else if velocity.doubleValue < low + (step * 3) {
+            rel = 2
+        }
+        else if velocity.doubleValue < low + (step * 4) {
+            rel = 3
+        }
+        else {
+            rel = 4
         }
         
         return rel

@@ -38,6 +38,8 @@ class AltitudeVelocityView: UIView {
     // The scale of velocity differential to the vertical space.
     var vScale = CGFloat(0)
     
+    var vBgAlpha = CGFloat(0.75)
+    
     /*!
      * Determines the relationships between the data differentials and the visual space.
      *
@@ -80,17 +82,17 @@ class AltitudeVelocityView: UIView {
                         if let v = testv as? NSNumber {
                             // Determine the high and low points for altitude
                             // and velocity as this determines the scale.
-                            if aLow == Double(0) || p.altitude < aLow {
+                            if aLow == Double(0) || p.altitude.doubleValue < aLow {
                                 aLow = p.altitude.doubleValue
                             }
-                            else if aHigh == Double(0) || p.altitude > aHigh {
+                            else if aHigh == 0.0 || p.altitude.doubleValue > aHigh {
                                 aHigh = p.altitude.doubleValue
                             }
-                            if !isnan(p.velocity.doubleValue) && (vLow == Double(0) || p.velocity < vLow) {
-                                vLow = p.velocity.doubleValue
+                            if !isnan(p.velocityMovingAvg.doubleValue) && (vLow == 0.0 || p.velocityMovingAvg.doubleValue < vLow) {
+                                vLow = p.velocityMovingAvg.doubleValue
                             }
-                            else if !isnan(p.velocity.doubleValue) && (vHigh == Double(0) || p.velocity > vHigh) {
-                                vHigh = p.velocity.doubleValue
+                            else if !isnan(p.velocityMovingAvg.doubleValue) && (vHigh == 0.0 || p.velocityMovingAvg.doubleValue > vHigh) {
+                                vHigh = p.velocityMovingAvg.doubleValue
                             }
                         }
                     }
@@ -177,6 +179,7 @@ class AltitudeVelocityView: UIView {
                 cx = CGFloat(10)
                 
                 var speedColor = GlobalTheme.getSpeedOne().CGColor
+                var speedColorBg = GlobalTheme.getSpeedOne().CGColor
                 // Draw the velocity graph.
                 for point in points {
                     
@@ -188,34 +191,56 @@ class AltitudeVelocityView: UIView {
                     
                     if let p = point as? Route {
                         
-                        switch p.relativeVelocity {
+                        switch p.relVelMovingAvg {
                         case 0:
                             speedColor = GlobalTheme.getSpeedOne().CGColor
+                            speedColorBg = GlobalTheme.getSpeedOne(setAlpha: self.vBgAlpha).CGColor
                         case 1:
                             speedColor = GlobalTheme.getSpeedTwo().CGColor
+                            speedColorBg = GlobalTheme.getSpeedTwo(setAlpha: self.vBgAlpha).CGColor
                         case 2:
                             speedColor = GlobalTheme.getSpeedThree().CGColor
+                            speedColorBg = GlobalTheme.getSpeedThree(setAlpha: self.vBgAlpha).CGColor
                         case 3:
                             speedColor = GlobalTheme.getSpeedFour().CGColor
+                            speedColorBg = GlobalTheme.getSpeedFour(setAlpha: self.vBgAlpha).CGColor
                         case 4:
                             speedColor = GlobalTheme.getSpeedFive().CGColor
+                            speedColorBg = GlobalTheme.getSpeedFive(setAlpha: self.vBgAlpha).CGColor
                         default:
                             speedColor = GlobalTheme.getSpeedOne().CGColor
+                            speedColorBg = GlobalTheme.getSpeedOne(setAlpha: self.vBgAlpha).CGColor
                         }
                         
                         // Ensure that the velocity is not null.
-                        let testv: AnyObject? = point.valueForKey("velocity")
+                        let testv: AnyObject? = point.valueForKey("velocityMovingAvg")
                         if let v = testv as? NSNumber {
                             // Velocity.
                             // @todo why does velocity eval to nan?
-                            let cv = isnan(p.velocity.doubleValue) ? Double(0) : p.velocity.doubleValue
+                            let cv = isnan(p.velocityMovingAvg.doubleValue) ? Double(0) : p.velocityMovingAvg.doubleValue
                             cvy = self.frame.height - (CGFloat(cv - self.vLow) * self.vScale)
                             if !start {
+                                // Draw the relative velocity point
                                 CGContextSetLineWidth(context, 2.0)
                                 var center = CGPointMake(cx, cvy)
+                                
                                 CGContextAddArc(context, center.x, center.y, CGFloat(1.5), CGFloat(0), CGFloat(2*M_PI), Int32(0))
                                 CGContextSetFillColorWithColor(context, speedColor);
                                 CGContextFillPath(context);
+                                CGContextBeginPath(context)
+                                //CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().CGColor)
+                                //CGContextMoveToPoint(context, px, pvy)
+                                //CGContextAddLineToPoint(context, cx, cvy)
+                                //CGContextStrokePath(context);
+                                
+                                // Draw the actual velocity
+                                //let av = isnan(p.velocity.doubleValue) ? Double(0) : p.velocity.doubleValue
+                                //let avy = self.frame.height - (CGFloat(av - self.vLow) * self.vScale)
+                                //CGContextSetLineWidth(context, 2.0)
+                                //center = CGPointMake(cx, avy)
+                                //CGContextAddArc(context, center.x, center.y, CGFloat(1.5), CGFloat(0), CGFloat(2*M_PI), Int32(0))
+                                //CGContextSetFillColorWithColor(context, speedColorBg);
+                                //CGContextFillPath(context);
                             }
                             pvy = cvy
                         }

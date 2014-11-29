@@ -239,8 +239,8 @@ class GlobalTheme {
      *
      * @return UIColor
      */
-    class func getSpeedOne()->UIColor {
-        return UIColor(red: 255/255, green: 66/255, blue: 66/255, alpha: 1.0)
+    class func getSpeedOne(setAlpha: CGFloat = 1.0)->UIColor {
+        return UIColor(red: 255/255, green: 66/255, blue: 66/255, alpha: setAlpha)
     }
     
     /*!
@@ -248,8 +248,8 @@ class GlobalTheme {
      *
      * @return UIColor
      */
-    class func getSpeedTwo()->UIColor {
-        return UIColor(red: 255/255, green: 135/255, blue: 66/255, alpha: 1.0)
+    class func getSpeedTwo(setAlpha: CGFloat = 1.0)->UIColor {
+        return UIColor(red: 255/255, green: 135/255, blue: 66/255, alpha: setAlpha)
     }
     
     /*!
@@ -257,8 +257,8 @@ class GlobalTheme {
      *
      * @return UIColor
      */
-    class func getSpeedThree()->UIColor {
-        return UIColor(red: 255/255, green: 255/255, blue: 66/255, alpha: 1.0)
+    class func getSpeedThree(setAlpha: CGFloat = 1.0)->UIColor {
+        return UIColor(red: 255/255, green: 255/255, blue: 66/255, alpha: setAlpha)
     }
     
     /*!
@@ -266,8 +266,8 @@ class GlobalTheme {
      *
      * @return UIColor
      */
-    class func getSpeedFour()->UIColor {
-        return UIColor(red: 135/255, green: 255/255, blue: 66/255, alpha: 1.0)
+    class func getSpeedFour(setAlpha: CGFloat = 1.0)->UIColor {
+        return UIColor(red: 135/255, green: 255/255, blue: 66/255, alpha: setAlpha)
     }
     
     /*!
@@ -275,8 +275,8 @@ class GlobalTheme {
      *
      * @return UIColor
      */
-    class func getSpeedFive()->UIColor {
-        return UIColor(red: 66/255, green: 255/255, blue: 66/255, alpha: 1.0)
+    class func getSpeedFive(setAlpha: CGFloat = 1.0)->UIColor {
+        return UIColor(red: 66/255, green: 255/255, blue: 66/255, alpha: setAlpha)
     }
     
     /*!

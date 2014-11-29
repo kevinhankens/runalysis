@@ -24,13 +24,13 @@ class RunView: UIView, CLLocationManagerDelegate {
     var prev = CLLocation()
     
     // Tracks the last time the run was updated.
-    var lastUpdateTime: NSDate = NSDate.date()
+    var lastUpdateTime: NSDate = NSDate()
     
     // How often to update during a run.
     let updateInterval: NSTimeInterval = 4.0
     
     // The last time a draw occured.
-    var lastDrawTime: NSDate = NSDate.date()
+    var lastDrawTime: NSDate = NSDate()
     
     // How often to redraw while timing.
     let redrawInterval: NSTimeInterval = 8.0
@@ -192,7 +192,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             sender.setTitle("Pause", forState: UIControlState.Normal)
             sender.setTitleColor(GlobalTheme.getStopTextColor(), forState: UIControlState.Normal)
             sender.backgroundColor = GlobalTheme.getStopBgColor()
-            self.lastUpdateTime = NSDate.date()
+            self.lastUpdateTime = NSDate()
             if (self.locationManager != nil) {
                 if let loc = self.locationManager? {
                     // In the simulator the location object occasionally fails.

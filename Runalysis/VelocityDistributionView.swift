@@ -36,7 +36,7 @@ class VelocityDistributionView: UIView {
             CGContextSetFillColorWithColor(context, GlobalTheme.getBackgroundColor().CGColor);
             CGContextFillRect(context, self.bounds)
         
-            let barWidth = (Int(self.frame.width - self.barPadding)/summary.distribution.count) - Int(self.barPadding)
+            let barWidth = (Int(self.frame.width - self.barPadding)/summary.mov_avg_dist.count) - Int(self.barPadding)
         
             var tx = CGFloat(10)
             var ty = CGFloat(0)
@@ -47,7 +47,7 @@ class VelocityDistributionView: UIView {
         
             // Find the high point, which will determine the scale.
             var high = 0
-            for count in summary.distribution {
+            for count in summary.mov_avg_dist {
                 if count > high {
                     high = count
                 }
@@ -56,7 +56,7 @@ class VelocityDistributionView: UIView {
             let scale = self.frame.height/CGFloat(high)
         
             var index = 0
-            for count in summary.distribution {
+            for count in summary.mov_avg_dist {
                 
                 switch index {
                 case 0:

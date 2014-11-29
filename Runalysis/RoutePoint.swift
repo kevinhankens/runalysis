@@ -16,6 +16,7 @@ class RoutePoint: NSObject {
     var longitude: NSNumber = 0.0
     var altitude: NSNumber = 0.0
     var velocity: NSNumber = 0.0
+    var velocityMovingAvg: NSNumber = 0.0
     var distance: NSNumber = 0.0
     var relativeVelocity: NSNumber = 0
 

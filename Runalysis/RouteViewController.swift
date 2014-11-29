@@ -28,6 +28,9 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     // The currently viewed route.
     var routeView: RouteView?
     
+    // The route layer drawing.
+    var routeLayer: CALayer?
+    
     // Tracks the RouteAnalysisView object.
     var routeAnalysisView: RouteAnalysisView?
     
@@ -86,10 +89,25 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         //container.contentSize = CGSizeMake(self.view.bounds.width, self.view.bounds.height)
         //container.delegate = self
         
+        // Handle route drawing
+        let routeAnimation = CABasicAnimation()
+        routeAnimation.keyPath = "strokeEnd"
+        routeAnimation.repeatCount = 1.0
+        routeAnimation.duration = 10.0
+        routeAnimation.fromValue = 0.0
+        routeAnimation.toValue = 1.0
+        routeAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        let routeLayer = CALayer()
+        routeLayer.delegate = routeView
+        routeLayer.frame = routeView.frame
+        routeLayer.addAnimation(routeAnimation, forKey: "strokeEndAnimation")
+        container.layer.addSublayer(routeLayer)
+        routeLayer.setNeedsDisplay()
+        
+        self.routeLayer = routeLayer
         self.routeView = routeView
         
         container.addSubview(routeView)
-        //self.view.addSubview(container)
         
         ypos = ypos + routeView.frame.height + 10
         
@@ -103,7 +121,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         self.scrollContentHeight = ypos //+ CGFloat(rav.frame.height)
         self.scrollContainer = container
         self.view.addSubview(container)
-        
+       
         // Add a back button to return to the "root" view.
         let backButton = UIButton()
         backButton.frame = CGRectMake(10, 30, self.view.bounds.width/2, 20.00)
@@ -117,6 +135,8 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         backButton.addTarget(self, action: "returnToRootViewButton:", forControlEvents: UIControlEvents.TouchDown)
         backButton.sizeToFit()
         self.view.addSubview(backButton)
+        
+        
     }
     
     /*!
@@ -236,6 +256,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
                     self.ravHeight = rav.frame.height
                     rav.updateDuration(self.routeSummary!.duration)
                     self.resetContentHeight()
+                    self.routeLayer?.setNeedsDisplay()
                 }
             }
         }
@@ -280,7 +301,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
      *
      */
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientationMask.Portrait.toRaw())
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
     }
     
     /*!

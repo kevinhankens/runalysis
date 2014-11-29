@@ -38,6 +38,9 @@ class RouteView: UIView {
     // The scale between the grid points and the canvas points.
     var gridRatio = 0.0
     
+    // The width of the course drawing.
+    let lineWidth = CGFloat(5.0)
+    
     /*!
      * Factory method to create a RouteView object.
      *
@@ -88,24 +91,24 @@ class RouteView: UIView {
     func determineGrid() {
         if self.summary!.points?.count > 0 {
             if let zp = self.summary!.points![0] as? Route {
-                self.gridMinX = zp.longitude
-                self.gridMaxX = zp.longitude
-                self.gridMinY = zp.latitude
-                self.gridMaxY = zp.latitude
+                self.gridMinX = zp.longitude.doubleValue
+                self.gridMaxX = zp.longitude.doubleValue
+                self.gridMinY = zp.latitude.doubleValue
+                self.gridMaxY = zp.latitude.doubleValue
             }
             for point in self.summary!.points! {
                 if let p = point as? Route {
-                    if p.longitude > self.gridMaxX {
-                        self.gridMaxX = p.longitude
+                    if p.longitude.doubleValue > self.gridMaxX {
+                        self.gridMaxX = p.longitude.doubleValue
                     }
-                    else if p.longitude < self.gridMinX {
-                        self.gridMinX = p.longitude
+                    else if p.longitude.doubleValue < self.gridMinX {
+                        self.gridMinX = p.longitude.doubleValue
                     }
-                    if p.latitude > self.gridMaxY {
-                        self.gridMaxY = p.latitude
+                    if p.latitude.doubleValue > self.gridMaxY {
+                        self.gridMaxY = p.latitude.doubleValue
                     }
-                    else if p.latitude < self.gridMinY {
-                        self.gridMinY = p.latitude
+                    else if p.latitude.doubleValue < self.gridMinY {
+                        self.gridMinY = p.latitude.doubleValue
                     }
                 }
             }
@@ -142,19 +145,31 @@ class RouteView: UIView {
      * 
      * @return void
      */
-    override func drawRect(rect: CGRect) {
+    //override func drawRect(rect: CGRect) {
+    override func drawLayer(layer: CALayer!, inContext ctx: CGContext!) {
         var mileCounter = 0
         var mileTest = 0
         var total = Double(0)
         
-        let context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, GlobalTheme.getBackgroundColor().CGColor);
-        CGContextFillRect(context, self.bounds)
+        //let context = UIGraphicsGetCurrentContext()
+        CGContextSetFillColorWithColor(ctx, GlobalTheme.getBackgroundColor().CGColor);
+        CGContextFillRect(ctx, self.bounds)
         
         var px: CGFloat = 0.0
         var py: CGFloat = 0.0
+        var ppx: CGFloat = 0.0
+        var ppy: CGFloat = 0.0
         var cx: CGFloat = 0.0
         var cy: CGFloat = 0.0
+        var dx: CGFloat = 0.0
+        var dy: CGFloat = 0.0
+        var wx: CGFloat = 0.0
+        var wy: CGFloat = 0.0
+        var dhyp: CGFloat = 0.0
+        var dratio: CGFloat = 0.0
+        
+        var q: Int = 0
+        var d: CGFloat = 0.0
         //var ptime: NSNumber = 0.0
         var start = true
         var speedColor = GlobalTheme.getSpeedOne().CGColor
@@ -174,35 +189,90 @@ class RouteView: UIView {
                             start = false
                         }
                         else {
-                            switch p.relativeVelocity {
+                            switch p.relVelMovingAvg {
                             case 0:
-                                speedColor = GlobalTheme.getSpeedOne().CGColor
+                                speedColor = GlobalTheme.getSpeedOne(setAlpha: 1.0).CGColor
                             case 1:
-                                speedColor = GlobalTheme.getSpeedTwo().CGColor
+                                speedColor = GlobalTheme.getSpeedTwo(setAlpha: 1.0).CGColor
                             case 2:
-                                speedColor = GlobalTheme.getSpeedThree().CGColor
+                                speedColor = GlobalTheme.getSpeedThree(setAlpha: 1.0).CGColor
                             case 3:
-                                speedColor = GlobalTheme.getSpeedFour().CGColor
+                                speedColor = GlobalTheme.getSpeedFour(setAlpha: 1.0).CGColor
                             case 4:
-                                speedColor = GlobalTheme.getSpeedFive().CGColor
+                                speedColor = GlobalTheme.getSpeedFive(setAlpha: 1.0).CGColor
                             default:
-                                speedColor = GlobalTheme.getSpeedOne().CGColor
+                                speedColor = GlobalTheme.getSpeedOne(setAlpha: 1.0).CGColor
                             }
                             
-                            CGContextSetStrokeColorWithColor(context, speedColor)
+                            CGContextSetStrokeColorWithColor(ctx, speedColor)
                             
-                            CGContextSetLineWidth(context, 4.0)
-                            CGContextBeginPath(context);
-                            CGContextMoveToPoint(context, px, py);
-                            CGContextAddLineToPoint(context, cx, cy);
-                            CGContextStrokePath(context);
+                            dx = fabs(cx - px)
+                            dy = fabs(cy - py)
                             
-                            CGContextSetLineWidth(context, 2.0)
-                            var center = CGPointMake(cx, cy)
-                            CGContextAddArc(context, center.x, center.y, CGFloat(1.5), CGFloat(0), CGFloat(2*M_PI), Int32(0))
-                            CGContextSetFillColorWithColor(context, speedColor);
-                            CGContextFillPath(context);
-                            //CGContextStrokePath(context);
+                            dhyp = sqrt(pow(dx, 2) + pow(dy, 2))
+                            dratio = dhyp/self.lineWidth
+                            
+                            if dratio == 0.0 {
+                                wx = 0.0
+                                wy = 0.0
+                            }
+                            else {
+                                wx = dy/dratio
+                                wy = dx/dratio
+                            }
+                            
+                            if cx > px && cy > py {
+                                // Moving SE
+                                q = 0
+                                wx *= -1
+                            }
+                            else if cx > px && cy < py {
+                                // Moving NE
+                                q = 1
+                            }
+                            else if cx < px && cy < py {
+                                // Moving NW
+                                q = 2
+                                wy *= -1
+                            }
+                            else {  // cx < px && cy > py
+                                // Moving SW or not moving
+                                q = 3
+                                wx *= -1
+                                wy *= -1
+                            }
+                            
+                            //println("-----")
+                            //println("q \(q)")
+                            //println("dhyp \(dhyp)")
+                            //println("dratio \(dratio)")
+                            //println("dx \(dx)")
+                            //println("dy \(dy)")
+                            //println("wx \(wx)")
+                            //println("wy \(wy)")
+                            
+                            // @todo find the angle of the path and make a
+                            // rectangle that matches the slope... ideally
+                            // matching up all points. Then see if you can
+                            // add a gradient to the rect in the correct dir.
+                            //CGContextSetLineWidth(ctx, 6.0)
+                            CGContextBeginPath(ctx)
+                            CGContextMoveToPoint(ctx, px, py)
+                            CGContextAddLineToPoint(ctx, cx, cy)
+                            CGContextAddLineToPoint(ctx, cx + wx, cy + wy)
+                            CGContextAddLineToPoint(ctx, px + wx, py + wy)
+                            CGContextAddLineToPoint(ctx, ppx, ppy)
+                            CGContextAddLineToPoint(ctx, px, py)
+                            CGContextSetFillColorWithColor(ctx, speedColor)
+                            CGContextFillPath(ctx)
+                            //CGContextStrokePath(ctx);
+                            
+                            //CGContextSetLineWidth(ctx, 2.0)
+                            //var center = CGPointMake(cx, cy)
+                            //CGContextAddArc(ctx, center.x, center.y, CGFloat(3.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
+                            //CGContextSetFillColorWithColor(ctx, speedColor);
+                            //CGContextFillPath(ctx);
+                            ////CGContextStrokePath(context);
                             
                             // Draw a mile marker
                             total += p.distance.doubleValue * Double(0.00062137)
@@ -210,15 +280,17 @@ class RouteView: UIView {
                             if mileTest > mileCounter {
                                 mileCounter = mileTest
                                 var center = CGPointMake(cx, cy)
-                                CGContextSetLineWidth(context, 1.0)
-                                CGContextAddArc(context, center.x, center.y, CGFloat(12.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
-                                CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().CGColor)
-                                CGContextStrokePath(context);
+                                CGContextSetLineWidth(ctx, 1.0)
+                                CGContextAddArc(ctx, center.x, center.y, CGFloat(12.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
+                                CGContextSetStrokeColorWithColor(ctx, UIColor.whiteColor().CGColor)
+                                CGContextStrokePath(ctx);
                             }
                         }
                     }
                     px = cx
                     py = cy
+                    ppx = cx + wx
+                    ppy = cy + wy
                     //ptime = p.date
                     //println("r: \(self.gridRatio)")
                     //println("lat: \(p.latitude)")

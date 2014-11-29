@@ -175,13 +175,13 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         if let p = self.picker? {
             if let m = self.mileage? {
                 let pm = Int(m.mileagePlanned)
-                let pdec = Int(round((m.mileagePlanned - Double(pm)) * 100))
+                let pdec = Int(round((m.mileagePlanned.doubleValue - Double(pm)) * 100))
                 var pd = Int(0)
                 if pdec > 0 {
                     pd = Int(Double(pdec)/Double(5))
                 }
                 let am = Int(m.mileageActual)
-                let adec = Int(round((m.mileageActual - Double(am)) * 100))
+                let adec = Int(round((m.mileageActual.doubleValue - Double(am)) * 100))
                 var ad = Int(0)
                 if adec > 0 {
                     ad = Int(Double(adec)/Double(5))
@@ -273,7 +273,7 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
      * Implements UIViewController::supportedInterfaceOrientations.
      */
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientationMask.Portrait.toRaw())
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
     }
     
     // UIPickerView Delegate Methods

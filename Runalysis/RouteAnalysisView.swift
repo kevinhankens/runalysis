@@ -59,19 +59,19 @@ class RouteAnalysisView: UIView {
         
         ypos += dl.bounds.height
         
-        let al = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 45))
+        let al = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 50))
         al.text = "-"
         al.textColor = GlobalTheme.getDistanceVelocityTextColor()
-        al.font = UIFont.systemFontOfSize(40.0)
+        al.font = UIFont.systemFontOfSize(45.0)
         rav.labelAverage = al
         rav.addSubview(al)
         
         ypos += al.bounds.height
         
-        let tl = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 45))
+        let tl = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 50))
         tl.text = "-"
         tl.textColor = GlobalTheme.getTimerTextColor()
-        tl.font = UIFont.systemFontOfSize(40.0)
+        tl.font = UIFont.systemFontOfSize(45.0)
         rav.labelTimer = tl
         rav.addSubview(tl)
         
@@ -168,7 +168,7 @@ class RouteAnalysisView: UIView {
         if let dl = self.labelDate? {
             if let summary = self.routeSummary? {
                 height += dl.frame.height
-                let date = NSDate(timeIntervalSince1970:summary.routeId)
+                let date = NSDate(timeIntervalSince1970:NSTimeInterval(summary.routeId))
                 let format = NSDateFormatter()
                 format.dateFormat = JLDate.getDateFormatFull()
                 dl.text = format.stringFromDate(date)
