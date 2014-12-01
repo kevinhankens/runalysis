@@ -42,9 +42,9 @@ class RouteSummary: NSObject {
     var distance_total: CLLocationDistance = Double(0)
     
     // Tracks a distribution of velocities relative to the mean.
-    var distribution = [0, 0, 0, 0, 0]
+    var distribution = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     
-    var mov_avg_dist = [0, 0, 0, 0, 0]
+    var mov_avg_dist = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     
     // Tracks the duration of the run.
     var duration: Double = Double(0)
@@ -262,14 +262,14 @@ class RouteSummary: NSObject {
     func calculateDistribution() {
         var rel = 0
         // For some reason trying to adjust self.distribution is very expensive. So do it in a local var and update once at the end.
-        var tmp = [0,0,0,0,0]
-        var tmp_mov = [0,0,0,0,0]
+        var tmp = [0,0,0,0,0,0,0,0,0]
+        var tmp_mov = [0,0,0,0,0,0,0,0,0]
         
         let velocityDiff = self.velocity_high - self.velocity_low
-        self.velocity_step = velocityDiff/5
+        self.velocity_step = velocityDiff/Double(tmp.count)
         
         let velocityDiffMov = self.mov_avg_high - self.mov_avg_low
-        self.mov_avg_step = velocityDiffMov/5
+        self.mov_avg_step = velocityDiffMov/Double(tmp_mov.count)
         
         if self.points?.count > 0 {
             for p: AnyObject in self.points! {
@@ -284,7 +284,7 @@ class RouteSummary: NSObject {
                         rel = self.getRelativeVelocity(point.velocity, low: self.velocity_low, step: self.velocity_step).integerValue
                         point.relativeVelocity = rel
                         tmp[rel]++
-                        rel = self.getRelativeVelocity(point.velocityMovingAvg, low: self.mov_avg_low, step: self.mov_avg_step).integerValue
+                        rel = self.getRelativeVelocity(point.velocityMovingAvg, low: self.velocity_low, step: self.velocity_step).integerValue
                         point.relVelMovingAvg = rel
                         tmp_mov[rel]++
                     }
@@ -293,7 +293,7 @@ class RouteSummary: NSObject {
         }
         
         var i = 0
-        for i = 0; i < 5; i++ {
+        for i = 0; i < tmp.count; i++ {
             self.distribution[i] = tmp[i]
             self.mov_avg_dist[i] = tmp_mov[i]
         }
@@ -307,22 +307,13 @@ class RouteSummary: NSObject {
     func getRelativeVelocity(velocity: NSNumber, low: CLLocationSpeed, step: CLLocationSpeed)->NSNumber {
         var rel = 0
         
-        if velocity.doubleValue < low + step {
-            rel = 0
+        for var i = 0; i < self.distribution.count; i++ {
+            if velocity.doubleValue < low + (step * Double((i + 1))) {
+                rel = i
+                break
+            }
         }
-        else if velocity.doubleValue < low + (step * 2) {
-            rel = 1
-        }
-        else if velocity.doubleValue < low + (step * 3) {
-            rel = 2
-        }
-        else if velocity.doubleValue < low + (step * 4) {
-            rel = 3
-        }
-        else {
-            rel = 4
-        }
-        
+       
         return rel
     }
 

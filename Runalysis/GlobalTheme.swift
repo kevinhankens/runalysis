@@ -235,6 +235,43 @@ class GlobalTheme {
     }
     
     /*!
+     * Retrieves a color based on a numeric speed.
+     *
+     * @param speed
+     * @param setAlpha
+     *
+     * @return UIColor
+     */
+    class func getSpeedColor(speed: Int, setAlpha: CGFloat = 1.0)->UIColor {
+        var c: UIColor
+    
+        switch speed {
+        case 0: // Red
+            c = UIColor(red: 255/255, green: 66/255, blue: 66/255, alpha: setAlpha)
+        case 1: // Redorange
+            c = UIColor(red: 255/255, green: 135/255, blue: 66/255, alpha: setAlpha)
+        case 2: // Orange
+            c = UIColor(red: 255/255, green: 185/255, blue: 66/255, alpha: setAlpha)
+        case 3: // Orangeyellow
+            c = UIColor(red: 255/255, green: 225/255, blue: 66/255, alpha: setAlpha)
+        case 4: // Yellow
+            c = UIColor(red: 255/255, green: 255/255, blue: 66/255, alpha: setAlpha)
+        case 5: // Yellowgreen
+            c = UIColor(red: 185/255, green: 255/255, blue: 66/255, alpha: setAlpha)
+        case 6: // Yellowgreen
+            c = UIColor(red: 135/255, green: 255/255, blue: 66/255, alpha: setAlpha)
+        case 7: // Green
+            c = UIColor(red: 66/255, green: 255/255, blue: 66/255, alpha: setAlpha)
+        case 8: // Bluegreen
+            c = UIColor(red: 66/255, green: 255/255, blue: 135/255, alpha: setAlpha)
+        default:
+            c = UIColor(red: 255/255, green: 66/255, blue: 66/255, alpha: setAlpha)
+        }
+        
+        return c
+    }
+    
+    /*!
      * Retrieves the color of the lowest speed.
      *
      * @return UIColor

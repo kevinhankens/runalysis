@@ -172,7 +172,7 @@ class RouteView: UIView {
         var d: CGFloat = 0.0
         //var ptime: NSNumber = 0.0
         var start = true
-        var speedColor = GlobalTheme.getSpeedOne().CGColor
+        var speedColor: CGColor
         if self.summary!.points?.count > 0 {
             for point in self.summary!.points! {
                 if let p = point as? Route {
@@ -189,20 +189,7 @@ class RouteView: UIView {
                             start = false
                         }
                         else {
-                            switch p.relVelMovingAvg {
-                            case 0:
-                                speedColor = GlobalTheme.getSpeedOne(setAlpha: 1.0).CGColor
-                            case 1:
-                                speedColor = GlobalTheme.getSpeedTwo(setAlpha: 1.0).CGColor
-                            case 2:
-                                speedColor = GlobalTheme.getSpeedThree(setAlpha: 1.0).CGColor
-                            case 3:
-                                speedColor = GlobalTheme.getSpeedFour(setAlpha: 1.0).CGColor
-                            case 4:
-                                speedColor = GlobalTheme.getSpeedFive(setAlpha: 1.0).CGColor
-                            default:
-                                speedColor = GlobalTheme.getSpeedOne(setAlpha: 1.0).CGColor
-                            }
+                            speedColor = GlobalTheme.getSpeedColor(p.relVelMovingAvg.integerValue, setAlpha: 1.0).CGColor
                             
                             CGContextSetStrokeColorWithColor(ctx, speedColor)
                             

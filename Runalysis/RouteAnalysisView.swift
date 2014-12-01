@@ -68,10 +68,10 @@ class RouteAnalysisView: UIView {
         
         ypos += al.bounds.height
         
-        let tl = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 50))
+        let tl = UILabel(frame: CGRectMake(10, ypos, rav.bounds.width, 60))
         tl.text = "-"
         tl.textColor = GlobalTheme.getTimerTextColor()
-        tl.font = UIFont.systemFontOfSize(45.0)
+        tl.font = UIFont.systemFontOfSize(55.0)
         rav.labelTimer = tl
         rav.addSubview(tl)
         

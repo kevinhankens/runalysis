@@ -88,11 +88,11 @@ class AltitudeVelocityView: UIView {
                             else if aHigh == 0.0 || p.altitude.doubleValue > aHigh {
                                 aHigh = p.altitude.doubleValue
                             }
-                            if !isnan(p.velocityMovingAvg.doubleValue) && (vLow == 0.0 || p.velocityMovingAvg.doubleValue < vLow) {
-                                vLow = p.velocityMovingAvg.doubleValue
+                            if !isnan(p.velocity.doubleValue) && (vLow == 0.0 || p.velocity.doubleValue < vLow) {
+                                vLow = p.velocity.doubleValue
                             }
-                            else if !isnan(p.velocityMovingAvg.doubleValue) && (vHigh == 0.0 || p.velocityMovingAvg.doubleValue > vHigh) {
-                                vHigh = p.velocityMovingAvg.doubleValue
+                            else if !isnan(p.velocity.doubleValue) && (vHigh == 0.0 || p.velocity.doubleValue > vHigh) {
+                                vHigh = p.velocity.doubleValue
                             }
                         }
                     }
@@ -100,11 +100,12 @@ class AltitudeVelocityView: UIView {
 
                 self.aLow = aLow
                 self.aHigh = aHigh
-                self.vLow = vLow
+                //self.vLow = vLow
+                self.vLow = 0.0
                 self.vHigh = vHigh
                 
                 // Determine the scale based on the differentials.
-                let ar = CGFloat(aHigh - aLow)
+                let ar = CGFloat(self.aHigh - self.aLow)
                 if ar > 0 {
                     self.aScale = self.frame.height/ar
                 }
@@ -112,7 +113,7 @@ class AltitudeVelocityView: UIView {
                     self.aScale = self.frame.height/10
                 }
                 
-                let vr = CGFloat(vHigh - vLow)
+                let vr = CGFloat(self.vHigh - self.vLow)
                 if vr > 0 {
                     self.vScale = self.frame.height/vr
                 }
@@ -178,8 +179,7 @@ class AltitudeVelocityView: UIView {
                 px = CGFloat(10)
                 cx = CGFloat(10)
                 
-                var speedColor = GlobalTheme.getSpeedOne().CGColor
-                var speedColorBg = GlobalTheme.getSpeedOne().CGColor
+                var speedColor: CGColor
                 // Draw the velocity graph.
                 for point in points {
                     
@@ -191,26 +191,7 @@ class AltitudeVelocityView: UIView {
                     
                     if let p = point as? Route {
                         
-                        switch p.relVelMovingAvg {
-                        case 0:
-                            speedColor = GlobalTheme.getSpeedOne().CGColor
-                            speedColorBg = GlobalTheme.getSpeedOne(setAlpha: self.vBgAlpha).CGColor
-                        case 1:
-                            speedColor = GlobalTheme.getSpeedTwo().CGColor
-                            speedColorBg = GlobalTheme.getSpeedTwo(setAlpha: self.vBgAlpha).CGColor
-                        case 2:
-                            speedColor = GlobalTheme.getSpeedThree().CGColor
-                            speedColorBg = GlobalTheme.getSpeedThree(setAlpha: self.vBgAlpha).CGColor
-                        case 3:
-                            speedColor = GlobalTheme.getSpeedFour().CGColor
-                            speedColorBg = GlobalTheme.getSpeedFour(setAlpha: self.vBgAlpha).CGColor
-                        case 4:
-                            speedColor = GlobalTheme.getSpeedFive().CGColor
-                            speedColorBg = GlobalTheme.getSpeedFive(setAlpha: self.vBgAlpha).CGColor
-                        default:
-                            speedColor = GlobalTheme.getSpeedOne().CGColor
-                            speedColorBg = GlobalTheme.getSpeedOne(setAlpha: self.vBgAlpha).CGColor
-                        }
+                        speedColor = GlobalTheme.getSpeedColor(p.relVelMovingAvg.integerValue, setAlpha: 1.0).CGColor
                         
                         // Ensure that the velocity is not null.
                         let testv: AnyObject? = point.valueForKey("velocityMovingAvg")

@@ -43,7 +43,7 @@ class VelocityDistributionView: UIView {
             var w = CGFloat(barWidth)
             var h = self.bounds.height
             
-            var speedColor = GlobalTheme.getSpeedOne().CGColor
+            var speedColor: CGColor
         
             // Find the high point, which will determine the scale.
             var high = 0
@@ -58,20 +58,7 @@ class VelocityDistributionView: UIView {
             var index = 0
             for count in summary.mov_avg_dist {
                 
-                switch index {
-                case 0:
-                    speedColor = GlobalTheme.getSpeedOne().CGColor
-                case 1:
-                    speedColor = GlobalTheme.getSpeedTwo().CGColor
-                case 2:
-                    speedColor = GlobalTheme.getSpeedThree().CGColor
-                case 3:
-                    speedColor = GlobalTheme.getSpeedFour().CGColor
-                case 4:
-                    speedColor = GlobalTheme.getSpeedFive().CGColor
-                default:
-                    speedColor = GlobalTheme.getSpeedOne().CGColor
-                }
+                speedColor = GlobalTheme.getSpeedColor(index, setAlpha: 1.0).CGColor
                 
                 // Always draw at least a value of one because it looks better.
                 h = count == 0 ? CGFloat(1) : CGFloat(count)

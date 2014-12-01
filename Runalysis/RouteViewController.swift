@@ -118,7 +118,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         
         self.ravHeight = rav.frame.height + 10
         
-        self.scrollContentHeight = ypos //+ CGFloat(rav.frame.height)
+        self.scrollContentHeight = ypos + 20 // + CGFloat(rav.frame.height)
         self.scrollContainer = container
         self.view.addSubview(container)
        
