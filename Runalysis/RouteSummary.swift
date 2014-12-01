@@ -185,8 +185,26 @@ class RouteSummary: NSObject {
         
         var movingAverage: [Double] = [0, 0, 0, 0, 0]
         var movingAverageTotal = Double(0.0)
+        var velocityRange: [Double] = []
         
         if self.points?.count > 0 {
+            
+            // Find outliers.
+            for p in self.points! {
+                if let point = p as? Route {
+                    // Track the range of velocity points.
+                    velocityRange.append(point.velocity.doubleValue)
+                }
+            }
+            
+            // Determine inner fences.
+            velocityRange.sort { $0 < $1 }
+            let q25 = locateQuantile(0.25, values: velocityRange)
+            let q75 = locateQuantile(0.75, values: velocityRange)
+            let qr = 1.5 * (q75 - q25)
+            let bl = q25 - qr
+            let bu = q75 + qr
+            
             for p in self.points! {
                 if let point = p as? Route {
                     if !started {
@@ -222,6 +240,11 @@ class RouteSummary: NSObject {
                         }
                         
                         if point.velocity.doubleValue > Double(0.0) {
+                            // Check for outliers.
+                            if point.velocity.doubleValue > bu {
+                                point.velocity = NSNumber(double: bu)
+                            }
+                            
                             if point.velocity.doubleValue < self.velocity_low || self.velocity_low == Double(0) {
                                 // @todo low is always 0.
                                 self.velocity_low = point.velocity.doubleValue
@@ -242,6 +265,7 @@ class RouteSummary: NSObject {
                         }
                     }
                     
+                    
                     // Track the miles.
                     if Int(self.distance_total * self.milesPerMeter) > mileCount {
                         mileCount++
@@ -255,6 +279,29 @@ class RouteSummary: NSObject {
         if count > 0 {
             self.velocity_mean = total/Double(count)
             self.duration = duration
+        }
+    }
+    
+    /*!
+     * Locates the quantile given an array of sorted values.
+     *
+     * @param quantile
+     * @param values
+     *
+     * @return Double
+     */
+    func locateQuantile(quantile: Double, values: [Double])->Double {
+        let length = values.count
+        let index = quantile * Double(length-1)
+        let boundary = Int(index)
+        let delta = index - Double(boundary)
+        
+        if length == 0 {
+            return 0.0
+        } else if boundary == length-1 {
+            return values[boundary]
+        } else {
+            return (1-delta)*values[boundary] + delta*values[boundary+1]
         }
     }
     
