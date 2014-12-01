@@ -52,6 +52,11 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     // Tracks that a delete action was triggered.
     var deleteTriggered = false
     
+    var drawTimer: NSTimer = NSTimer()
+    
+    var drawStep: Int = 0
+    var drawSteps: Int = 0
+    
     /*!
      * Overrides UIViewController::viewDidLoad()
      */
@@ -90,19 +95,20 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         //container.delegate = self
         
         // Handle route drawing
-        let routeAnimation = CABasicAnimation()
-        routeAnimation.keyPath = "strokeEnd"
-        routeAnimation.repeatCount = 1.0
-        routeAnimation.duration = 10.0
-        routeAnimation.fromValue = 0.0
-        routeAnimation.toValue = 1.0
-        routeAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
+        //let routeAnimation = CABasicAnimation()
+        //routeAnimation.keyPath = "strokeEnd"
+        //routeAnimation.repeatCount = 1.0
+        //routeAnimation.duration = 10.0
+        //routeAnimation.fromValue = 0.0
+        //routeAnimation.toValue = 1.0
+        //routeAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
         let routeLayer = CALayer()
         routeLayer.delegate = routeView
         routeLayer.frame = routeView.frame
-        routeLayer.addAnimation(routeAnimation, forKey: "strokeEndAnimation")
+        //routeLayer.addAnimation(routeAnimation, forKey: "strokeEndAnimation")
         container.layer.addSublayer(routeLayer)
-        routeLayer.setNeedsDisplay()
+        
+        self.drawRoute()
         
         self.routeLayer = routeLayer
         self.routeView = routeView
@@ -137,6 +143,31 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         self.view.addSubview(backButton)
         
         
+    }
+    
+    /*!
+     * Draws the route in the currently loaded summary.
+     */
+    func drawRoute() {
+        if let points = self.routeSummary?.points {
+            
+            self.drawSteps = points.count/50
+            self.drawStep = 0
+            self.drawTimer = NSTimer.scheduledTimerWithTimeInterval(0.025, target: self, selector: Selector("drawRouteAnimated"), userInfo: nil, repeats: true)
+        }
+    }
+    
+    /*!
+     * NSTimer callback to draw the route a bit at a time.
+     */
+    func drawRouteAnimated() {
+        self.drawStep++
+        self.routeSummary!.animation_length = self.drawStep * self.drawSteps
+        self.routeLayer!.setNeedsDisplay()
+        
+        if self.routeSummary!.animation_length > self.routeSummary!.points!.count {
+            self.drawTimer.invalidate()
+        }
     }
     
     /*!
@@ -256,7 +287,8 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
                     self.ravHeight = rav.frame.height
                     rav.updateDuration(self.routeSummary!.duration)
                     self.resetContentHeight()
-                    self.routeLayer?.setNeedsDisplay()
+                    //self.routeLayer?.setNeedsDisplay()
+                    self.drawRoute()
                 }
             }
         }

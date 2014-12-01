@@ -173,11 +173,17 @@ class RouteView: UIView {
         //var ptime: NSNumber = 0.0
         var start = true
         var speedColor: CGColor
+        var animation_steps = 0
         if self.summary!.points?.count > 0 {
             for point in self.summary!.points! {
                 if let p = point as? Route {
                     cx = CGFloat((p.longitude.doubleValue - self.gridMinX) * self.gridRatio) + 10.0
                     cy = CGFloat(self.frame.height) - CGFloat((p.latitude.doubleValue - self.gridMinY) * self.gridRatio) - 10.0
+                    
+                    animation_steps++
+                    if animation_steps > self.summary!.animation_length {
+                        break
+                    }
                     
                     if start || p.velocity.doubleValue > 0.0 {
                         

@@ -46,6 +46,8 @@ class RouteSummary: NSObject {
     
     var mov_avg_dist = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     
+    var animation_length: Int = 0
+    
     // Tracks the duration of the run.
     var duration: Double = Double(0)
     
