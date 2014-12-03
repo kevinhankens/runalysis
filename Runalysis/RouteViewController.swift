@@ -40,6 +40,9 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     // Tracks the label with the current distance.
     var distLabel: UILabel?
     
+    // Tracks a label that denotes a loading route.
+    var loadingLabel: UILabel?
+    
     // Tracks the container for scrolling/zooming.
     var scrollContainer: UIScrollView?
     
@@ -52,9 +55,13 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     // Tracks that a delete action was triggered.
     var deleteTriggered = false
     
+    // Tracks the timer that controls the route drawing.
     var drawTimer: NSTimer = NSTimer()
     
+    // Tracks which step the drawing animation is on.
     var drawStep: Int = 0
+    
+    // Tracks how many steps are in the drawing animation.
     var drawSteps: Int = 0
     
     /*!
@@ -68,7 +75,6 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
         var ypos = CGFloat(50)
-        
 
         // Create a RouteView to display the results.
         //let container = UIScrollView(frame: CGRectMake(0, ypos, self.view.bounds.width + 5, self.view.bounds.width))
@@ -94,18 +100,9 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         //container.contentSize = CGSizeMake(self.view.bounds.width, self.view.bounds.height)
         //container.delegate = self
         
-        // Handle route drawing
-        //let routeAnimation = CABasicAnimation()
-        //routeAnimation.keyPath = "strokeEnd"
-        //routeAnimation.repeatCount = 1.0
-        //routeAnimation.duration = 10.0
-        //routeAnimation.fromValue = 0.0
-        //routeAnimation.toValue = 1.0
-        //routeAnimation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionLinear)
         let routeLayer = CALayer()
         routeLayer.delegate = routeView
         routeLayer.frame = routeView.frame
-        //routeLayer.addAnimation(routeAnimation, forKey: "strokeEndAnimation")
         container.layer.addSublayer(routeLayer)
         
         self.drawRoute()
@@ -114,6 +111,21 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         self.routeView = routeView
         
         container.addSubview(routeView)
+        
+        // Add left/right arrows.
+        let leftArrowLabel = UILabel(frame: CGRect(x: 10, y: ypos + routeView.frame.maxY/2, width: 20, height: 30))
+        leftArrowLabel.text = "<"
+        leftArrowLabel.font = UIFont.systemFontOfSize(30)
+        leftArrowLabel.textColor = GlobalTheme.getNormalTextColor()
+        leftArrowLabel.textAlignment = NSTextAlignment.Left
+        container.addSubview(leftArrowLabel)
+        
+        let rightArrowLabel = UILabel(frame: CGRect(x: container.frame.maxX - 30, y: ypos + routeView.frame.maxY/2, width: 20, height: 30))
+        rightArrowLabel.text = ">"
+        rightArrowLabel.font = UIFont.systemFontOfSize(30)
+        rightArrowLabel.textColor = GlobalTheme.getNormalTextColor()
+        rightArrowLabel.textAlignment = NSTextAlignment.Left
+        container.addSubview(rightArrowLabel)
         
         ypos = ypos + routeView.frame.height + 10
         

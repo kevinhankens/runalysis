@@ -94,7 +94,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         record.titleLabel?.font = UIFont.systemFontOfSize(45.0)
         //record.backgroundColor = GlobalTheme.getBackgroundColor()
         //record.sizeToFit()
-        record.addTarget(runView, action: "toggleRecordPause:", forControlEvents: UIControlEvents.TouchUpInside)
+        record.addTarget(runView, action: "toggleRecordPause:", forControlEvents: UIControlEvents.TouchDown)
         runView.addSubview(record)
             
         //ypos += record.frame.height + 10

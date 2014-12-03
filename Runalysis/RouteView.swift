@@ -165,6 +165,8 @@ class RouteView: UIView {
         var dy: CGFloat = 0.0
         var wx: CGFloat = 0.0
         var wy: CGFloat = 0.0
+        var bx: CGFloat = 0.0
+        var by: CGFloat = 0.0
         var dhyp: CGFloat = 0.0
         var dratio: CGFloat = 0.0
         
@@ -188,10 +190,6 @@ class RouteView: UIView {
                     if start || p.velocity.doubleValue > 0.0 {
                         
                         if start {
-                            //var center = CGPointMake(cx, cy)
-                            //CGContextAddArc(context, center.x, center.y, CGFloat(6.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
-                            //CGContextSetFillColorWithColor(context, GlobalTheme.getSpeedOne().CGColor);
-                            //CGContextFillPath(context);
                             start = false
                         }
                         else {
@@ -199,9 +197,12 @@ class RouteView: UIView {
                             
                             CGContextSetStrokeColorWithColor(ctx, speedColor)
                             
+                            // Calculate the change in x/y.
                             dx = fabs(cx - px)
                             dy = fabs(cy - py)
                             
+                            // Find the ratio of change vs perpendicular line
+                            // to create a box.
                             dhyp = sqrt(pow(dx, 2) + pow(dy, 2))
                             dratio = dhyp/self.lineWidth
                             
@@ -214,58 +215,52 @@ class RouteView: UIView {
                                 wy = dx/dratio
                             }
                             
+                            // Back everything up a tiny amount so that we
+                            // don't have lines separating the boxes
+                            bx = 0.1 * wx
+                            by = 0.1 * wy
+                            
                             if cx > px && cy > py {
                                 // Moving SE
                                 q = 0
                                 wx *= -1
+                                px -= by
+                                py -= bx
                             }
                             else if cx > px && cy < py {
                                 // Moving NE
                                 q = 1
+                                px -= by
+                                py += bx
                             }
                             else if cx < px && cy < py {
                                 // Moving NW
                                 q = 2
                                 wy *= -1
+                                px += by
+                                py += bx
                             }
                             else {  // cx < px && cy > py
                                 // Moving SW or not moving
                                 q = 3
                                 wx *= -1
                                 wy *= -1
+                                px += by
+                                py -= bx
                             }
                             
-                            //println("-----")
-                            //println("q \(q)")
-                            //println("dhyp \(dhyp)")
-                            //println("dratio \(dratio)")
-                            //println("dx \(dx)")
-                            //println("dy \(dy)")
-                            //println("wx \(wx)")
-                            //println("wy \(wy)")
+                            // Create a box path.
+                            var path = CGPathCreateMutable();
+                            CGPathMoveToPoint(path, nil, px, py)
+                            CGPathAddLineToPoint(path, nil, cx, cy)
+                            CGPathAddLineToPoint(path, nil, cx + wx, cy + wy)
+                            CGPathAddLineToPoint(path, nil, px + wx, py + wy)
+                            CGPathAddLineToPoint(path, nil, ppx, ppy)
+                            CGPathAddLineToPoint(path, nil, px, py)
                             
-                            // @todo find the angle of the path and make a
-                            // rectangle that matches the slope... ideally
-                            // matching up all points. Then see if you can
-                            // add a gradient to the rect in the correct dir.
-                            //CGContextSetLineWidth(ctx, 6.0)
-                            CGContextBeginPath(ctx)
-                            CGContextMoveToPoint(ctx, px, py)
-                            CGContextAddLineToPoint(ctx, cx, cy)
-                            CGContextAddLineToPoint(ctx, cx + wx, cy + wy)
-                            CGContextAddLineToPoint(ctx, px + wx, py + wy)
-                            CGContextAddLineToPoint(ctx, ppx, ppy)
-                            CGContextAddLineToPoint(ctx, px, py)
                             CGContextSetFillColorWithColor(ctx, speedColor)
-                            CGContextFillPath(ctx)
-                            //CGContextStrokePath(ctx);
-                            
-                            //CGContextSetLineWidth(ctx, 2.0)
-                            //var center = CGPointMake(cx, cy)
-                            //CGContextAddArc(ctx, center.x, center.y, CGFloat(3.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
-                            //CGContextSetFillColorWithColor(ctx, speedColor);
-                            //CGContextFillPath(ctx);
-                            ////CGContextStrokePath(context);
+                            CGContextAddPath(ctx, path)
+                            CGContextDrawPath(ctx, kCGPathFill)
                             
                             // Draw a mile marker
                             total += p.distance.doubleValue * Double(0.00062137)
@@ -284,16 +279,6 @@ class RouteView: UIView {
                     py = cy
                     ppx = cx + wx
                     ppy = cy + wy
-                    //ptime = p.date
-                    //println("r: \(self.gridRatio)")
-                    //println("lat: \(p.latitude)")
-                    //println("lon: \(p.longitude)")
-                    //println("x: \(px)")
-                    //println("y: \(py)")
-                    //println("miny: \(self.bounds.minY)")
-                    //println("maxy: \(self.bounds.maxY)")
-                    //println("minx: \(self.bounds.minX)")
-                    //println("maxx: \(self.bounds.maxX)")
                 }
             }
         }
