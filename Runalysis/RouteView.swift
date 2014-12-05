@@ -91,24 +91,24 @@ class RouteView: UIView {
     func determineGrid() {
         if self.summary!.points?.count > 0 {
             if let zp = self.summary!.points![0] as? Route {
-                self.gridMinX = zp.longitude.doubleValue
-                self.gridMaxX = zp.longitude.doubleValue
-                self.gridMinY = zp.latitude.doubleValue
-                self.gridMaxY = zp.latitude.doubleValue
+                self.gridMinX = zp.longitude_raw
+                self.gridMaxX = zp.longitude_raw
+                self.gridMinY = zp.latitude_raw
+                self.gridMaxY = zp.latitude_raw
             }
             for point in self.summary!.points! {
                 if let p = point as? Route {
-                    if p.longitude.doubleValue > self.gridMaxX {
-                        self.gridMaxX = p.longitude.doubleValue
+                    if p.longitude_raw > self.gridMaxX {
+                        self.gridMaxX = p.longitude_raw
                     }
-                    else if p.longitude.doubleValue < self.gridMinX {
-                        self.gridMinX = p.longitude.doubleValue
+                    else if p.longitude_raw < self.gridMinX {
+                        self.gridMinX = p.longitude_raw
                     }
-                    if p.latitude.doubleValue > self.gridMaxY {
-                        self.gridMaxY = p.latitude.doubleValue
+                    if p.latitude_raw > self.gridMaxY {
+                        self.gridMaxY = p.latitude_raw
                     }
-                    else if p.latitude.doubleValue < self.gridMinY {
-                        self.gridMinY = p.latitude.doubleValue
+                    else if p.latitude_raw < self.gridMinY {
+                        self.gridMinY = p.latitude_raw
                     }
                 }
             }
@@ -179,8 +179,8 @@ class RouteView: UIView {
         if self.summary!.points?.count > 0 {
             for point in self.summary!.points! {
                 if let p = point as? Route {
-                    cx = CGFloat((p.longitude.doubleValue - self.gridMinX) * self.gridRatio) + 10.0
-                    cy = CGFloat(self.frame.height) - CGFloat((p.latitude.doubleValue - self.gridMinY) * self.gridRatio) - 10.0
+                    cx = CGFloat((p.longitude_raw - self.gridMinX) * self.gridRatio) + 10.0
+                    cy = CGFloat(self.frame.height) - CGFloat((p.latitude_raw - self.gridMinY) * self.gridRatio) - 10.0
                     
                     animation_steps++
                     if animation_steps > self.summary!.animation_length {
@@ -193,7 +193,7 @@ class RouteView: UIView {
                             start = false
                         }
                         else {
-                            speedColor = GlobalTheme.getSpeedColor(p.relVelMovingAvg.integerValue, setAlpha: 1.0).CGColor
+                            speedColor = GlobalTheme.getSpeedColor(p.relVelMovingAvg, setAlpha: 1.0).CGColor
                             
                             CGContextSetStrokeColorWithColor(ctx, speedColor)
                             

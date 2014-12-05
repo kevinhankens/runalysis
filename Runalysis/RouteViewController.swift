@@ -113,19 +113,27 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         container.addSubview(routeView)
         
         // Add left/right arrows.
-        let leftArrowLabel = UILabel(frame: CGRect(x: 10, y: ypos + routeView.frame.maxY/2, width: 20, height: 30))
+        let leftArrowLabel = UILabel(frame: CGRect(x: 10, y: ypos + routeView.frame.minY + 10, width: 20, height: 35))
         leftArrowLabel.text = "<"
         leftArrowLabel.font = UIFont.systemFontOfSize(30)
-        leftArrowLabel.textColor = GlobalTheme.getNormalTextColor()
+        leftArrowLabel.textColor = GlobalTheme.getBackButtonTextColor()
         leftArrowLabel.textAlignment = NSTextAlignment.Left
         container.addSubview(leftArrowLabel)
         
-        let rightArrowLabel = UILabel(frame: CGRect(x: container.frame.maxX - 30, y: ypos + routeView.frame.maxY/2, width: 20, height: 30))
+        let rightArrowLabel = UILabel(frame: CGRect(x: container.frame.maxX - 30, y: ypos + routeView.frame.minY + 10, width: 20, height: 35))
         rightArrowLabel.text = ">"
         rightArrowLabel.font = UIFont.systemFontOfSize(30)
-        rightArrowLabel.textColor = GlobalTheme.getNormalTextColor()
+        rightArrowLabel.textColor = GlobalTheme.getBackButtonTextColor()
         rightArrowLabel.textAlignment = NSTextAlignment.Left
         container.addSubview(rightArrowLabel)
+        
+        //let loadingLabel = UILabel(frame: CGRect(x: container.frame.width/2 - 150, y: ypos + routeView.frame.minY + 10, width: 300, height: 35))
+        //loadingLabel.text = "Loading"
+        //loadingLabel.font = UIFont.systemFontOfSize(30)
+        //loadingLabel.textColor = GlobalTheme.getBackButtonTextColor()
+        //loadingLabel.textAlignment = NSTextAlignment.Center
+        //self.loadingLabel = loadingLabel
+        //container.addSubview(loadingLabel)
         
         ypos = ypos + routeView.frame.height + 10
         
@@ -179,6 +187,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         
         if self.routeSummary!.animation_length > self.routeSummary!.points!.count {
             self.drawTimer.invalidate()
+            //self.loadingLabel?.text = ""
         }
     }
     
@@ -273,6 +282,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
                 break;
             }
             
+            //self.loadingLabel?.text = "Loading"
             self.displayNextRoute(previous)
         }
     }

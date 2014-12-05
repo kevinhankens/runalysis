@@ -102,43 +102,68 @@ class ViewController: UIViewController {
         container.addGestureRecognizer(swipeLeft)
         
         // Add a Run button
-        ypos += 10
-        let runButton = UIButton()
-        runButton.frame = CGRectMake(0, ypos, self.view.bounds.width/2, 35.00)
-        runButton.setTitle("Run", forState: UIControlState.Normal)
-        runButton.setTitleColor(GlobalTheme.getRunTextColor(), forState: UIControlState.Normal)
-        runButton.titleLabel?.textAlignment = NSTextAlignment.Center
-        runButton.backgroundColor = GlobalTheme.getBackgroundColor()
-        runButton.addTarget(self, action: "displayRunViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
-        runButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
-        self.runButton = runButton
-        container.addSubview(runButton)
+        ypos += 30
+        //let runButton = UIButton()
+        //runButton.frame = CGRectMake(0, ypos, self.view.bounds.width/2, 35.00)
+        //runButton.setTitle("Run", forState: UIControlState.Normal)
+        //runButton.setTitleColor(GlobalTheme.getRunTextColor(), forState: UIControlState.Normal)
+        //runButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        //runButton.backgroundColor = GlobalTheme.getBackgroundColor()
+        //runButton.addTarget(self, action: "displayRunViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        //runButton.titleLabel?.font = UIFont.systemFontOfSize(30.0)
+        //self.runButton = runButton
+        //container.addSubview(runButton)
         
-        // Add a Run button
-        let latestButton = UIButton()
-        latestButton.frame = CGRectMake(self.view.bounds.width/2, ypos, self.view.bounds.width/2, 35.00)
-        latestButton.setTitle("Review", forState: UIControlState.Normal)
-        latestButton.setTitleColor(GlobalTheme.getRecentTextColor(), forState: UIControlState.Normal)
-        latestButton.titleLabel?.textAlignment = NSTextAlignment.Center
-        latestButton.backgroundColor = GlobalTheme.getBackgroundColor()
-        latestButton.addTarget(self, action: "displayRouteViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
-        latestButton.titleLabel?.font = UIFont.systemFontOfSize(25.0)
-        self.latestButton = latestButton
-        container.addSubview(latestButton)
+        // Add a Review button
+        //let latestButton = UIButton()
+        //latestButton.frame = CGRectMake(self.view.bounds.width/2, ypos, self.view.bounds.width/2, 35.00)
+        //latestButton.setTitle("Review", forState: UIControlState.Normal)
+        //latestButton.setTitleColor(GlobalTheme.getRecentTextColor(), forState: UIControlState.Normal)
+        //latestButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        //latestButton.backgroundColor = GlobalTheme.getBackgroundColor()
+        //latestButton.addTarget(self, action: "displayRouteViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        //latestButton.titleLabel?.font = UIFont.systemFontOfSize(25.0)
+        //self.latestButton = latestButton
+        //container.addSubview(latestButton)
+        //
+        //ypos += CGFloat(latestButton.frame.height) + 30
         
-        ypos += CGFloat(runButton.frame.height) + 30
-        
-        // Add the help/config button
+        // Add the review button
         let iconSize = CGFloat(36)
         let runalysisButton = UIButton()
-        runalysisButton.frame = CGRectMake(container.bounds.width - container.bounds.width/4 - (iconSize/2), ypos, iconSize, iconSize)
+        runalysisButton.frame = CGRectMake((2 * (container.bounds.width/4)) - (iconSize/2), ypos, iconSize, iconSize)
         let runalysisImage = UIImage(named: "RunalysisButton")
-        runalysisButton.addTarget(self, action: "displayConfigViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        //runalysisButton.addTarget(self, action: "displayConfigViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        runalysisButton.addTarget(self, action: "displayRouteViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
         runalysisButton.setImage(runalysisImage, forState: UIControlState.Normal)
         runalysisButton.sizeToFit()
         var rf = CGRectMake(runalysisButton.frame.minX, runalysisButton.frame.minY, runalysisButton.frame.width, runalysisButton.frame.height)
         runalysisButton.frame = rf
+        self.latestButton = runalysisButton
         container.addSubview(runalysisButton)
+        
+        // Add the settings button
+        let settingsButton = UIButton()
+        settingsButton.frame = CGRectMake((3 * (container.bounds.width/4)) - (iconSize/2), ypos, iconSize, iconSize)
+        let settingsImage = UIImage(named: "SettingsButton")
+        settingsButton.addTarget(self, action: "displayConfigViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        settingsButton.setImage(settingsImage, forState: UIControlState.Normal)
+        settingsButton.sizeToFit()
+        var sf = CGRectMake(settingsButton.frame.minX, settingsButton.frame.minY, settingsButton.frame.width, settingsButton.frame.height)
+        settingsButton.frame = sf
+        container.addSubview(settingsButton)
+        
+        // Add the run button
+        let runButton = UIButton()
+        runButton.frame = CGRectMake((1 * (container.bounds.width/4)) - (iconSize/2), ypos, iconSize, iconSize)
+        let runImage = UIImage(named: "RunButton")
+        runButton.addTarget(self, action: "displayRunViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
+        runButton.setImage(runImage, forState: UIControlState.Normal)
+        runButton.sizeToFit()
+        var runFrame = CGRectMake(runButton.frame.minX, runButton.frame.minY, runButton.frame.width, runButton.frame.height)
+        runButton.frame = runFrame
+        self.runButton = runButton
+        container.addSubview(runButton)
         
         self.scrollContentHeight = ypos + runalysisButton.frame.height + 10
         self.scrollView = container

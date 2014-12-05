@@ -182,19 +182,29 @@ class RouteSummary: NSObject {
         var mileCount = 0
         var mileTime = Double(0.0)
         var mileTimeTmp = Double(0.0)
+        var distanceTotal = Double(0.0)
         
         var movingAverage: [Double] = [0, 0, 0, 0, 0]
         var movingAverageTotal = Double(0.0)
-        var velocityRange: [Double] = []
         
         if self.points?.count > 0 {
+        
+            var velocityRange = [Double](count: self.points!.count, repeatedValue: 0.0)
             
             // Find outliers.
+            var i = 0
             for p in self.points! {
                 if let point = p as? Route {
+                    // Track the raw double value to speed up drawing.
+                    point.latitude_raw = point.latitude.doubleValue
+                    point.longitude_raw = point.longitude.doubleValue
+                    point.altitude_raw = point.altitude.doubleValue
+                    
                     // Track the range of velocity points.
-                    velocityRange.append(point.velocity.doubleValue)
+                    point.velocity_raw = point.velocity.doubleValue
+                    velocityRange[i] = point.velocity_raw
                 }
+                i++
             }
             
             // Determine inner fences.
@@ -204,6 +214,13 @@ class RouteSummary: NSObject {
             let qr = 1.5 * (q75 - q25)
             let bl = q25 - qr
             let bu = q75 + qr
+            
+            var vlow = 0.0
+            var vhigh = 0.0
+            var malow = 0.0
+            var mahigh = 0.0
+            
+            var movingAveragePos = 0
             
             for p in self.points! {
                 if let point = p as? Route {
@@ -219,46 +236,44 @@ class RouteSummary: NSObject {
                         
                         // Determine the moving average by compiling a list
                         // of trailing values.
-                        movingAverageTotal = 0.0
-                        for (i, a) in enumerate(movingAverage) {
-                            if i < movingAverage.count - 1 {
-                                movingAverage[i] = movingAverage[i + 1]
-                            }
-                            else {
-                                movingAverage[i] = point.velocity.doubleValue
-                            }
-                            movingAverageTotal += movingAverage[i]
+                        movingAverageTotal -= movingAverage[movingAveragePos]
+                        movingAverageTotal += point.velocity_raw
+                        movingAverage[movingAveragePos] = point.velocity_raw
+                        movingAveragePos++
+                        if movingAveragePos > 4 {
+                            movingAveragePos = 0
                         }
                         
                         // Set the new velocity if the moving average array
                         // has enough values to be significant.
-                        if count > movingAverage.count - 1 {
+                        if count > 4 {
                             point.velocityMovingAvg = movingAverageTotal / Double(movingAverage.count)
                         }
                         else {
-                            point.velocityMovingAvg = point.velocity
+                            point.velocityMovingAvg = point.velocity_raw
                         }
                         
-                        if point.velocity.doubleValue > Double(0.0) {
+                        if point.velocity_raw > Double(0.0) {
                             // Check for outliers.
-                            if point.velocity.doubleValue > bu {
+                            if point.velocity_raw > bu {
                                 point.velocity = NSNumber(double: bu)
+                                point.velocity_raw = bu
                             }
                             
-                            if point.velocity.doubleValue < self.velocity_low || self.velocity_low == Double(0) {
+                            if point.velocity_raw < vlow || vlow == Double(0) {
                                 // @todo low is always 0.
-                                self.velocity_low = point.velocity.doubleValue
+                                vlow = point.velocity_raw
                             }
-                            else if point.velocity.doubleValue > self.velocity_high {
-                                self.velocity_high = point.velocity.doubleValue
+                            else if point.velocity_raw > vhigh {
+                                vhigh = point.velocity_raw
                             }
-                            if point.velocityMovingAvg.doubleValue < self.mov_avg_low || self.mov_avg_low == Double(0) {
-                                self.mov_avg_low = point.velocityMovingAvg.doubleValue
+                            if point.velocityMovingAvg < malow || malow == Double(0) {
+                                malow = point.velocityMovingAvg
                             }
-                            else if point.velocityMovingAvg.doubleValue > self.mov_avg_high {
-                                self.mov_avg_high = point.velocityMovingAvg.doubleValue
+                            else if point.velocityMovingAvg > mahigh {
+                                mahigh = point.velocityMovingAvg
                             }
-                            self.distance_total += Double(point.distance)
+                            distanceTotal += Double(point.distance)
                             total += Double(point.velocity)
                             duration += Double(point.interval)
                             count++
@@ -267,7 +282,7 @@ class RouteSummary: NSObject {
                     
                     
                     // Track the miles.
-                    if Int(self.distance_total * self.milesPerMeter) > mileCount {
+                    if Int(distanceTotal * self.milesPerMeter) > mileCount {
                         mileCount++
                         mileTimeTmp = duration - mileTime
                         mileTime = duration
@@ -275,6 +290,11 @@ class RouteSummary: NSObject {
                     }
                 }
             }
+            self.distance_total = distanceTotal
+            self.velocity_low = vlow
+            self.velocity_high = vhigh
+            self.mov_avg_low = malow
+            self.mov_avg_high = mahigh
         }
         if count > 0 {
             self.velocity_mean = total/Double(count)
@@ -330,10 +350,10 @@ class RouteSummary: NSObject {
                     let testv: AnyObject? = point.valueForKey("velocity")
                     
                     if let v = testv as? NSNumber {
-                        rel = self.getRelativeVelocity(point.velocity, low: self.velocity_low, step: self.velocity_step).integerValue
+                        rel = self.getRelativeVelocity(point.velocity_raw, low: self.velocity_low, step: self.velocity_step)
                         point.relativeVelocity = rel
                         tmp[rel]++
-                        rel = self.getRelativeVelocity(point.velocityMovingAvg, low: self.velocity_low, step: self.velocity_step).integerValue
+                        rel = self.getRelativeVelocity(point.velocityMovingAvg, low: self.velocity_low, step: self.velocity_step)
                         point.relVelMovingAvg = rel
                         tmp_mov[rel]++
                     }
@@ -353,11 +373,11 @@ class RouteSummary: NSObject {
      *
      * @return NSNumber
      */
-    func getRelativeVelocity(velocity: NSNumber, low: CLLocationSpeed, step: CLLocationSpeed)->NSNumber {
+    func getRelativeVelocity(velocity: Double, low: CLLocationSpeed, step: CLLocationSpeed)->Int {
         var rel = 0
         
         for var i = 0; i < self.distribution.count; i++ {
-            if velocity.doubleValue < low + (step * Double((i + 1))) {
+            if velocity < low + (step * Double((i + 1))) {
                 rel = i
                 break
             }
@@ -365,5 +385,5 @@ class RouteSummary: NSObject {
        
         return rel
     }
-
+    
 }

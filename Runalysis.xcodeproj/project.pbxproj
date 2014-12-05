@@ -557,6 +557,7 @@
 				PRODUCT_NAME = RunalysisTests;
 				STRIP_STYLE = "non-global";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runalysis-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Debug;

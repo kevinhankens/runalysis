@@ -9,13 +9,23 @@
 import Foundation
 import UIKit
 
+let speedColor0 = UIColor(red: 255/255, green: 66/255, blue: 66/255, alpha: 1.0)
+let speedColor1 = UIColor(red: 255/255, green: 135/255, blue: 66/255, alpha: 1.0)
+let speedColor2 = UIColor(red: 255/255, green: 185/255, blue: 66/255, alpha: 1.0)
+let speedColor3 = UIColor(red: 255/255, green: 225/255, blue: 66/255, alpha: 1.0)
+let speedColor4 = UIColor(red: 255/255, green: 255/255, blue: 66/255, alpha: 1.0)
+let speedColor5 = UIColor(red: 185/255, green: 255/255, blue: 66/255, alpha: 1.0)
+let speedColor6 = UIColor(red: 135/255, green: 255/255, blue: 66/255, alpha: 1.0)
+let speedColor7 = UIColor(red: 66/255, green: 255/255, blue: 66/255, alpha: 1.0)
+let speedColor8 = UIColor(red: 66/255, green: 255/255, blue: 135/255, alpha: 1.0)
+
 /*!
  * @class
  *
  * Manages some of the global themes.
  */
 class GlobalTheme {
-
+    
     /*!
      * Retrieves the global background color.
      *
@@ -247,25 +257,25 @@ class GlobalTheme {
     
         switch speed {
         case 0: // Red
-            c = UIColor(red: 255/255, green: 66/255, blue: 66/255, alpha: setAlpha)
+            c = speedColor0
         case 1: // Redorange
-            c = UIColor(red: 255/255, green: 135/255, blue: 66/255, alpha: setAlpha)
+            c = speedColor1
         case 2: // Orange
-            c = UIColor(red: 255/255, green: 185/255, blue: 66/255, alpha: setAlpha)
+            c = speedColor2
         case 3: // Orangeyellow
-            c = UIColor(red: 255/255, green: 225/255, blue: 66/255, alpha: setAlpha)
+            c = speedColor3
         case 4: // Yellow
-            c = UIColor(red: 255/255, green: 255/255, blue: 66/255, alpha: setAlpha)
+            c = speedColor4
         case 5: // Yellowgreen
-            c = UIColor(red: 185/255, green: 255/255, blue: 66/255, alpha: setAlpha)
+            c = speedColor5
         case 6: // Yellowgreen
-            c = UIColor(red: 135/255, green: 255/255, blue: 66/255, alpha: setAlpha)
+            c = speedColor6
         case 7: // Green
-            c = UIColor(red: 66/255, green: 255/255, blue: 66/255, alpha: setAlpha)
+            c = speedColor7
         case 8: // Bluegreen
-            c = UIColor(red: 66/255, green: 255/255, blue: 135/255, alpha: setAlpha)
+            c = speedColor8
         default:
-            c = UIColor(red: 255/255, green: 66/255, blue: 66/255, alpha: setAlpha)
+            c = speedColor0
         }
         
         return c

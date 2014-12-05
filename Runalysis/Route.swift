@@ -20,8 +20,12 @@ class Route: NSManagedObject {
     @NSManaged var velocity: NSNumber
     @NSManaged var distance: NSNumber
     @NSManaged var steps: NSNumber
-    var relativeVelocity: NSNumber = 0
-    var velocityMovingAvg: NSNumber = 0
-    var relVelMovingAvg: NSNumber = 0
+    var latitude_raw: Double = 0.0
+    var longitude_raw: Double = 0.0
+    var velocity_raw: Double = 0.0
+    var altitude_raw: Double = 0.0
+    var relativeVelocity: Int = 0
+    var velocityMovingAvg: Double = 0.0
+    var relVelMovingAvg: Int = 0
     
 }

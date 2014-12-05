@@ -82,17 +82,17 @@ class AltitudeVelocityView: UIView {
                         if let v = testv as? NSNumber {
                             // Determine the high and low points for altitude
                             // and velocity as this determines the scale.
-                            if aLow == Double(0) || p.altitude.doubleValue < aLow {
-                                aLow = p.altitude.doubleValue
+                            if aLow == Double(0) || p.altitude_raw < aLow {
+                                aLow = p.altitude_raw
                             }
-                            else if aHigh == 0.0 || p.altitude.doubleValue > aHigh {
-                                aHigh = p.altitude.doubleValue
+                            else if aHigh == 0.0 || p.altitude_raw > aHigh {
+                                aHigh = p.altitude_raw
                             }
-                            if !isnan(p.velocity.doubleValue) && (vLow == 0.0 || p.velocity.doubleValue < vLow) {
-                                vLow = p.velocity.doubleValue
+                            if !isnan(p.velocity_raw) && (vLow == 0.0 || p.velocity_raw < vLow) {
+                                vLow = p.velocity_raw
                             }
-                            else if !isnan(p.velocity.doubleValue) && (vHigh == 0.0 || p.velocity.doubleValue > vHigh) {
-                                vHigh = p.velocity.doubleValue
+                            else if !isnan(p.velocity_raw) && (vHigh == 0.0 || p.velocity_raw > vHigh) {
+                                vHigh = p.velocity_raw
                             }
                         }
                     }
@@ -191,14 +191,14 @@ class AltitudeVelocityView: UIView {
                     
                     if let p = point as? Route {
                         
-                        speedColor = GlobalTheme.getSpeedColor(p.relVelMovingAvg.integerValue, setAlpha: 1.0).CGColor
+                        speedColor = GlobalTheme.getSpeedColor(p.relVelMovingAvg, setAlpha: 1.0).CGColor
                         
                         // Ensure that the velocity is not null.
                         let testv: AnyObject? = point.valueForKey("velocityMovingAvg")
                         if let v = testv as? NSNumber {
                             // Velocity.
                             // @todo why does velocity eval to nan?
-                            let cv = isnan(p.velocityMovingAvg.doubleValue) ? Double(0) : p.velocityMovingAvg.doubleValue
+                            let cv = isnan(p.velocityMovingAvg) ? Double(0) : p.velocityMovingAvg
                             cvy = self.frame.height - (CGFloat(cv - self.vLow) * self.vScale)
                             if !start {
                                 // Draw the relative velocity point
