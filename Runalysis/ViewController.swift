@@ -146,6 +146,7 @@ class ViewController: UIViewController {
         let settingsButton = UIButton()
         settingsButton.frame = CGRectMake((3 * (container.bounds.width/4)) - (iconSize/2), ypos, iconSize, iconSize)
         let settingsImage = UIImage(named: "SettingsButton")
+        //settingsButton.addTarget(self, action: "displayConfigViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
         settingsButton.addTarget(self, action: "displayConfigViewFromButton:", forControlEvents: UIControlEvents.TouchDown)
         settingsButton.setImage(settingsImage, forState: UIControlState.Normal)
         settingsButton.sizeToFit()
@@ -234,12 +235,20 @@ class ViewController: UIViewController {
     }
     
     /*!
+     * Segues to a config view.
+     */
+    func launchConfigView() {
+        self.performSegueWithIdentifier("configViewSegue", sender: self)
+    }
+    
+    /*!
      * Displays the help/config view.
      *
      * @param UIButton button
      */
     func displayConfigViewFromButton(button: UIButton) {
-        displayHelpView()
+        //displayHelpView()
+        self.performSegueWithIdentifier("configViewSegue", sender: self)
     }
     
     /*!

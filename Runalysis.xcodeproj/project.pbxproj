@@ -17,6 +17,8 @@
 		1773453C19910FB80038F304 /* JLDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453A19910FA70038F304 /* JLDate.swift */; };
 		1773453E199112900038F304 /* JLDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453D199112900038F304 /* JLDateTests.swift */; };
 		17734541199122CA0038F304 /* MileageStoreMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453F199122CA0038F304 /* MileageStoreMock.swift */; };
+		178B2EA81A37541B00021247 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178B2EA71A37541B00021247 /* ConfigViewController.swift */; };
+		178B2EA91A37541B00021247 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178B2EA71A37541B00021247 /* ConfigViewController.swift */; };
 		178F085C199BFE83000448F9 /* RunView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178F085B199BFE83000448F9 /* RunView.swift */; };
 		178F085E199BFF0E000448F9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 178F085D199BFF0E000448F9 /* CoreLocation.framework */; };
 		1798393E1989371D0047F859 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798392D1989371D0047F859 /* AppDelegate.swift */; };
@@ -95,6 +97,7 @@
 		1773453F199122CA0038F304 /* MileageStoreMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MileageStoreMock.swift; sourceTree = "<group>"; };
 		178151B71972F1240029EB87 /* Runalysis.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runalysis.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		178151CC1972F1240029EB87 /* RunalysisTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunalysisTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		178B2EA71A37541B00021247 /* ConfigViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 		178D50ED1981AEE000173703 /* Runalysis-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Runalysis-Bridging-Header.h"; sourceTree = "<group>"; };
 		178F085B199BFE83000448F9 /* RunView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunView.swift; sourceTree = "<group>"; };
 		178F085D199BFF0E000448F9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -194,6 +197,7 @@
 				1798392D1989371D0047F859 /* AppDelegate.swift */,
 				17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */,
 				1798392E1989371D0047F859 /* Main.storyboard */,
+				178B2EA71A37541B00021247 /* ConfigViewController.swift */,
 				174B7F2B19D23A4000C87345 /* LaunchScreen.storyboard */,
 				17C42C3119D23B2F007DBFCA /* LaunchViewController.swift */,
 				179839301989371D0047F859 /* GlobalTheme.swift */,
@@ -356,6 +360,7 @@
 				17CE2E0719A2490A00303598 /* RouteView.swift in Sources */,
 				17C42C3219D23B2F007DBFCA /* LaunchViewController.swift in Sources */,
 				17D5F2CF199A4B7E00D9AF80 /* NoteView.swift in Sources */,
+				178B2EA81A37541B00021247 /* ConfigViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,6 +374,7 @@
 				17068D4419E5CDA6002A5821 /* RouteSummaryTests.swift in Sources */,
 				17AF16BC198FEC6F00565322 /* AppDelegate.swift in Sources */,
 				17AF16BD198FEC6F00565322 /* GlobalTheme.swift in Sources */,
+				178B2EA91A37541B00021247 /* ConfigViewController.swift in Sources */,
 				17AF16BE198FEC6F00565322 /* Images.xcassets in Sources */,
 				17AF16BF198FEC6F00565322 /* Info.plist in Sources */,
 				17AF16C0198FEC6F00565322 /* Runalysis.xcdatamodeld in Sources */,
