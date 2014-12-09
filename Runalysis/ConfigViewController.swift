@@ -11,6 +11,8 @@ import UIKit
 
 class ConfigViewController: UIViewController {
     
+    let orientationKey = "RunalysisRunViewOrientation"
+    
     /*!
      * Overrides UIViewController::viewDidLoad()
      */
@@ -21,6 +23,8 @@ class ConfigViewController: UIViewController {
         var ypos = CGFloat(70)
         
         let container = UIScrollView(frame: CGRectMake(0, 20, self.view.frame.width, self.view.frame.height - 20))
+        
+        let orientationValue = NSUserDefaults.standardUserDefaults().integerForKey(self.orientationKey)
         
         let iconSize = CGFloat(72)
         var orientation = UISegmentedControl()
@@ -38,6 +42,7 @@ class ConfigViewController: UIViewController {
             ypos += iconSize + 10
             i++
         }
+        orientation.selectedSegmentIndex = orientationValue
         container.addSubview(orientation)
         
         self.view.addSubview(container)
@@ -57,8 +62,16 @@ class ConfigViewController: UIViewController {
         self.view.addSubview(backButton)
     }
     
+    /*!
+     * Handler for the segmented control actions.
+     *
+     * Saves the choice to the NSUserDefaults.
+     *
+     * @param sender
+     */
     func orientationSelect(sender: UISegmentedControl) {
-        println("\(sender.selectedSegmentIndex)")
+        NSUserDefaults.standardUserDefaults().setInteger(sender.selectedSegmentIndex, forKey: self.orientationKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     /*!
