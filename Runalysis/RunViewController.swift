@@ -125,9 +125,9 @@ class RunViewController: UIViewController {
         
         switch self.getOrientation() {
         case 1:
-            return UIInterfaceOrientation.LandscapeLeft
-        case 2:
             return UIInterfaceOrientation.LandscapeRight
+        case 2:
+            return UIInterfaceOrientation.LandscapeLeft
         default:
             return UIInterfaceOrientation.Portrait
         }
