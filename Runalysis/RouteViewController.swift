@@ -28,9 +28,6 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     // The currently viewed route.
     var routeView: RouteView?
     
-    // The route layer drawing.
-    var routeLayer: CALayer?
-    
     // Tracks the RouteAnalysisView object.
     var routeAnalysisView: RouteAnalysisView?
     
@@ -79,6 +76,8 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
 
         self.routeSummary = RouteSummary.createRouteSummary(self.routeId, routeStore: self.routeStore!)
         let routeView = RouteView.createRouteView(0, y: ypos, width: self.view.bounds.width - 5, height: self.view.bounds.width - 5, routeId: self.routeId, routeStore: self.routeStore!, routeSummary: self.routeSummary!)
+        routeView.autoresizingMask = UIViewAutoresizing.FlexibleWidth
+        routeView.contentMode = UIViewContentMode.ScaleAspectFill
         
         // Add swipe gestures to change the route.
         let routeSwipeLeft = UISwipeGestureRecognizer(target: self, action: "routeSwipeGesture:")
@@ -98,14 +97,8 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         //container.contentSize = CGSizeMake(self.view.bounds.width, self.view.bounds.height)
         //container.delegate = self
         
-        let routeLayer = CALayer()
-        routeLayer.delegate = routeView
-        routeLayer.frame = routeView.frame
-        container.layer.addSublayer(routeLayer)
-        
         self.drawRoute()
         
-        self.routeLayer = routeLayer
         self.routeView = routeView
         
         container.addSubview(routeView)
@@ -123,6 +116,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         rightArrowLabel.font = UIFont.systemFontOfSize(30)
         rightArrowLabel.textColor = GlobalTheme.getBackButtonTextColor()
         rightArrowLabel.textAlignment = NSTextAlignment.Left
+        rightArrowLabel.autoresizingMask = UIViewAutoresizing.FlexibleLeftMargin
         container.addSubview(rightArrowLabel)
         
         //let loadingLabel = UILabel(frame: CGRect(x: container.frame.width/2 - 150, y: ypos + routeView.frame.minY + 10, width: 300, height: 35))
@@ -165,6 +159,35 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     }
     
     /*!
+     * Prepare the RouteView and RouteAnalysis for the change in size
+     * before the rotation occurs.
+     */
+    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        if let rv = self.routeView? {
+            if let rav = self.routeAnalysisView? {
+                rv.frame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height)
+                rav.frame = CGRectMake(0.0, self.routeView!.bounds.height, self.view.bounds.width, self.ravHeight)
+            }
+        }
+    }
+    
+    /*!
+     * After the rotation occurs, we need to redraw and reset the scroll
+     * container frame.
+     */
+    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        
+        if let rv = self.routeView? {
+            if let sc = self.scrollContainer? {
+                sc.frame = CGRectMake(0.0, 0.0, self.view.frame.width, self.view.frame.height)
+                self.scrollContentHeight = rv.frame.maxY + 10
+                self.resetContentHeight()
+                self.routeView!.displayLatest()
+            }
+        }
+    }
+    
+    /*!
      * Draws the route in the currently loaded summary.
      */
     func drawRoute() {
@@ -182,7 +205,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     func drawRouteAnimated() {
         self.drawStep++
         self.routeSummary!.animation_length = self.drawStep * self.drawSteps
-        self.routeLayer!.setNeedsDisplay()
+        self.routeView?.setNeedsDisplay()
         
         if self.routeSummary!.animation_length > self.routeSummary!.points!.count {
             self.drawTimer.invalidate()
@@ -200,7 +223,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     // Sets the height of the scrollview container based on the contents.
     func resetContentHeight() {
         if let container = self.scrollContainer? {
-            container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight + self.ravHeight + 30)
+            container.contentSize = CGSizeMake(self.routeView!.frame.width, self.scrollContentHeight + self.ravHeight + 30)
         }
     }
     
@@ -308,7 +331,6 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
                     self.ravHeight = rav.frame.height
                     rav.updateDuration(self.routeSummary!.duration)
                     self.resetContentHeight()
-                    //self.routeLayer?.setNeedsDisplay()
                     self.drawRoute()
                 }
             }
