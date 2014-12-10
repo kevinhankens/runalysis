@@ -70,15 +70,13 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.frame.width, self.view.frame.height - 20))
+        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.bounds.width, self.view.bounds.height - 20))
+        container.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
         var ypos = CGFloat(50)
 
-        // Create a RouteView to display the results.
-        //let container = UIScrollView(frame: CGRectMake(0, ypos, self.view.bounds.width + 5, self.view.bounds.width))
-        
         self.routeSummary = RouteSummary.createRouteSummary(self.routeId, routeStore: self.routeStore!)
         let routeView = RouteView.createRouteView(0, y: ypos, width: self.view.bounds.width - 5, height: self.view.bounds.width - 5, routeId: self.routeId, routeStore: self.routeStore!, routeSummary: self.routeSummary!)
         
@@ -139,6 +137,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         
         // @todo what is the height of this view?
         let rav = RouteAnalysisView.createRouteAnalysisView(80.0, cellWidth: self.view.bounds.width, x: 0, y: ypos, routeSummary: self.routeSummary!)
+        rav.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         container.addSubview(rav)
         self.routeAnalysisView = rav
         
@@ -348,14 +347,16 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
      *
      */
     override func shouldAutorotate()->Bool {
-        return false
+        return true
     }
     
     /*!
      *
      */
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue) |
+            Int(UIInterfaceOrientationMask.LandscapeLeft.rawValue) |
+            Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
     }
     
     /*!

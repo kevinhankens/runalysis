@@ -57,6 +57,7 @@ class RouteView: UIView {
     class func createRouteView(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat, routeId: NSNumber, routeStore: RouteStore, routeSummary: RouteSummary)->RouteView {
         
         let route = RouteView(frame: CGRectMake(x, y, width, width))
+        route.autoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth
         route.summary = routeSummary
         route.routeStore = routeStore
         route.updateRoute()
@@ -119,7 +120,7 @@ class RouteView: UIView {
         
         if (diffX > diffY) {
             if diffX > 0 {
-                self.gridRatio = Double(self.frame.width - 20) / diffX
+                self.gridRatio = Double(self.bounds.width - 20) / diffX
             }
             else {
                 self.gridRatio = 1
@@ -127,13 +128,14 @@ class RouteView: UIView {
         }
         else {
             if diffY > 0 {
-                self.gridRatio = Double(self.frame.height - 20) / diffY
+                self.gridRatio = Double(self.bounds.height - 20) / diffY
             }
             else {
                 self.gridRatio = 1
             }
         }
-        //println("\(self.minX) \(self.maxX) \(self.minY) \(self.maxY)")
+        //println("\(self.bounds)")
+        //println("\(self.gridMinX) \(self.gridMaxX) \(self.gridMinY) \(self.gridMaxY)")
     }
     
     /*!

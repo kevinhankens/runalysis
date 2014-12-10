@@ -41,9 +41,6 @@ class RunView: UIView, CLLocationManagerDelegate {
     // Tracks whether there was a CLLocationManager failure.
     var failed: Bool = false
     
-    // Tracks the RouteView object.
-    var routeView: RouteView?
-    
     // Tracks the RouteAnalysisView object.
     var routeAnalysisView: RouteAnalysisView?
     
@@ -83,7 +80,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             runView.prev = RunView.createLocationCopy(l)
         }
             
-        var ypos: CGFloat = 10
+        var ypos: CGFloat = 30
             
         // Control button for recording the run.
         let record = UIButton()
@@ -97,14 +94,7 @@ class RunView: UIView, CLLocationManagerDelegate {
         record.addTarget(runView, action: "toggleRecordPause:", forControlEvents: UIControlEvents.TouchDown)
         runView.addSubview(record)
             
-        //ypos += record.frame.height + 10
-            
-        // Create a RouteView to display the results.
-        let routeView = RouteView.createRouteView(0, y: ypos, width: runView.bounds.width, height: runView.bounds.width, routeId: runView.routeId, routeStore: routeStore, routeSummary: routeSummary)
-        runView.routeView = routeView
-        runView.addSubview(routeView)
-            
-        ypos = ypos + routeView.frame.height + 10
+        ypos += record.frame.height + 10
             
         // @todo what is the height of this view?
         let rav = RouteAnalysisView.createRouteAnalysisView(80.0, cellWidth: runView.bounds.width, x: 0, y: ypos, routeSummary: routeSummary)
@@ -113,8 +103,6 @@ class RunView: UIView, CLLocationManagerDelegate {
         rav.userInteractionEnabled = false
             
         ypos = ypos + rav.frame.height + 10
-            
-        record.frame.origin.y = routeView.frame.minY + (routeView.frame.height/2)
             
         let signal = UILabel(frame: CGRectMake(10, record.frame.minY - GlobalTheme.getNormalFontHeight(), runView.frame.width - 20, GlobalTheme.getNormalFontHeight()))
         signal.text = "Retrieving Accuracy"
@@ -292,25 +280,6 @@ class RunView: UIView, CLLocationManagerDelegate {
     
             // Write to db.
             var route = self.routeStore!.storeRoutePoint(self.routeId, date: location.timestamp.timeIntervalSince1970, latitude: coord.latitude, longitude: coord.longitude, altitude: location.altitude, velocity: velocity, distance_traveled: distance, interval: interval, steps: steps)
-            
-            // Redraw the map
-            if let rv = self.routeView? {
-                if let summary = rv.summary {
-                    // @todo this is horrible for performance.
-                    //summary.updateRoute(self.routeId)
-                    summary.points?.append(route)
-                    
-                    var tc = self.lastDrawTime.dateByAddingTimeInterval(self.redrawInterval)
-                    if tc.timeIntervalSinceNow < 0.0 {
-                        summary.calculateSummary()
-                        rv.displayLatest()
-                        if let rav = self.routeAnalysisView? {
-                            rav.updateLabels()
-                        }
-                        self.lastDrawTime = tc
-                    }
-                }
-            }
             
             self.duration += fabs(self.lastUpdateTime.timeIntervalSinceNow)
             self.lastUpdateTime = location.timestamp.dateByAddingTimeInterval(0.0)

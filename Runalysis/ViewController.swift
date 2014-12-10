@@ -75,7 +75,20 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.frame.width, self.view.frame.height - 20))
+        var boundsWidth = CGFloat(0.0)
+        var boundsHeight = CGFloat(0.0)
+        
+        //switch self.interfaceOrientation {
+        //case UIInterfaceOrientation.Portrait:
+            boundsWidth = self.view.bounds.width
+            boundsHeight = self.view.bounds.height
+        //default:
+            //boundsWidth = self.view.bounds.height
+            //boundsHeight = self.view.bounds.width
+        //}
+        
+        let container = UIScrollView(frame: CGRectMake(0, 20, boundsWidth, boundsHeight - 20))
+        container.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
         
         // @todo move the setup to init?
         
@@ -86,7 +99,7 @@ class ViewController: UIViewController {
         
         var ypos = CGFloat(20)
         
-        let weekSummary = WeekSummaryView.createWeekSummaryView(CGRectMake(0, ypos, self.view.frame.width, self.view.frame.height/2), mileageStore: self.mileageStore, routeStore: self.routeStore, sunday: self.sunday, controller: self)
+        let weekSummary = WeekSummaryView.createWeekSummaryView(CGRectMake(0, ypos, container.bounds.width, container.bounds.height/2), mileageStore: self.mileageStore, routeStore: self.routeStore, sunday: self.sunday, controller: self)
         self.summaryView = weekSummary
         container.addSubview(weekSummary)
         ypos += weekSummary.frame.height
@@ -322,11 +335,13 @@ class ViewController: UIViewController {
     }
     
     override func shouldAutorotate()->Bool {
-      return false
+      return true
     }
     
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue) |
+        Int(UIInterfaceOrientationMask.LandscapeLeft.rawValue) |
+        Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
     }
     
     override func didReceiveMemoryWarning() {

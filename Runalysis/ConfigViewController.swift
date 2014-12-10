@@ -92,14 +92,16 @@ class ConfigViewController: UIViewController {
      *
      */
     override func shouldAutorotate()->Bool {
-        return false
+        return true
     }
     
     /*!
      *
      */
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue) |
+            Int(UIInterfaceOrientationMask.LandscapeLeft.rawValue) |
+            Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
     }
     
     /*!

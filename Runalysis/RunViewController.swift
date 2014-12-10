@@ -31,11 +31,25 @@ class RunViewController: UIViewController {
     
     // The height of the content to scroll.
     var scrollContentHeight = CGFloat(0)
+    
+    // @todo this should be in a central place.
+    let orientationKey = "RunalysisRunViewOrientation"
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.frame.width, self.view.frame.height - 20))
+        var boundsWidth = CGFloat(0.0)
+        var boundsHeight = CGFloat(0.0)
+        
+        switch self.getOrientation() {
+        case 1, 2:
+            boundsWidth = self.view.bounds.height
+            boundsHeight = self.view.bounds.width
+        default:
+            boundsWidth = self.view.bounds.width
+            boundsHeight = self.view.bounds.height
+        }
+        let container = UIScrollView(frame: CGRectMake(0, 20, boundsWidth, boundsHeight - 20))
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
@@ -75,7 +89,7 @@ class RunViewController: UIViewController {
     */
     override func viewWillAppear(animated: Bool) {
         if let container = self.scrollContainer? {
-            container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
+            //container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
         }
     }
     
@@ -96,12 +110,31 @@ class RunViewController: UIViewController {
     override func shouldAutorotate()->Bool {
         return false
     }
-    
+   
     /*!
     *
     */
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue) |
+            Int(UIInterfaceOrientationMask.LandscapeLeft.rawValue) |
+            Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
+    }
+    
+    override func preferredInterfaceOrientationForPresentation() -> UIInterfaceOrientation {
+        
+        
+        switch self.getOrientation() {
+        case 1:
+            return UIInterfaceOrientation.LandscapeLeft
+        case 2:
+            return UIInterfaceOrientation.LandscapeRight
+        default:
+            return UIInterfaceOrientation.Portrait
+        }
+    }
+    
+    func getOrientation()->Int {
+        return NSUserDefaults.standardUserDefaults().integerForKey(self.orientationKey)
     }
     
     /*!

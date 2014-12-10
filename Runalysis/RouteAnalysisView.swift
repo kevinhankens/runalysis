@@ -80,6 +80,8 @@ class RouteAnalysisView: UIView {
         // @todo make a factory method for this.
         let dv = VelocityDistributionView(frame: CGRectMake(0, ypos, rav.bounds.width, 40.0))
         dv.routeSummary = routeSummary
+        dv.autoresizingMask = UIViewAutoresizing.FlexibleWidth
+        dv.contentMode = UIViewContentMode.Redraw
         rav.addSubview(dv)
         rav.velocityDistributionView = dv
         
@@ -87,6 +89,8 @@ class RouteAnalysisView: UIView {
         ypos += dv.bounds.height + 10
         let avv = AltitudeVelocityView(frame: CGRectMake(0, ypos, rav.bounds.width, 50))
         avv.routeSummary = routeSummary
+        avv.autoresizingMask = UIViewAutoresizing.FlexibleWidth
+        avv.contentMode = UIViewContentMode.Redraw
         rav.addSubview(avv)
         rav.altitudeVelocityView = avv
         

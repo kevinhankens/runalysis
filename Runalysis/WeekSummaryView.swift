@@ -65,6 +65,7 @@ class WeekSummaryView: UIView {
         container.routeStore = routeStore
         container.sunday = sunday
         container.controller = controller
+        container.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         
         var ypos = CGFloat(0)
         let height = GlobalTheme.getNormalFontHeight()
@@ -73,6 +74,7 @@ class WeekSummaryView: UIView {
         dateView.textColor = GlobalTheme.getNormalTextColor()
         dateView.font = GlobalTheme.getNormalFont()
         dateView.textAlignment = NSTextAlignment.Center
+        dateView.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         container.dateLabel = dateView
         container.setDateLabel()
         container.addSubview(dateView)
@@ -82,6 +84,7 @@ class WeekSummaryView: UIView {
         dateViewHi.font = GlobalTheme.getNormalFont()
         dateViewHi.textAlignment = NSTextAlignment.Center
         dateViewHi.alpha = 0.0
+        dateViewHi.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         container.dateLabelAlert = dateViewHi
         container.setDateLabel()
         container.addSubview(dateViewHi)
@@ -92,7 +95,8 @@ class WeekSummaryView: UIView {
         
         var dayNum = container.sunday
         for day in container.daysOfWeek {
-            let dayView = WeekSummaryCell.createWeekSummaryCell(CGRectMake(0, ypos, container.frame.width, 30), dayNum: dayNum, title: dayNum.toStringDay())
+            let dayView = WeekSummaryCell.createWeekSummaryCell(CGRectMake(0, ypos, container.bounds.width, 30), dayNum: dayNum, title: dayNum.toStringDay())
+            dayView.autoresizingMask = UIViewAutoresizing.FlexibleWidth
             container.summaryCells.append(dayView)
             container.addSubview(dayView)
             
@@ -103,7 +107,7 @@ class WeekSummaryView: UIView {
             dayNum = dayNum.nextDay()
         }
         
-        let total = WeekSummaryCell.createWeekSummaryCell(CGRectMake(0, ypos, container.frame.width, 30), dayNum: dayNum, title: "")
+        let total = WeekSummaryCell.createWeekSummaryCell(CGRectMake(0, ypos, container.bounds.width, 30), dayNum: dayNum, title: "")
         ypos += total.frame.height
         container.totalCell = total
         container.addSubview(total)
