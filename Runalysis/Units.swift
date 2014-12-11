@@ -12,6 +12,8 @@ let MilesPerMeter = Double(0.00062137)
     
 let KilometersPerMeter = Double(0.001)
 
+var RunalysisUnitsType: Int = -1
+
 class RunalysisUnits {
     
     /*!
@@ -20,8 +22,11 @@ class RunalysisUnits {
      * @return Int
      */
     class func getUnitsType()->Int {
-        let unitsKey = "RunalysisUnits"
-        return NSUserDefaults.standardUserDefaults().integerForKey(unitsKey)
+        if RunalysisUnitsType == -1 {
+            let unitsKey = "RunalysisUnits"
+            RunalysisUnitsType = NSUserDefaults.standardUserDefaults().integerForKey(unitsKey)
+        }
+        return RunalysisUnitsType
     }
     
     /*!

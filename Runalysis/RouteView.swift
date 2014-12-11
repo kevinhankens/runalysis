@@ -147,8 +147,8 @@ class RouteView: UIView {
      * @return void
      */
     override func drawRect(rect: CGRect) {
-        var mileCounter = 0
-        var mileTest = 0
+        var unitCounter = 0
+        var unitTest = 0
         var total = Double(0)
         
         let ctx = UIGraphicsGetCurrentContext()
@@ -262,11 +262,11 @@ class RouteView: UIView {
                             CGContextAddPath(ctx, path)
                             CGContextDrawPath(ctx, kCGPathFill)
                             
-                            // Draw a mile marker
-                            total += p.distance.doubleValue * Double(0.00062137)
-                            mileTest = Int(total)
-                            if mileTest > mileCounter {
-                                mileCounter = mileTest
+                            // Draw a unit (mi/km) marker
+                            total += RunalysisUnits.convertMetersToUnits(p.distance.doubleValue)
+                            unitTest = Int(total)
+                            if unitTest > unitCounter {
+                                unitCounter = unitTest
                                 var center = CGPointMake(cx, cy)
                                 CGContextSetLineWidth(ctx, 1.0)
                                 CGContextAddArc(ctx, center.x, center.y, CGFloat(12.0), CGFloat(0), CGFloat(2*M_PI), Int32(0))
