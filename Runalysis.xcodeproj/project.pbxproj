@@ -48,6 +48,8 @@
 		17AF16C7198FEC6F00565322 /* WeekHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1798393D1989371D0047F859 /* WeekHeader.swift */; };
 		17B01BBF19CCF33100031121 /* AltitudeVelocityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */; };
 		17B01BC119CE5F9800031121 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B01BC019CE5F9800031121 /* NoteViewController.swift */; };
+		17BDC33E1A39F4D800A1C9B7 /* Units.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BDC33D1A39F4D800A1C9B7 /* Units.swift */; };
+		17BDC33F1A39F4D800A1C9B7 /* Units.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BDC33D1A39F4D800A1C9B7 /* Units.swift */; };
 		17C42C3219D23B2F007DBFCA /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C42C3119D23B2F007DBFCA /* LaunchViewController.swift */; };
 		17C42C3319D31A8E007DBFCA /* RouteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17435938199E799F000472AF /* RouteStore.swift */; };
 		17C42C3419D31AEA007DBFCA /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17435936199E783D000472AF /* Route.swift */; };
@@ -125,6 +127,7 @@
 		17AF16B4198FCD9F00565322 /* RunalysisTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunalysisTests.swift; sourceTree = "<group>"; };
 		17B01BBE19CCF33100031121 /* AltitudeVelocityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AltitudeVelocityView.swift; sourceTree = "<group>"; };
 		17B01BC019CE5F9800031121 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
+		17BDC33D1A39F4D800A1C9B7 /* Units.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Units.swift; sourceTree = "<group>"; };
 		17C42C3119D23B2F007DBFCA /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		17C42C4319D47495007DBFCA /* WeekSummaryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekSummaryView.swift; sourceTree = "<group>"; };
 		17C42C4619D49D06007DBFCA /* WeekSummaryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeekSummaryCell.swift; sourceTree = "<group>"; };
@@ -177,6 +180,7 @@
 		1798392C1989371D0047F859 /* Runalysis */ = {
 			isa = PBXGroup;
 			children = (
+				17BDC33D1A39F4D800A1C9B7 /* Units.swift */,
 				17C42C4319D47495007DBFCA /* WeekSummaryView.swift */,
 				17C42C4619D49D06007DBFCA /* WeekSummaryCell.swift */,
 				17B01BC019CE5F9800031121 /* NoteViewController.swift */,
@@ -351,6 +355,7 @@
 				179839431989371D0047F859 /* Runalysis.xcdatamodeld in Sources */,
 				1773453C19910FB80038F304 /* JLDate.swift in Sources */,
 				17B01BC119CE5F9800031121 /* NoteViewController.swift in Sources */,
+				17BDC33E1A39F4D800A1C9B7 /* Units.swift in Sources */,
 				179839401989371D0047F859 /* GlobalTheme.swift in Sources */,
 				1798483419C8D9B600571D35 /* MileSummaryView.swift in Sources */,
 				1798393E1989371D0047F859 /* AppDelegate.swift in Sources */,
@@ -371,6 +376,7 @@
 				17AF16BB198FEC6F00565322 /* HelpView.swift in Sources */,
 				17C42C4119D31B1E007DBFCA /* LaunchViewController.swift in Sources */,
 				17C42C3819D31AF8007DBFCA /* RouteAnalysisView.swift in Sources */,
+				17BDC33F1A39F4D800A1C9B7 /* Units.swift in Sources */,
 				17068D4419E5CDA6002A5821 /* RouteSummaryTests.swift in Sources */,
 				17AF16BC198FEC6F00565322 /* AppDelegate.swift in Sources */,
 				17AF16BD198FEC6F00565322 /* GlobalTheme.swift in Sources */,

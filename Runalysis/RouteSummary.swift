@@ -54,9 +54,6 @@ class RouteSummary: NSObject {
     // Tracks the times for each mile run.
     var mileTimes: [Double] = []
     
-    // How many miles per meter for conversions.
-    let milesPerMeter = Double(0.00062137)
-
     /*!
      * Factory method to create a summary.
      *
@@ -100,7 +97,7 @@ class RouteSummary: NSObject {
      * @return String
      */
     func getTotalAndPace()->String {
-        return "\(self.totalInMiles())mi @\(self.avgVelocityInMinutesPerMile())"
+        return "\(self.totalInMiles())\(RunalysisUnits.getUnitLabel()) @\(self.avgVelocityInUnitsPerMile())"
     }
     
     /*!
@@ -109,7 +106,7 @@ class RouteSummary: NSObject {
      * @return String
      */
     func totalInMiles()->String {
-        let totalMiles = self.distance_total * self.milesPerMeter
+        let totalMiles = RunalysisUnits.convertMetersToUnits(self.distance_total)
         let rounded = round(totalMiles * 100)/100
         let miles = Int(rounded)
         let fraction = Int((rounded - Double(miles)) * 100)
@@ -121,26 +118,16 @@ class RouteSummary: NSObject {
     }
     
     /*!
-     * Gets the average velocity in miles per hour.
-     *
-     * @return Double
-     */
-    func avgVelocityInMilesPerHour()->Double {
-        let milesPerSecond = self.velocity_mean * Double(0.00062137)
-        return milesPerSecond * Double(3600)
-    }
-    
-    /*!
      * Gets a label for the average pace in minutes per mile.
      *
      * @return String
      */
-    func avgVelocityInMinutesPerMile()->String {
-        let milesperminute = self.avgVelocityInMilesPerHour()/Double(60)
-        if milesperminute > 0 {
-            let minutespermile = Double(1)/milesperminute
-            let minutes = Int(minutespermile)
-            let seconds = Int(round((minutespermile - Double(minutes)) * 60))
+    func avgVelocityInUnitsPerMile()->String {
+        let unitsPerMinute = RunalysisUnits.getVelocityPerUnit(self.velocity_mean)/Double(60)
+        if unitsPerMinute > 0 {
+            let minutesPerUnit = Double(1)/unitsPerMinute
+            let minutes = Int(minutesPerUnit)
+            let seconds = Int(round((minutesPerUnit - Double(minutes)) * 60))
             var seconds_string = "\(String(seconds))"
             if seconds < Int(10) {
                 seconds_string = "0\(String(seconds))"
@@ -282,7 +269,7 @@ class RouteSummary: NSObject {
                     
                     
                     // Track the miles.
-                    if Int(distanceTotal * self.milesPerMeter) > mileCount {
+                    if Int(RunalysisUnits.convertMetersToUnits(distanceTotal)) > mileCount {
                         mileCount++
                         mileTimeTmp = duration - mileTime
                         mileTime = duration

@@ -12,6 +12,7 @@ import UIKit
 class ConfigViewController: UIViewController {
     
     let orientationKey = "RunalysisRunViewOrientation"
+    let unitsKey = "RunalysisUnits"
     
     /*!
      * Overrides UIViewController::viewDidLoad()
@@ -20,9 +21,20 @@ class ConfigViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
-        var ypos = CGFloat(70)
+        var ypos = CGFloat(20)
         
-        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.frame.width, self.view.frame.height - 20))
+        let container = UIScrollView(frame: CGRectMake(0, ypos, self.view.frame.width, self.view.frame.height - 20))
+        
+        ypos += 50
+        
+        let orientationLabel = UILabel(frame: CGRectMake(10, ypos, container.bounds.width - 20, GlobalTheme.getNormalFontHeight()))
+        orientationLabel.text = "Rotate when running"
+        orientationLabel.textColor = GlobalTheme.getNormalTextColor()
+        orientationLabel.font = GlobalTheme.getNormalFont()
+        orientationLabel.textAlignment = NSTextAlignment.Center
+        container.addSubview(orientationLabel)
+        
+        ypos += orientationLabel.frame.height + 10
         
         let orientationValue = NSUserDefaults.standardUserDefaults().integerForKey(self.orientationKey)
         
@@ -39,11 +51,31 @@ class ConfigViewController: UIViewController {
         for icon in icons {
             var image = UIImage(named: icon)
             orientation.insertSegmentWithImage(image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal), atIndex: i, animated: true)
-            ypos += iconSize + 10
             i++
         }
         orientation.selectedSegmentIndex = orientationValue
         container.addSubview(orientation)
+        
+        ypos += orientation.frame.height + 10
+        
+        let unitsLabel = UILabel(frame: CGRectMake(10, ypos, container.bounds.width - 20, GlobalTheme.getNormalFontHeight()))
+        unitsLabel.text = "Display units"
+        unitsLabel.textColor = GlobalTheme.getNormalTextColor()
+        unitsLabel.font = GlobalTheme.getNormalFont()
+        unitsLabel.textAlignment = NSTextAlignment.Center
+        container.addSubview(unitsLabel)
+        
+        ypos += unitsLabel.frame.height + 10
+        
+        let unitsValue = NSUserDefaults.standardUserDefaults().integerForKey(self.unitsKey)
+        var units = UISegmentedControl()
+        units.tintColor = GlobalTheme.getRunTextColor()
+        units.frame = CGRectMake(10, ypos, self.view.frame.width - 20, GlobalTheme.getNormalFontHeight() + 10)
+        units.addTarget(self, action: "unitsSelect:", forControlEvents: UIControlEvents.ValueChanged)
+        units.insertSegmentWithTitle("Miles", atIndex: 0, animated: true)
+        units.insertSegmentWithTitle("Kilometers", atIndex: 1, animated: true)
+        units.selectedSegmentIndex = unitsValue
+        container.addSubview(units)
         
         self.view.addSubview(container)
         
@@ -63,7 +95,7 @@ class ConfigViewController: UIViewController {
     }
     
     /*!
-     * Handler for the segmented control actions.
+     * Handler for the orientation segmented control actions.
      *
      * Saves the choice to the NSUserDefaults.
      *
@@ -71,6 +103,19 @@ class ConfigViewController: UIViewController {
      */
     func orientationSelect(sender: UISegmentedControl) {
         NSUserDefaults.standardUserDefaults().setInteger(sender.selectedSegmentIndex, forKey: self.orientationKey)
+        NSUserDefaults.standardUserDefaults().synchronize()
+ 
+    }
+    
+     /*!
+      * Handler for the units segmented control actions.
+      *
+      * Saves the choice to the NSUserDefaults.
+      *
+      * @param sender
+      */
+    func unitsSelect(sender: UISegmentedControl) {
+        NSUserDefaults.standardUserDefaults().setInteger(sender.selectedSegmentIndex, forKey: self.unitsKey)
         NSUserDefaults.standardUserDefaults().synchronize()
     }
     
