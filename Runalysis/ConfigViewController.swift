@@ -12,7 +12,6 @@ import UIKit
 class ConfigViewController: UIViewController {
     
     let orientationKey = "RunalysisRunViewOrientation"
-    let unitsKey = "RunalysisUnits"
     
     /*!
      * Overrides UIViewController::viewDidLoad()
@@ -67,7 +66,7 @@ class ConfigViewController: UIViewController {
         
         ypos += unitsLabel.frame.height + 10
         
-        let unitsValue = NSUserDefaults.standardUserDefaults().integerForKey(self.unitsKey)
+        let unitsValue = RunalysisUnits.getUnitsType()
         var units = UISegmentedControl()
         units.tintColor = GlobalTheme.getRunTextColor()
         units.frame = CGRectMake(10, ypos, self.view.frame.width - 20, GlobalTheme.getNormalFontHeight() + 10)
@@ -115,8 +114,7 @@ class ConfigViewController: UIViewController {
       * @param sender
       */
     func unitsSelect(sender: UISegmentedControl) {
-        NSUserDefaults.standardUserDefaults().setInteger(sender.selectedSegmentIndex, forKey: self.unitsKey)
-        NSUserDefaults.standardUserDefaults().synchronize()
+        RunalysisUnits.setUnitsType(sender.selectedSegmentIndex)
     }
     
     /*!

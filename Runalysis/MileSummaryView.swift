@@ -78,7 +78,7 @@ class MileSummaryView: UIView {
         }
     
        
-        return "Mile \(count) @\(minutes_string):\(seconds_string)"
+        return "\(count) \(RunalysisUnits.getUnitLabel()) @\(minutes_string):\(seconds_string)"
     }
 
 }

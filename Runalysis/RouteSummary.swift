@@ -166,9 +166,9 @@ class RouteSummary: NSObject {
         var started = false
         var duration = Double(0)
         self.mileTimes.removeAll(keepCapacity: false)
-        var mileCount = 0
-        var mileTime = Double(0.0)
-        var mileTimeTmp = Double(0.0)
+        var unitCount = 0
+        var unitTime = Double(0.0)
+        var unitTimeTmp = Double(0.0)
         var distanceTotal = Double(0.0)
         
         var movingAverage: [Double] = [0, 0, 0, 0, 0]
@@ -269,11 +269,11 @@ class RouteSummary: NSObject {
                     
                     
                     // Track the miles.
-                    if Int(RunalysisUnits.convertMetersToUnits(distanceTotal)) > mileCount {
-                        mileCount++
-                        mileTimeTmp = duration - mileTime
-                        mileTime = duration
-                        self.mileTimes.append(mileTimeTmp)
+                    if Int(RunalysisUnits.convertMetersToUnits(distanceTotal)) > unitCount {
+                        unitCount++
+                        unitTimeTmp = duration - unitTime
+                        unitTime = duration
+                        self.mileTimes.append(unitTimeTmp)
                     }
                 }
             }
