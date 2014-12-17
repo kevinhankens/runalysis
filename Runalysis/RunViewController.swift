@@ -41,14 +41,25 @@ class RunViewController: UIViewController {
         var boundsWidth = CGFloat(0.0)
         var boundsHeight = CGFloat(0.0)
         
-        switch self.getOrientation() {
-        case 1, 2:
-            boundsWidth = self.view.bounds.height
-            boundsHeight = self.view.bounds.width
-        default:
-            boundsWidth = self.view.bounds.width
-            boundsHeight = self.view.bounds.height
+        let currentOrientation = UIApplication.sharedApplication().statusBarOrientation
+        
+        boundsWidth = self.view.bounds.width
+        boundsHeight = self.view.bounds.height
+        
+        // If it is in portrait and the preferred orientation is landscape,
+        // we need to flip the bounds.
+        if currentOrientation == UIInterfaceOrientation.Portrait {
+            switch self.getOrientation() {
+            case 1, 2:
+                boundsWidth = self.view.bounds.height
+                boundsHeight = self.view.bounds.width
+            default:
+                boundsWidth = self.view.bounds.width
+                boundsHeight = self.view.bounds.height
+            }
         }
+        
+       
         let container = UIScrollView(frame: CGRectMake(0, 20, boundsWidth, boundsHeight - 20))
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()

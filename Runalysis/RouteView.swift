@@ -39,7 +39,7 @@ class RouteView: UIView {
     var gridRatio = 0.0
     
     // The width of the course drawing.
-    let lineWidth = CGFloat(5.0)
+    var lineWidth = CGFloat(5.0)
     
     /*!
      * Factory method to create a RouteView object.
@@ -147,6 +147,15 @@ class RouteView: UIView {
      * @return void
      */
     override func drawRect(rect: CGRect) {
+        
+        // Let the line width scale for the screen size.
+        self.lineWidth = ceil(1.2 * self.bounds.width/100)
+        if self.lineWidth < 5 {
+            self.lineWidth = 5
+        } else if self.lineWidth > 8 {
+            self.lineWidth = 8
+        }
+        
         var unitCounter = 0
         var unitTest = 0
         var total = Double(0)
