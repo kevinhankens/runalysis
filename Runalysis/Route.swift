@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 
+@objc(Route)
 class Route: NSManagedObject {
 
     @NSManaged var routeid: NSNumber

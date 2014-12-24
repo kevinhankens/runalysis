@@ -16,6 +16,10 @@ let RunalysisUnitsKey: String = "RunalysisUnits"
 
 var RunalysisUnitsType: Int = -1
 
+let RunalysisUnitsMiles = 0
+
+let RunalysisUnitsKilometers = 1
+
 class RunalysisUnits {
     
     /*!
@@ -52,9 +56,9 @@ class RunalysisUnits {
         var multiple = Double(0.0)
         
         switch RunalysisUnits.getUnitsType() {
-        case 0:
+        case RunalysisUnitsMiles:
             multiple = MilesPerMeter
-        case 1:
+        case RunalysisUnitsKilometers:
             multiple = KilometersPerMeter
         default:
             multiple = MilesPerMeter
@@ -74,9 +78,9 @@ class RunalysisUnits {
         var multiple = Double(0.0)
         
         switch RunalysisUnits.getUnitsType() {
-        case 0:
+        case RunalysisUnitsMiles:
             multiple = MilesPerMeter
-        case 1:
+        case RunalysisUnitsKilometers:
             multiple = KilometersPerMeter
         default:
             multiple = MilesPerMeter
@@ -95,9 +99,9 @@ class RunalysisUnits {
         var label = "mi"
         
         switch RunalysisUnits.getUnitsType() {
-        case 0:
+        case RunalysisUnitsMiles:
             label = "mi"
-        case 1:
+        case RunalysisUnitsKilometers:
             label = "km"
         default:
             label = "mi"

@@ -18,7 +18,7 @@ class RouteStoreMock: RouteStore {
             let bundle = NSBundle(forClass: Route.self)
             let modelURL = bundle.URLForResource("Runalysis", withExtension: "momd")
             let mom = NSManagedObjectModel(contentsOfURL: modelURL!)
-            let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
+            let psc = NSPersistentStoreCoordinator(managedObjectModel: mom!)
             psc.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil, error: nil)
             self._context!.persistentStoreCoordinator = psc
             }

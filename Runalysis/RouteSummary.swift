@@ -97,7 +97,7 @@ class RouteSummary: NSObject {
      * @return String
      */
     func getTotalAndPace()->String {
-        return "\(self.totalInMiles())\(RunalysisUnits.getUnitLabel()) @\(self.avgVelocityInUnitsPerMile())"
+        return "\(self.totalDistance())\(RunalysisUnits.getUnitLabel()) @\(self.avgVelocityInMinutesPerUnit())"
     }
     
     /*!
@@ -105,9 +105,9 @@ class RouteSummary: NSObject {
      *
      * @return String
      */
-    func totalInMiles()->String {
-        let totalMiles = RunalysisUnits.convertMetersToUnits(self.distance_total)
-        let rounded = round(totalMiles * 100)/100
+    func totalDistance()->String {
+        let total = RunalysisUnits.convertMetersToUnits(self.distance_total)
+        let rounded = round(total * 100)/100
         let miles = Int(rounded)
         let fraction = Int((rounded - Double(miles)) * 100)
         var fraction_string = "\(fraction)"
@@ -122,7 +122,7 @@ class RouteSummary: NSObject {
      *
      * @return String
      */
-    func avgVelocityInUnitsPerMile()->String {
+    func avgVelocityInMinutesPerUnit()->String {
         let unitsPerMinute = RunalysisUnits.getVelocityPerUnit(self.velocity_mean)/Double(60)
         if unitsPerMinute > 0 {
             let minutesPerUnit = Double(1)/unitsPerMinute

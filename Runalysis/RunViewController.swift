@@ -100,7 +100,7 @@ class RunViewController: UIViewController {
     */
     override func viewWillAppear(animated: Bool) {
         if let container = self.scrollContainer? {
-            //container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
+            container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
         }
     }
     

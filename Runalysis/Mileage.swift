@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 
+@objc(Mileage)
 class Mileage: NSManagedObject {
 
     // The date of the mileage, tracked as a numeric value.
