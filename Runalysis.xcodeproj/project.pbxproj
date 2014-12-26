@@ -13,6 +13,7 @@
 		17435939199E799F000472AF /* RouteStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17435938199E799F000472AF /* RouteStore.swift */; };
 		1743593B19A239E1000472AF /* RouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1743593A19A239E1000472AF /* RouteViewController.swift */; };
 		174B7F2C19D23A4000C87345 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 174B7F2B19D23A4000C87345 /* LaunchScreen.storyboard */; };
+		17698B2F1A4CF84900D81FC8 /* UnitsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17698B2E1A4CF84900D81FC8 /* UnitsTests.swift */; };
 		1773453B19910FA70038F304 /* JLDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453A19910FA70038F304 /* JLDate.swift */; };
 		1773453C19910FB80038F304 /* JLDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453A19910FA70038F304 /* JLDate.swift */; };
 		1773453E199112900038F304 /* JLDateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1773453D199112900038F304 /* JLDateTests.swift */; };
@@ -94,6 +95,7 @@
 		17435938199E799F000472AF /* RouteStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteStore.swift; sourceTree = "<group>"; };
 		1743593A19A239E1000472AF /* RouteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RouteViewController.swift; sourceTree = "<group>"; };
 		174B7F2B19D23A4000C87345 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		17698B2E1A4CF84900D81FC8 /* UnitsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnitsTests.swift; sourceTree = "<group>"; };
 		1773453A19910FA70038F304 /* JLDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JLDate.swift; sourceTree = "<group>"; };
 		1773453D199112900038F304 /* JLDateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JLDateTests.swift; path = RunalysisTests/JLDateTests.swift; sourceTree = SOURCE_ROOT; };
 		1773453F199122CA0038F304 /* MileageStoreMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MileageStoreMock.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 				17AF16B4198FCD9F00565322 /* RunalysisTests.swift */,
 				17068D4119E5CA4D002A5821 /* RouteStoreMock.swift */,
 				17068D4319E5CDA6002A5821 /* RouteSummaryTests.swift */,
+				17698B2E1A4CF84900D81FC8 /* UnitsTests.swift */,
 			);
 			path = RunalysisTests;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				17AF16BB198FEC6F00565322 /* HelpView.swift in Sources */,
+				17698B2F1A4CF84900D81FC8 /* UnitsTests.swift in Sources */,
 				17C42C4119D31B1E007DBFCA /* LaunchViewController.swift in Sources */,
 				17C42C3819D31AF8007DBFCA /* RouteAnalysisView.swift in Sources */,
 				17BDC33F1A39F4D800A1C9B7 /* Units.swift in Sources */,
@@ -569,7 +573,7 @@
 				PRODUCT_NAME = RunalysisTests;
 				STRIP_STYLE = "non-global";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runalysis-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Debug;
@@ -586,6 +590,7 @@
 				PRODUCT_NAME = RunalysisTests;
 				STRIP_STYLE = "non-global";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runalysis-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
 			name = Release;

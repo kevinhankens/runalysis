@@ -194,6 +194,9 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         if let points = self.routeSummary?.points {
             
             self.drawSteps = points.count/50
+            if self.drawSteps < 1 {
+                self.drawSteps = 1
+            }
             self.drawStep = 0
             self.drawTimer = NSTimer.scheduledTimerWithTimeInterval(0.025, target: self, selector: Selector("drawRouteAnimated"), userInfo: nil, repeats: true)
         }
