@@ -199,9 +199,7 @@ class ViewController: UIViewController {
      */
     override func viewWillAppear(animated: Bool) {
         // Ensure that the UIScrollView knows its content bounds.
-        if let container = self.scrollView? {
-            container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
-        }
+        self.resetContentHeight()
     }
     
     /*!
@@ -335,13 +333,30 @@ class ViewController: UIViewController {
     }
     
     override func shouldAutorotate()->Bool {
-      return true
+        return true
     }
     
     override func supportedInterfaceOrientations()->Int {
         return Int(UIInterfaceOrientationMask.Portrait.rawValue) |
         Int(UIInterfaceOrientationMask.LandscapeLeft.rawValue) |
         Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
+    }
+    
+    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        self.resetContentHeight()
+    }
+    
+    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        if let sv = self.scrollView {
+            sv.frame = CGRectMake(0, 20, self.view.bounds.width, self.view.bounds.height)
+        }
+    }
+    
+    // Sets the height of the scrollview container based on the contents.
+    func resetContentHeight() {
+        if let sv = self.scrollView? {
+            sv.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
+        }
     }
     
     override func didReceiveMemoryWarning() {

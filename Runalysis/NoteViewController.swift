@@ -49,7 +49,8 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.frame.width, self.view.frame.height - 20))
+        let container = UIScrollView(frame: CGRectMake(0, 20, self.view.bounds.width, self.view.bounds.height - 20))
+        container.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
         
         self.view.backgroundColor = GlobalTheme.getBackgroundColor()
         
@@ -61,6 +62,7 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         let pp = UIPickerView(frame: CGRect(x: 0, y: ypos, width: self.view.frame.width, height: 30))
         pp.delegate = self
         pp.tintColor = GlobalTheme.getNormalTextColor()
+        pp.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         self.picker = pp
         self.updatePickerValues()
         container.addSubview(pp)
@@ -71,6 +73,7 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
             if let mileageStore = self.store? {
                 if let dayNum = self.dayNum? {
                     let n = NoteView.createNoteView(0, y: ypos, width: self.view.bounds.width - 20, height: self.view.bounds.height, dayNum: self.dayNum!, mileageStore: mileageStore, routeStore: self.routeStore!, controller: self)
+                    n.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
                     container.addSubview(n)
                     self.noteView = n
                     ypos = ypos + n.frame.height
@@ -221,9 +224,7 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
      */
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if let container = self.scrollContainer? {
-            container.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
-        }
+        self.resetContentHeight()
     }
     
     /*!
@@ -262,18 +263,37 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         self.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    // Sets the height of the scrollview container based on the contents.
+    func resetContentHeight() {
+        if let sv = self.scrollContainer? {
+            sv.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
+        }
+    }
+    
     /*!
      * Implements UIViewController::shouldAutorotate.
      */
     override func shouldAutorotate()->Bool {
-        return false
+        return true
     }
     
     /*!
-     * Implements UIViewController::supportedInterfaceOrientations.
-     */
+    *
+    */
     override func supportedInterfaceOrientations()->Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue) |
+            Int(UIInterfaceOrientationMask.LandscapeLeft.rawValue) |
+            Int(UIInterfaceOrientationMask.LandscapeRight.rawValue)
+    }
+    
+    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        self.resetContentHeight()
+    }
+    
+    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        if let sv = self.scrollContainer? {
+            sv.frame = CGRectMake(0, 20, self.view.bounds.width, self.view.bounds.height - 20)
+        }
     }
     
     // UIPickerView Delegate Methods

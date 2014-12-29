@@ -96,6 +96,7 @@ class NoteView : UIView, UITextViewDelegate {
         noteView.editable = true
         noteView.text = ""
         noteView.delegate = container
+        noteView.autoresizingMask = UIViewAutoresizing.FlexibleWidth
         container.note = noteView
         //noteView.becomeFirstResponder()
         container.addSubview(noteView)
