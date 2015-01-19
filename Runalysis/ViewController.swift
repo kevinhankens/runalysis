@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     var scrollContentHeight = CGFloat(0)
     
     // The current version, used to track intro/update modals.
-    let version = 0.035
+    let version = 0.036
     
     // The position of cells that are off screen.
     let cellPosOffScreen = CGFloat(20)
