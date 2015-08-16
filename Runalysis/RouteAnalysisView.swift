@@ -121,8 +121,8 @@ class RouteAnalysisView: UIView {
      *
      * @return NSString
      */
-    func getDuration(new_duration: NSTimeInterval)->NSString {
-        if let summary = self.routeSummary? {
+    func getDuration(new_duration: NSTimeInterval)->String {
+        if let summary = self.routeSummary {
             let tmp_minutes = Int(new_duration/60.0)
             let seconds = new_duration - (Double(tmp_minutes) * Double(60))
             let rounded_seconds = round(seconds * 10)/10
@@ -153,7 +153,7 @@ class RouteAnalysisView: UIView {
      * @param NSTimeInterval new_duration
      */
     func updateDuration(new_duration: NSTimeInterval) {
-        if let tl = self.labelTimer? {
+        if let tl = self.labelTimer {
             tl.text = self.getDuration(new_duration)
         }
     }
@@ -164,13 +164,13 @@ class RouteAnalysisView: UIView {
     func updateLabels() {
         // @todo use delegation to have each visualization redraw.
         var height = CGFloat(0)
-        if let al = self.labelAverage? {
+        if let al = self.labelAverage {
             height += al.frame.height
             al.text = self.routeSummary!.getTotalAndPace()
         }
         
-        if let dl = self.labelDate? {
-            if let summary = self.routeSummary? {
+        if let dl = self.labelDate {
+            if let summary = self.routeSummary {
                 height += dl.frame.height
                 let date = NSDate(timeIntervalSince1970:NSTimeInterval(summary.routeId))
                 let format = NSDateFormatter()
@@ -179,17 +179,17 @@ class RouteAnalysisView: UIView {
             }
         }
         
-        if let vdv = self.velocityDistributionView? {
+        if let vdv = self.velocityDistributionView {
             height += vdv.frame.height
             vdv.setNeedsDisplay()
         }
         
-        if let avv = self.altitudeVelocityView? {
+        if let avv = self.altitudeVelocityView {
             height += avv.frame.height
             avv.setNeedsDisplay()
         }
         
-        if let mv = self.mileSummaryView? {
+        if let mv = self.mileSummaryView {
             mv.updateLabels()
             height += mv.frame.height + CGFloat(20)
             

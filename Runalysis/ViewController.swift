@@ -277,7 +277,7 @@ class ViewController: UIViewController {
      * @param UIButton button
      */
     func displayRouteViewFromButton(button: UIButton) {
-        if let id = self.routeStore.getLatestRouteId()? {
+        if let id = self.routeStore.getLatestRouteId() {
             self.modalRouteId = id
         }
         self.launchRouteView()
@@ -354,7 +354,7 @@ class ViewController: UIViewController {
     
     // Sets the height of the scrollview container based on the contents.
     func resetContentHeight() {
-        if let sv = self.scrollView? {
+        if let sv = self.scrollView {
             sv.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
         }
     }
@@ -371,7 +371,7 @@ class ViewController: UIViewController {
      */
     func updateDay() {
         var date = self.sunday
-        if let s = self.summaryView? {
+        if let s = self.summaryView {
             s.updateView(date)
         }
     }

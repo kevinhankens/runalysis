@@ -163,8 +163,8 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
      * before the rotation occurs.
      */
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        if let rv = self.routeView? {
-            if let rav = self.routeAnalysisView? {
+        if let rv = self.routeView {
+            if let rav = self.routeAnalysisView {
                 rv.frame = CGRectMake(0.0, 0.0, self.view.bounds.width, self.view.bounds.height)
                 rav.frame = CGRectMake(0.0, self.routeView!.bounds.height, self.view.bounds.width, self.ravHeight)
             }
@@ -177,8 +177,8 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
      */
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
         
-        if let rv = self.routeView? {
-            if let sc = self.scrollContainer? {
+        if let rv = self.routeView {
+            if let sc = self.scrollContainer {
                 sc.frame = CGRectMake(0.0, 0.0, self.view.frame.width, self.view.frame.height)
                 self.scrollContentHeight = rv.frame.maxY + 10
                 self.resetContentHeight()
@@ -225,7 +225,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
     
     // Sets the height of the scrollview container based on the contents.
     func resetContentHeight() {
-        if let container = self.scrollContainer? {
+        if let container = self.scrollContainer {
             container.contentSize = CGSizeMake(self.routeView!.frame.width, self.scrollContentHeight + self.ravHeight + 30)
         }
     }
@@ -241,7 +241,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
      * UIScrollViewDelegate
      */
     func scrollViewDidEndZooming(scrollView: UIScrollView!, withView view: UIView!, atScale scale: CGFloat) {
-        if let rv = self.routeView? {
+        if let rv = self.routeView {
             //let newRect = CGRectMake(rv.bounds.minX, rv.bounds.minY, rv.bounds.width, rv.bounds.height)
             //rv.setNeedsDisplayInRect(newRect)
             //rv.contentScaleFactor = scale
@@ -323,9 +323,9 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
         // Update the ID of the route
         let next = self.routeStore!.getNextRouteId(self.routeId, prev: previous)
         
-        if let r = next? {
-            if let rv = self.routeView? {
-                if let rav = self.routeAnalysisView? {
+        if let r = next {
+            if let rv = self.routeView {
+                if let rav = self.routeAnalysisView {
                     self.routeId = r
                     self.routeSummary?.updateRoute(self.routeId)
                     // @todo set the route id in the summary here.
@@ -343,7 +343,7 @@ class RouteViewController: UIViewController, UIAlertViewDelegate {
             // nothing, return to the root view.
             // @todo make this circular, only return if there are no routes.
             let next = self.routeStore!.getNextRouteId(self.routeId, prev: !previous)
-            if let r = next? {
+            if let r = next {
                 if force {
                     self.displayNextRoute(!previous, force: force)
                 }

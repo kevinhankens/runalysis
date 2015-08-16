@@ -141,8 +141,8 @@ class WeekSummaryView: UIView {
      */
     func setDateLabel() {
         let endDate = self.sunday.nextDay(increment: 6)
-        if let v = self.dateLabel? {
-            if let vh = self.dateLabelAlert? {
+        if let v = self.dateLabel {
+            if let vh = self.dateLabelAlert {
                 let format = NSDateFormatter()
                 format.dateFormat = JLDate.getDateFormatMonthDay()
                 let text = "< \(format.stringFromDate(self.sunday.date)) - \(format.stringFromDate(endDate.date)) >"
@@ -238,7 +238,7 @@ class WeekSummaryView: UIView {
         var plannedTotal = Double(0)
         var actualTotal = Double(0)
         
-        if let store = self.mileageStore? {
+        if let store = self.mileageStore {
             var i = 0
             for i = 0; i < 7; i++ {
                 var cell = self.summaryCells[i]
@@ -253,7 +253,7 @@ class WeekSummaryView: UIView {
             }
         }
         
-        if let total = self.totalCell? {
+        if let total = self.totalCell {
             total.plannedValue = plannedTotal
             total.actualValue = actualTotal
             total.updateValues()

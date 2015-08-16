@@ -31,7 +31,7 @@ class VelocityDistributionView: UIView {
      */
     override func drawRect(rect: CGRect) {
     
-        if let summary = self.routeSummary? {
+        if let summary = self.routeSummary {
             let context = UIGraphicsGetCurrentContext()
             CGContextSetFillColorWithColor(context, GlobalTheme.getBackgroundColor().CGColor);
             CGContextFillRect(context, self.bounds)

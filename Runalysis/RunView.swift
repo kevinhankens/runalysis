@@ -128,7 +128,7 @@ class RunView: UIView, CLLocationManagerDelegate {
      */
     func updateStopwatch() {
         if self.recording {
-            if let rav = self.routeAnalysisView? {
+            if let rav = self.routeAnalysisView {
                 // How long since we last updated.
                 var interval = fabs(self.lastUpdateTime.timeIntervalSinceNow)
                 // Sets the overall duration in the route analysis view.
@@ -164,7 +164,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             sender.setTitleColor(GlobalTheme.getStartTextColor(), forState: UIControlState.Normal)
             sender.backgroundColor = GlobalTheme.getStartBgColor()
             if (self.locationManager != nil) {
-                if let loc = self.locationManager? {
+                if let loc = self.locationManager {
                     // @todo protect unwrapping nil.
                     let locationObj = RunView.createLocationCopy(loc.location)
                     let interval = fabs(self.lastUpdateTime.timeIntervalSinceNow)
@@ -182,7 +182,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             sender.backgroundColor = GlobalTheme.getStopBgColor()
             self.lastUpdateTime = NSDate()
             if (self.locationManager != nil) {
-                if let loc = self.locationManager? {
+                if let loc = self.locationManager {
                     // In the simulator the location object occasionally fails.
                     // @todo disable button.
                     let ri: NSTimeInterval = -8.0
@@ -210,7 +210,7 @@ class RunView: UIView, CLLocationManagerDelegate {
     }
     
     func setAccuracyLabel(accuracy: CLLocationAccuracy) {
-        if let a = self.accuracy? {
+        if let a = self.accuracy {
             if accuracy < Double(20) {
                 a.backgroundColor = GlobalTheme.getAccuracyGoodColor()
                 a.text = "Accuracy: Good"
@@ -235,7 +235,7 @@ class RunView: UIView, CLLocationManagerDelegate {
      */
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         var locationArray = locations as NSArray
-        var locationObj = locationArray.lastObject as CLLocation
+        var locationObj = locationArray.lastObject as! CLLocation
         var coord = locationObj.coordinate
         var interval: NSTimeInterval = 0.0
         
@@ -282,7 +282,7 @@ class RunView: UIView, CLLocationManagerDelegate {
             var route = self.routeStore!.storeRoutePoint(self.routeId, date: location.timestamp.timeIntervalSince1970, latitude: coord.latitude, longitude: coord.longitude, altitude: location.altitude, velocity: velocity, distance_traveled: distance, interval: interval, steps: steps)
             
             // Redraw the map
-            if let rav = self.routeAnalysisView? {
+            if let rav = self.routeAnalysisView {
                 if let summary = rav.routeSummary {
                     // @todo this is horrible for performance.
                     //summary.updateRoute(self.routeId)

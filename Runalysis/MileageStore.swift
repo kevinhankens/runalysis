@@ -35,7 +35,7 @@ class MileageStore: NSObject {
      *   Returns the shared Manged Object Context.
      */
     var context: NSManagedObjectContext {
-        let app = UIApplication.sharedApplication().delegate as AppDelegate
+        let app = UIApplication.sharedApplication().delegate as! AppDelegate
         return app.managedObjectContext!
     }
 
@@ -45,7 +45,7 @@ class MileageStore: NSObject {
      * @return void
      */
     func saveContext() {
-        let app = UIApplication.sharedApplication().delegate as AppDelegate
+        let app = UIApplication.sharedApplication().delegate as! AppDelegate
         app.saveContext()
     }
     
@@ -61,11 +61,11 @@ class MileageStore: NSObject {
         // @todo error handling?
         var error: NSError? = nil
         let mileageEntity: NSString = "Mileage"
-        var fReq: NSFetchRequest = NSFetchRequest(entityName: mileageEntity)
+        var fReq: NSFetchRequest = NSFetchRequest(entityName: mileageEntity as String)
         
         let format_complete = "date == \(day.number.stringValue)"
         let format_string: NSString = NSString(string: format_complete)
-        fReq.predicate = NSPredicate(format:format_string)
+        fReq.predicate = NSPredicate(format:format_string as String)
         //fReq.predicate = NSPredicate(format:"id == 1")
         
         //var sorter: NSSortDescriptor = NSSortDescriptor(key: "date" , ascending: false)
@@ -75,7 +75,7 @@ class MileageStore: NSObject {
 
         if result != nil {
             for resultItem : AnyObject in result! {
-                var mileageItem = resultItem as Mileage
+                var mileageItem = resultItem as! Mileage
                 return mileageItem
             }
         }
@@ -95,8 +95,8 @@ class MileageStore: NSObject {
      * @return Mileage
      */
     func getMileageObject(day: JLDate)->Mileage {
-        let mileageEntity: NSString = "Mileage"
-        var obj = NSEntityDescription.insertNewObjectForEntityForName(mileageEntity, inManagedObjectContext: self.context) as Mileage
+        let mileageEntity = "Mileage"
+        var obj = NSEntityDescription.insertNewObjectForEntityForName(mileageEntity, inManagedObjectContext: self.context) as! Mileage
         obj.date = day.number
         obj.mileagePlanned = 0
         obj.mileageActual = 0
@@ -124,7 +124,7 @@ class MileageStore: NSObject {
         obj.mileagePlanned = planned
         obj.mileageActual = actual
         if note != "" {
-          obj.note = note
+          obj.note = note as String
         }
         
     }

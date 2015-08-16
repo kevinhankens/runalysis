@@ -115,7 +115,7 @@ class NoteView : UIView, UITextViewDelegate {
      * @param UITapGestureRecognizer gesture
      */
     func dismissKeyboard(gesture: UITapGestureRecognizer) {
-        if let n = self.note? {
+        if let n = self.note {
             n.resignFirstResponder()
         }
     }
@@ -127,9 +127,9 @@ class NoteView : UIView, UITextViewDelegate {
      */
     func viewRoute(sender: UIButton) {
         if let c = self.controller as? NoteViewController {
-            if let d = self.dayNum? {
+            if let d = self.dayNum {
                 let routeId = self.routeStore!.getFirstRoutIdForDate(date: self.dayNum!.date.timeIntervalSince1970)
-                if let day = routeId? {
+                if let day = routeId {
                     c.viewRoute(routeId!)
                 }
                 else {
@@ -151,8 +151,8 @@ class NoteView : UIView, UITextViewDelegate {
         // Storage engine.
         let mileageData = self.store!.getMileageForDate(self.dayNum!)
         
-        if let l = self.label? {
-            if let lh = self.labelHi? {
+        if let l = self.label {
+            if let lh = self.labelHi {
                 let text = day.toStringMedium()
                 l.text = text
                 lh.text = text
@@ -162,10 +162,10 @@ class NoteView : UIView, UITextViewDelegate {
         }
         
         // See if there is a route for this day.
-        if let r = self.reviewButton? {
+        if let r = self.reviewButton {
             let routeId = self.routeStore!.getFirstRoutIdForDate(date: self.dayNum!.date.timeIntervalSince1970)
             
-            if let day = routeId? {
+            if let day = routeId {
                 r.enabled = true
                 r.setTitleColor(GlobalTheme.getRecentTextColor(), forState: UIControlState.Normal)
             }
@@ -175,7 +175,7 @@ class NoteView : UIView, UITextViewDelegate {
             }
         }
         
-        if let n = self.note? {
+        if let n = self.note {
             n.text = mileageData.note
         }
     }
@@ -184,7 +184,7 @@ class NoteView : UIView, UITextViewDelegate {
      * Saves the currently entered note
      */
     func saveNote() {
-        if let n = self.note? {
+        if let n = self.note {
             let day = self.dayNum!.nextDay(increment: 0)
             let text = n.text.stringByAppendingString("")
             // @todo, this breaks saving for some reason.

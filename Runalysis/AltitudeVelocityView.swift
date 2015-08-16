@@ -52,9 +52,9 @@ class AltitudeVelocityView: UIView {
         var vHigh = Double(0)
         
         // @todo the high/low calc probably belongs in the RouteSummary
-        if let summary = self.routeSummary? {
+        if let summary = self.routeSummary {
             
-            if let points = summary.points? {
+            if let points = summary.points {
                 var count = CGFloat(points.count)
                 if count <= 0 {
                     count = 1
@@ -131,12 +131,12 @@ class AltitudeVelocityView: UIView {
         
         self.determineRatios()
         
-        if let summary = self.routeSummary? {
+        if let summary = self.routeSummary {
             let context = UIGraphicsGetCurrentContext()
             CGContextSetFillColorWithColor(context, GlobalTheme.getBackgroundColor().CGColor);
             CGContextFillRect(context, self.bounds)
             
-            if let points = summary.points? {
+            if let points = summary.points {
                 
                 // Track previous and current x,y values.
                 var cx = CGFloat(10)

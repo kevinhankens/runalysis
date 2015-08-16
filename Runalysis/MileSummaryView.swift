@@ -22,7 +22,7 @@ class MileSummaryView: UIView {
      */
     func updateLabels() {
     
-        if let summary = self.routeSummary? {
+        if let summary = self.routeSummary {
             for l in self.mileLabels {
                 l.removeFromSuperview()
             }

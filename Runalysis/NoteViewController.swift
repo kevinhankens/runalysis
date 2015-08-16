@@ -69,9 +69,9 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         
         ypos = ypos + pp.frame.height + 10
         
-        if let routeStore = self.routeStore? {
-            if let mileageStore = self.store? {
-                if let dayNum = self.dayNum? {
+        if let routeStore = self.routeStore {
+            if let mileageStore = self.store {
+                if let dayNum = self.dayNum {
                     let n = NoteView.createNoteView(0, y: ypos, width: self.view.bounds.width - 20, height: self.view.bounds.height, dayNum: self.dayNum!, mileageStore: mileageStore, routeStore: self.routeStore!, controller: self)
                     n.autoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight
                     container.addSubview(n)
@@ -132,7 +132,7 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
      * Updates the mileage in the pickers according to the current day.
      */
     func updateMileage() {
-        if let d = self.dayNum? {
+        if let d = self.dayNum {
             self.mileage = self.store?.getMileageForDate(self.dayNum!)
             self.updatePickerValues()
         }
@@ -147,8 +147,8 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
      */
     func daySwipeGesture(gesture: UIGestureRecognizer) {
         if let g = gesture as? UISwipeGestureRecognizer {
-            if let n = self.noteView? {
-                if let d = self.dayNum? {
+            if let n = self.noteView {
+                if let d = self.dayNum {
                     // Update the day of the note.
                     var day = self.dayNum!
                     switch g.direction {
@@ -175,8 +175,8 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
      * Updates the picker values with the saved values.
      */
     func updatePickerValues() {
-        if let p = self.picker? {
-            if let m = self.mileage? {
+        if let p = self.picker {
+            if let m = self.mileage {
                 let pm = Int(m.mileagePlanned)
                 let pdec = Int(round((m.mileagePlanned.doubleValue - Double(pm)) * 100))
                 var pd = Int(0)
@@ -201,9 +201,9 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
      * Saves the current picker values to the database.
      */
     func savePickerValues() {
-        if let p = self.picker? {
-            if let s = self.store? {
-                if let d = self.dayNum? {
+        if let p = self.picker {
+            if let s = self.store {
+                if let d = self.dayNum {
                     let pm = p.selectedRowInComponent(0)
                     let pd = p.selectedRowInComponent(1)
                     let pdec = Double(pd)/Double(20)
@@ -232,8 +232,8 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
      */
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        if let n = self.noteView? {
-            if let textview = n.note? {
+        if let n = self.noteView {
+            if let textview = n.note {
                 //textview.becomeFirstResponder()
             }
         }
@@ -245,8 +245,8 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
      * @param UIButton sender
      */
     func returnToRootView(sender: UIButton) {
-        if let n = self.noteView? {
-            if let textview = n.note? {
+        if let n = self.noteView {
+            if let textview = n.note {
                 textview.endEditing(true)
                 self.savePickerValues()
                 n.saveNote()
@@ -265,7 +265,7 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     
     // Sets the height of the scrollview container based on the contents.
     func resetContentHeight() {
-        if let sv = self.scrollContainer? {
+        if let sv = self.scrollContainer {
             sv.contentSize = CGSizeMake(self.view.bounds.width, self.scrollContentHeight)
         }
     }
@@ -291,7 +291,7 @@ class NoteViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     }
     
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        if let sv = self.scrollContainer? {
+        if let sv = self.scrollContainer {
             sv.frame = CGRectMake(0, 20, self.view.bounds.width, self.view.bounds.height - 20)
         }
     }

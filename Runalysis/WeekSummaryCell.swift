@@ -113,8 +113,8 @@ class WeekSummaryCell: UIView {
      * Updates the cells with their current values.
      */
     func updateValues() {
-        if let p = self.plannedLabel? {
-            if let ph = self.plannedLabelHi? {
+        if let p = self.plannedLabel {
+            if let ph = self.plannedLabelHi {
                 let text = self.getMileageLabel(self.plannedValue)
                 p.text = text
                 ph.text = text
@@ -123,8 +123,8 @@ class WeekSummaryCell: UIView {
             }
         }
         
-        if let a = self.actualLabel? {
-            if let ah = self.actualLabelHi? {
+        if let a = self.actualLabel {
+            if let ah = self.actualLabelHi {
                 let text = self.getMileageLabel(self.actualValue)
                 a.text = text
                 ah.text = text
